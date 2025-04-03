@@ -1,0 +1,2249 @@
+---
+openapi: 3.0.1
+info:
+  title: travelPlan API Test
+  description: travelPlan의 api 테스트입니다.
+  version: 1.0.0
+servers:
+- url: http://localhost:8080
+  description: Generated server url
+security:
+- bearerAuth: []
+tags:
+- name: Member API
+  description: 회원관련 기능을 제공합니다.
+- name: Place API
+  description: 여행지 관련 기능을 제공합니다.
+- name: TripSchedule API
+  description: 여행일정 관련 기능을 제공합니다.
+paths:
+  "/trip/schedule/{scheduleId}":
+    put:
+      tags:
+      - TripSchedule API
+      operationId: updateSchedule
+      parameters:
+      - name: scheduleId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/TripScheduleUpdateReqDto"
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/RsDataTripScheduleResDto"
+  "/trip/schedule/update":
+    put:
+      tags:
+      - TripSchedule API
+      summary: 나의 여행 일정 및 여행 정보 통합 수정
+      operationId: updateTrip
+      parameters:
+      - name: Authorization
+        in: header
+        required: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/TripUpdateReqDto"
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/RsDataTripUpdateResDto"
+  "/trip/information/{tripInfoId}":
+    put:
+      tags:
+      - trip-information-controller
+      operationId: updateTripInformation
+      parameters:
+      - name: tripInfoId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/TripInformationUpdateReqDto"
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/RsDataTripInformationResDto"
+  "/recruits/{recruitId}":
+    get:
+      tags:
+      - recruit-controller
+      operationId: getRecruit
+      parameters:
+      - name: recruitId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/RsDataRecruitDetailResponseDto"
+    put:
+      tags:
+      - recruit-controller
+      operationId: updateRecruit
+      parameters:
+      - name: recruitId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: Authorization
+        in: header
+        required: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/RecruitRequestDto"
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/RsDataRecruitDetailResponseDto"
+    delete:
+      tags:
+      - recruit-controller
+      operationId: deleteRecruit
+      parameters:
+      - name: recruitId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: Authorization
+        in: header
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/RsDataVoid"
+  "/place/{id}":
+    get:
+      tags:
+      - Place API
+      summary: 여행지 조회
+      operationId: getPlace
+      parameters:
+      - name: id
+        in: path
+        description: 여행지 ID
+        required: true
+        schema:
+          type: integer
+          format: int64
+        example: 1
+      responses:
+        '200':
+          description: OK
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/RsDataPlaceResDto"
+    put:
+      tags:
+      - Place API
+      summary: 여행지 정보 수정
+      operationId: updatePlace
+      parameters:
+      - name: id
+        in: path
+        description: 여행지 ID
+        required: true
+        schema:
+          type: integer
+          format: int64
+        example: 1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/PlaceUpdateReqDto"
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/RsDataPlaceResDto"
+    delete:
+      tags:
+      - Place API
+      summary: 여행지 삭제
+      operationId: deletePlace
+      parameters:
+      - name: id
+        in: path
+        description: 여행지 ID
+        required: true
+        schema:
+          type: integer
+          format: int64
+        example: 1
+      responses:
+        '200':
+          description: OK
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/RsDataVoid"
+  "/member/{id}":
+    put:
+      tags:
+      - Member API
+      summary: 회원정보 수정
+      operationId: updateMember
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/MemberUpdateRequestDto"
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/MemberResponseDto"
+    delete:
+      tags:
+      - Member API
+      summary: 회원 삭제
+      operationId: deleteMember
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: OK
+  "/api/reviews/{reviewId}":
+    get:
+      tags:
+      - review-controller
+      operationId: getReview
+      parameters:
+      - name: reviewId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/RsDataReviewResponseDto"
+    put:
+      tags:
+      - review-controller
+      operationId: updateReview
+      parameters:
+      - name: reviewId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: memberId
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int64
+          default: 1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/ReviewRequestDto"
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/RsDataReviewResponseDto"
+    delete:
+      tags:
+      - review-controller
+      operationId: deleteReview
+      parameters:
+      - name: reviewId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: memberId
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int64
+          default: 1
+      responses:
+        '200':
+          description: OK
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/RsDataVoid"
+  "/api/comments/{commentId}":
+    get:
+      tags:
+      - comment-controller
+      operationId: getComment
+      parameters:
+      - name: commentId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/RsDataCommentResponseDto"
+    put:
+      tags:
+      - comment-controller
+      operationId: updateComment
+      parameters:
+      - name: commentId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: memberId
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int64
+          default: 1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/CommentRequestDto"
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/RsDataCommentResponseDto"
+    delete:
+      tags:
+      - comment-controller
+      operationId: deleteComment
+      parameters:
+      - name: commentId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: memberId
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int64
+          default: 1
+      responses:
+        '200':
+          description: OK
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/RsDataVoid"
+  "/admin/notice/{id}":
+    get:
+      tags:
+      - notice-controller
+      operationId: getNoticeById
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/Notice"
+    put:
+      tags:
+      - notice-controller
+      operationId: updateNotice
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/Notice"
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/Notice"
+    delete:
+      tags:
+      - notice-controller
+      operationId: deleteNotice
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: OK
+  "/trip/schedule":
+    get:
+      tags:
+      - TripSchedule API
+      operationId: getAllSchedules
+      responses:
+        '200':
+          description: OK
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/RsDataListTripScheduleResDto"
+    post:
+      tags:
+      - TripSchedule API
+      summary: 나의 여행 일정 등록
+      operationId: createSchedule
+      parameters:
+      - name: Authorization
+        in: header
+        required: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/TripScheduleReqDto"
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/RsDataTripScheduleResDto"
+  "/recruits":
+    get:
+      tags:
+      - recruit-controller
+      operationId: getRecruits
+      responses:
+        '200':
+          description: OK
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/RsDataListRecruitListResponseDto"
+    post:
+      tags:
+      - recruit-controller
+      operationId: createRecruit
+      parameters:
+      - name: Authorization
+        in: header
+        required: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/RecruitRequestDto"
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/RsDataRecruitDetailResponseDto"
+  "/recruits/{recruitId}/applies":
+    get:
+      tags:
+      - apply-controller
+      operationId: getApplies
+      parameters:
+      - name: recruitId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/RsDataListApplyResponseDto"
+    post:
+      tags:
+      - apply-controller
+      operationId: createApply
+      parameters:
+      - name: recruitId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: Authorization
+        in: header
+        required: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/ApplyCreateRequestDto"
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/RsDataApplyResponseDto"
+  "/qna/question":
+    get:
+      tags:
+      - question-controller
+      operationId: getAllQuestions
+      responses:
+        '200':
+          description: OK
+          content:
+            "*/*":
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/QuestionDto"
+    post:
+      tags:
+      - question-controller
+      operationId: createQuestion
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/QuestionDto"
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/Question"
+  "/qna/answer":
+    post:
+      tags:
+      - answer-controller
+      operationId: createAnswer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties:
+                type: object
+        required: true
+      responses:
+        '200':
+          description: OK
+  "/place":
+    get:
+      tags:
+      - Place API
+      summary: 전체 여행지 조회
+      operationId: getAllPlaces
+      responses:
+        '200':
+          description: OK
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/RsDataListPlaceResDto"
+    post:
+      tags:
+      - Place API
+      summary: 여행지 등록
+      operationId: createPlace
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/PlaceCreateReqDto"
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/RsDataPlaceResDto"
+  "/member/refresh":
+    post:
+      tags:
+      - Member API
+      summary: 액세스 토큰 재발급
+      operationId: refresh
+      parameters:
+      - name: refreshToken
+        in: cookie
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            "*/*":
+              schema:
+                type: object
+  "/member/logout":
+    post:
+      tags:
+      - Member API
+      summary: 로그아웃
+      operationId: logout
+      responses:
+        '200':
+          description: OK
+          content:
+            "*/*":
+              schema:
+                type: object
+  "/member/login":
+    post:
+      tags:
+      - Member API
+      summary: 로그인
+      operationId: login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/LoginRequestDto"
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            "*/*":
+              schema:
+                type: object
+  "/member/join":
+    post:
+      tags:
+      - Member API
+      summary: 회원가입
+      operationId: join
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/JoinRequestDto"
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/MemberResponseDto"
+  "/member/auth/email":
+    post:
+      tags:
+      - Member API
+      summary: 이메일 인증
+      operationId: validateAuthCode
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/EmailVerificationRequestDto"
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            "*/*":
+              schema:
+                type: string
+  "/api/reviews":
+    get:
+      tags:
+      - review-controller
+      operationId: getReviews
+      parameters:
+      - name: sort
+        in: query
+        required: false
+        schema:
+          type: string
+          default: newest
+      - name: keyword
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: placeId
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int64
+      - name: memberId
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/RsDataListReviewResponseDto"
+    post:
+      tags:
+      - review-controller
+      operationId: createReview
+      parameters:
+      - name: memberId
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int64
+          default: 1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/ReviewRequestDto"
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/RsDataReviewResponseDto"
+  "/api/comments":
+    post:
+      tags:
+      - comment-controller
+      operationId: createComment
+      parameters:
+      - name: memberId
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int64
+          default: 1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/CommentRequestDto"
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/RsDataCommentResponseDto"
+  "/admin/notice":
+    get:
+      tags:
+      - notice-controller
+      operationId: getAllNotices
+      responses:
+        '200':
+          description: OK
+          content:
+            "*/*":
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/Notice"
+    post:
+      tags:
+      - notice-controller
+      operationId: createNotice
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/Notice"
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/Notice"
+  "/admin/blacklist":
+    get:
+      tags:
+      - blacklist-controller
+      operationId: getBlacklist
+      responses:
+        '200':
+          description: OK
+          content:
+            "*/*":
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/Blacklist"
+    post:
+      tags:
+      - blacklist-controller
+      operationId: addToBlacklist
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/Dto"
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            "*/*":
+              schema:
+                type: string
+  "/trip/schedule/my-schedules":
+    get:
+      tags:
+      - TripSchedule API
+      summary: 나의 여행 일정 전체 조회
+      operationId: getMySchedules
+      parameters:
+      - name: Authorization
+        in: header
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/RsDataListTripScheduleResDto"
+  "/trip/schedule/member/{memberId}":
+    get:
+      tags:
+      - TripSchedule API
+      operationId: getSchedulesByMember
+      parameters:
+      - name: memberId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/RsDataListTripScheduleResDto"
+  "/recruits/search":
+    get:
+      tags:
+      - recruit-controller
+      operationId: searchRecruits
+      parameters:
+      - name: keyword
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/RsDataListRecruitListResponseDto"
+  "/recruits/search3":
+    get:
+      tags:
+      - recruit-controller
+      operationId: searchAndFilter
+      parameters:
+      - name: keyword
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: cityName
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: isClosed
+        in: query
+        required: false
+        schema:
+          type: boolean
+      - name: startDate
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date
+      - name: endDate
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date
+      - name: travelStyle
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: sameGender
+        in: query
+        required: false
+        schema:
+          type: boolean
+      - name: sameAge
+        in: query
+        required: false
+        schema:
+          type: boolean
+      - name: minBudget
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: maxBudget
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: minGroupSize
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: maxGroupSize
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: sortBy
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: Authorization
+        in: header
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/RsDataListRecruitListResponseDto"
+  "/recruits/search2":
+    get:
+      tags:
+      - recruit-controller
+      operationId: findRecruitsByIsClosed
+      parameters:
+      - name: isClosed
+        in: query
+        required: true
+        schema:
+          type: boolean
+      responses:
+        '200':
+          description: OK
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/RsDataListRecruitListResponseDto"
+  "/qna/question/{id}":
+    get:
+      tags:
+      - question-controller
+      operationId: getQuestionById
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/Question"
+    delete:
+      tags:
+      - question-controller
+      operationId: deleteQuestionById
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: OK
+  "/member/mypage":
+    get:
+      tags:
+      - Member API
+      summary: 마이페이지
+      operationId: getMyPage
+      parameters:
+      - name: Authorization
+        in: header
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/MemberResponseDto"
+  "/member/auth/verify-email":
+    get:
+      tags:
+      - Member API
+      summary: 이메일 인증 코드 전송
+      operationId: requestAuthCode
+      parameters:
+      - name: email
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            "*/*":
+              schema:
+                type: string
+  "/api/reviews/popular":
+    get:
+      tags:
+      - review-controller
+      operationId: getPopularReviews
+      parameters:
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 10
+      responses:
+        '200':
+          description: OK
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/RsDataListReviewResponseDto"
+  "/api/reviews/place/{placeId}":
+    get:
+      tags:
+      - review-controller
+      operationId: getReviewsByPlace
+      parameters:
+      - name: placeId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/RsDataListReviewResponseDto"
+  "/api/comments/review/{reviewId}":
+    get:
+      tags:
+      - comment-controller
+      operationId: getCommentsByReview
+      parameters:
+      - name: reviewId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/RsDataListCommentResponseDto"
+  "/api/comments/member/{memberId}":
+    get:
+      tags:
+      - comment-controller
+      operationId: getCommentsByMember
+      parameters:
+      - name: memberId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/RsDataListCommentResponseDto"
+  "/trip/schedule/my-schedules/{scheduleId}":
+    delete:
+      tags:
+      - TripSchedule API
+      summary: 나의 여행 일정 삭제
+      operationId: deleteSchedule
+      parameters:
+      - name: scheduleId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: Authorization
+        in: header
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/RsDataVoid"
+  "/recruits/{recruitId}/applies/{applyId}":
+    delete:
+      tags:
+      - apply-controller
+      operationId: deleteApply
+      parameters:
+      - name: applyId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: Authorization
+        in: header
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/RsDataVoid"
+  "/qna/answer/{answerId}":
+    delete:
+      tags:
+      - answer-controller
+      operationId: deleteAnswer
+      parameters:
+      - name: answerId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: OK
+  "/admin/blacklist/{memberId}":
+    delete:
+      tags:
+      - blacklist-controller
+      operationId: removeFromBlacklist
+      parameters:
+      - name: memberId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            "*/*":
+              schema:
+                type: string
+components:
+  schemas:
+    TripScheduleUpdateReqDto:
+      required:
+      - description
+      - endDate
+      - startDate
+      - title
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        startDate:
+          type: string
+          format: date
+        endDate:
+          type: string
+          format: date
+    RsDataTripScheduleResDto:
+      type: object
+      properties:
+        code:
+          type: string
+        msg:
+          type: string
+        data:
+          "$ref": "#/components/schemas/TripScheduleResDto"
+    TripInformationResDto:
+      type: object
+      properties:
+        placeId:
+          type: integer
+          format: int64
+        visitTime:
+          type: string
+          format: date-time
+        duration:
+          type: integer
+          format: int32
+        transportation:
+          type: string
+          enum:
+          - WALK
+          - BUS
+          - SUBWAY
+          - CAR
+          - TAXI
+          - ETC
+        cost:
+          type: integer
+          format: int32
+        notes:
+          type: string
+        priority:
+          type: integer
+          format: int32
+        visited:
+          type: boolean
+    TripScheduleResDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        memberName:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        startDate:
+          type: string
+          format: date
+        endDate:
+          type: string
+          format: date
+        tripInformations:
+          type: array
+          items:
+            "$ref": "#/components/schemas/TripInformationResDto"
+    TripInformationUpdateReqDto:
+      required:
+      - tripInformationId
+      type: object
+      properties:
+        tripInformationId:
+          type: integer
+          format: int64
+        placeId:
+          type: integer
+          format: int64
+        visitTime:
+          type: string
+          format: date-time
+        duration:
+          type: integer
+          format: int32
+        transportation:
+          type: string
+          enum:
+          - WALK
+          - BUS
+          - SUBWAY
+          - CAR
+          - TAXI
+          - ETC
+        cost:
+          type: integer
+          format: int32
+        notes:
+          type: string
+        isVisited:
+          type: boolean
+    TripUpdateReqDto:
+      required:
+      - tripScheduleId
+      type: object
+      properties:
+        tripScheduleId:
+          type: integer
+          format: int64
+        scheduleUpdate:
+          "$ref": "#/components/schemas/TripScheduleUpdateReqDto"
+        tripInformationUpdates:
+          type: array
+          items:
+            "$ref": "#/components/schemas/TripInformationUpdateReqDto"
+    RsDataTripUpdateResDto:
+      type: object
+      properties:
+        code:
+          type: string
+        msg:
+          type: string
+        data:
+          "$ref": "#/components/schemas/TripUpdateResDto"
+    TripUpdateResDto:
+      type: object
+      properties:
+        updatedSchedule:
+          "$ref": "#/components/schemas/TripScheduleResDto"
+        updatedTripInformations:
+          type: array
+          items:
+            "$ref": "#/components/schemas/TripInformationResDto"
+    RsDataTripInformationResDto:
+      type: object
+      properties:
+        code:
+          type: string
+        msg:
+          type: string
+        data:
+          "$ref": "#/components/schemas/TripInformationResDto"
+    RecruitRequestDto:
+      type: object
+      properties:
+        placeId:
+          type: integer
+          format: int64
+        title:
+          type: string
+        content:
+          type: string
+        startDate:
+          type: string
+          format: date
+        endDate:
+          type: string
+          format: date
+        travelStyle:
+          type: string
+          enum:
+          - SIGHTSEEING
+          - RELAXATION
+          - ADVENTURE
+          - GOURMET
+          - SHOPPING
+        sameGender:
+          type: boolean
+        sameAge:
+          type: boolean
+        budget:
+          type: integer
+          format: int32
+        groupSize:
+          type: integer
+          format: int32
+        closed:
+          type: boolean
+    RecruitDetailResponseDto:
+      type: object
+      properties:
+        recruitId:
+          type: integer
+          format: int64
+        memberId:
+          type: integer
+          format: int64
+        memberProfileImage:
+          type: string
+        memberNickname:
+          type: string
+        placeId:
+          type: integer
+          format: int64
+        placeCityName:
+          type: string
+        placePlaceName:
+          type: string
+        title:
+          type: string
+        content:
+          type: string
+        startDate:
+          type: string
+          format: date
+        endDate:
+          type: string
+          format: date
+        travelStyle:
+          type: string
+          enum:
+          - SIGHTSEEING
+          - RELAXATION
+          - ADVENTURE
+          - GOURMET
+          - SHOPPING
+        sameGender:
+          type: boolean
+        sameAge:
+          type: boolean
+        budget:
+          type: integer
+          format: int32
+        groupSize:
+          type: integer
+          format: int32
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        closed:
+          type: boolean
+    RsDataRecruitDetailResponseDto:
+      type: object
+      properties:
+        code:
+          type: string
+        msg:
+          type: string
+        data:
+          "$ref": "#/components/schemas/RecruitDetailResponseDto"
+    PlaceUpdateReqDto:
+      type: object
+      properties:
+        cityName:
+          type: string
+        placeName:
+          type: string
+        description:
+          type: string
+        category:
+          type: string
+          enum:
+          - PLACE
+          - STAY
+          - RESTAURANT
+          - CAFE
+          - ETC
+    PlaceResDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        cityName:
+          type: string
+        placeName:
+          type: string
+        description:
+          type: string
+        category:
+          type: string
+          enum:
+          - PLACE
+          - STAY
+          - RESTAURANT
+          - CAFE
+          - ETC
+    RsDataPlaceResDto:
+      type: object
+      properties:
+        code:
+          type: string
+        msg:
+          type: string
+        data:
+          "$ref": "#/components/schemas/PlaceResDto"
+    MemberUpdateRequestDto:
+      type: object
+      properties:
+        nickname:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        profileImage:
+          type: string
+        gender:
+          type: string
+          enum:
+          - MALE
+          - FEMALE
+        ageRange:
+          type: string
+          enum:
+          - TEENS
+          - TWENTIES
+          - THIRTIES
+          - FORTIES_PLUS
+        travelStyle:
+          type: string
+          enum:
+          - TOURISM
+          - RELAXATION
+          - SHOPPING
+        aboutMe:
+          type: string
+    MemberResponseDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        username:
+          type: string
+        email:
+          type: string
+        nickname:
+          type: string
+        profileImage:
+          type: string
+        gender:
+          type: string
+          enum:
+          - MALE
+          - FEMALE
+        ageRange:
+          type: string
+          enum:
+          - TEENS
+          - TWENTIES
+          - THIRTIES
+          - FORTIES_PLUS
+        travelStyle:
+          type: string
+          enum:
+          - TOURISM
+          - RELAXATION
+          - SHOPPING
+        aboutMe:
+          type: string
+        rating:
+          type: number
+          format: double
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        authority:
+          type: string
+    ReviewRequestDto:
+      required:
+      - content
+      - title
+      type: object
+      properties:
+        title:
+          maxLength: 30
+          minLength: 2
+          type: string
+        content:
+          maxLength: 2000
+          minLength: 10
+          type: string
+        rating:
+          maximum: 5
+          minimum: 1
+          type: number
+          format: double
+        placeId:
+          type: integer
+          format: int64
+    ReviewResponseDto:
+      type: object
+      properties:
+        reviewId:
+          type: integer
+          format: int64
+        title:
+          type: string
+        content:
+          type: string
+        rating:
+          type: number
+          format: double
+        memberId:
+          type: integer
+          format: int64
+        memberName:
+          type: string
+        placeId:
+          type: integer
+          format: int64
+        viewCount:
+          type: integer
+          format: int32
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        commentCount:
+          type: integer
+          format: int32
+    RsDataReviewResponseDto:
+      type: object
+      properties:
+        code:
+          type: string
+        msg:
+          type: string
+        data:
+          "$ref": "#/components/schemas/ReviewResponseDto"
+    CommentRequestDto:
+      required:
+      - content
+      type: object
+      properties:
+        content:
+          maxLength: 100
+          minLength: 2
+          type: string
+        reviewId:
+          type: integer
+          format: int64
+    CommentResponseDto:
+      type: object
+      properties:
+        commentId:
+          type: integer
+          format: int64
+        content:
+          type: string
+        reviewId:
+          type: integer
+          format: int64
+        memberId:
+          type: integer
+          format: int64
+        memberName:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    RsDataCommentResponseDto:
+      type: object
+      properties:
+        code:
+          type: string
+        msg:
+          type: string
+        data:
+          "$ref": "#/components/schemas/CommentResponseDto"
+    Member:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        username:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        nickname:
+          type: string
+        profileImage:
+          type: string
+        gender:
+          type: string
+          enum:
+          - MALE
+          - FEMALE
+        ageRange:
+          type: string
+          enum:
+          - TEENS
+          - TWENTIES
+          - THIRTIES
+          - FORTIES_PLUS
+        travelStyle:
+          type: string
+          enum:
+          - TOURISM
+          - RELAXATION
+          - SHOPPING
+        aboutMe:
+          type: string
+        rating:
+          type: number
+          format: double
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        authority:
+          type: string
+        verified:
+          type: boolean
+    Notice:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        title:
+          type: string
+        content:
+          type: string
+        member:
+          "$ref": "#/components/schemas/Member"
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    TripInformationReqDto:
+      required:
+      - placeId
+      type: object
+      properties:
+        placeId:
+          type: integer
+          format: int64
+        visitTime:
+          type: string
+          format: date-time
+        duration:
+          type: integer
+          format: int32
+        transportation:
+          type: string
+          enum:
+          - WALK
+          - BUS
+          - SUBWAY
+          - CAR
+          - TAXI
+          - ETC
+        cost:
+          type: integer
+          format: int32
+        notes:
+          type: string
+        priority:
+          type: integer
+          format: int32
+        visited:
+          type: boolean
+    TripScheduleReqDto:
+      type: object
+      properties:
+        memberId:
+          type: integer
+          format: int64
+        title:
+          type: string
+        description:
+          type: string
+        startDate:
+          type: string
+          format: date
+        endDate:
+          type: string
+          format: date
+        tripInformations:
+          type: array
+          items:
+            "$ref": "#/components/schemas/TripInformationReqDto"
+    ApplyCreateRequestDto:
+      type: object
+      properties:
+        content:
+          type: string
+    ApplyResponseDto:
+      type: object
+      properties:
+        applyId:
+          type: integer
+          format: int64
+        memberId:
+          type: integer
+          format: int64
+        memberProfileImage:
+          type: string
+        memberNickname:
+          type: string
+        content:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    RsDataApplyResponseDto:
+      type: object
+      properties:
+        code:
+          type: string
+        msg:
+          type: string
+        data:
+          "$ref": "#/components/schemas/ApplyResponseDto"
+    QuestionDto:
+      type: object
+      properties:
+        title:
+          type: string
+        content:
+          type: string
+        memberId:
+          type: integer
+          format: int64
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+        memberUsername:
+          type: string
+    Answer:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        member:
+          "$ref": "#/components/schemas/Member"
+        question:
+          "$ref": "#/components/schemas/Question"
+        content:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    Question:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        member:
+          "$ref": "#/components/schemas/Member"
+        title:
+          type: string
+        content:
+          type: string
+        answers:
+          type: array
+          items:
+            "$ref": "#/components/schemas/Answer"
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    PlaceCreateReqDto:
+      required:
+      - category
+      - cityName
+      - placeName
+      type: object
+      properties:
+        cityName:
+          type: string
+        placeName:
+          type: string
+        description:
+          type: string
+        category:
+          type: string
+          enum:
+          - PLACE
+          - STAY
+          - RESTAURANT
+          - CAFE
+          - ETC
+    LoginRequestDto:
+      required:
+      - password
+      - username
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+    JoinRequestDto:
+      required:
+      - ageRange
+      - email
+      - gender
+      - nickname
+      - password
+      - travelStyle
+      - username
+      type: object
+      properties:
+        username:
+          maxLength: 20
+          minLength: 4
+          pattern: "^[a-zA-Z0-9_]+$"
+          type: string
+        email:
+          type: string
+        password:
+          maxLength: 2147483647
+          minLength: 8
+          type: string
+        nickname:
+          type: string
+        profileImage:
+          type: string
+        gender:
+          type: string
+          enum:
+          - MALE
+          - FEMALE
+        ageRange:
+          type: string
+          enum:
+          - TEENS
+          - TWENTIES
+          - THIRTIES
+          - FORTIES_PLUS
+        travelStyle:
+          type: string
+          enum:
+          - TOURISM
+          - RELAXATION
+          - SHOPPING
+        aboutMe:
+          type: string
+    EmailVerificationRequestDto:
+      required:
+      - authCode
+      - email
+      type: object
+      properties:
+        email:
+          type: string
+        authCode:
+          maxLength: 6
+          minLength: 6
+          type: string
+    Dto:
+      type: object
+      properties:
+        memberId:
+          type: integer
+          format: int64
+        reason:
+          type: string
+    RsDataListTripScheduleResDto:
+      type: object
+      properties:
+        code:
+          type: string
+        msg:
+          type: string
+        data:
+          type: array
+          items:
+            "$ref": "#/components/schemas/TripScheduleResDto"
+    RecruitListResponseDto:
+      type: object
+      properties:
+        recruitId:
+          type: integer
+          format: int64
+        memberProfileImage:
+          type: string
+        memberNickname:
+          type: string
+        placeCityName:
+          type: string
+        placePlaceName:
+          type: string
+        title:
+          type: string
+        startDate:
+          type: string
+          format: date
+        endDate:
+          type: string
+          format: date
+        travelStyle:
+          type: string
+          enum:
+          - SIGHTSEEING
+          - RELAXATION
+          - ADVENTURE
+          - GOURMET
+          - SHOPPING
+        sameGender:
+          type: boolean
+        sameAge:
+          type: boolean
+        budget:
+          type: integer
+          format: int32
+        groupSize:
+          type: integer
+          format: int32
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        closed:
+          type: boolean
+    RsDataListRecruitListResponseDto:
+      type: object
+      properties:
+        code:
+          type: string
+        msg:
+          type: string
+        data:
+          type: array
+          items:
+            "$ref": "#/components/schemas/RecruitListResponseDto"
+    RsDataListApplyResponseDto:
+      type: object
+      properties:
+        code:
+          type: string
+        msg:
+          type: string
+        data:
+          type: array
+          items:
+            "$ref": "#/components/schemas/ApplyResponseDto"
+    RsDataListPlaceResDto:
+      type: object
+      properties:
+        code:
+          type: string
+        msg:
+          type: string
+        data:
+          type: array
+          items:
+            "$ref": "#/components/schemas/PlaceResDto"
+    RsDataListReviewResponseDto:
+      type: object
+      properties:
+        code:
+          type: string
+        msg:
+          type: string
+        data:
+          type: array
+          items:
+            "$ref": "#/components/schemas/ReviewResponseDto"
+    RsDataListCommentResponseDto:
+      type: object
+      properties:
+        code:
+          type: string
+        msg:
+          type: string
+        data:
+          type: array
+          items:
+            "$ref": "#/components/schemas/CommentResponseDto"
+    Blacklist:
+      type: object
+      properties:
+        createdAt:
+          type: string
+          format: date-time
+        id:
+          type: integer
+          format: int64
+        member:
+          "$ref": "#/components/schemas/Member"
+        reason:
+          type: string
+    RsDataVoid:
+      type: object
+      properties:
+        code:
+          type: string
+        msg:
+          type: string
+        data:
+          type: object
+  securitySchemes:
+    bearerAuth:
+      type: http
+      name: Authorization
+      in: header
+      scheme: bearer
+      bearerFormat: JWT
