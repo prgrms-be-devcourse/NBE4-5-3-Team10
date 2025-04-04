@@ -216,4 +216,20 @@ public class TripScheduleServiceTest {
         List<?> tripInfoList = tripScheduleService.getTripInfo(token, scheduleId);
         assertThat(tripInfoList).isNotEmpty();
     }
+
+    @Test
+    @DisplayName("특정 회원의 여행 일정 조회 실패 - 회원 미존재")
+    void getSchedulesByMemberIdFailNotFound() {
+        // 존재하지 않는 회원 ID 사용 (예: 9999L)
+        Long nonExistentMemberId = 9999L;
+
+        ServiceException ex = assertThrows(ServiceException.class, () -> {
+            tripScheduleService.getSchedulesByMemberId(nonExistentMemberId);
+        });
+        assertThat(ex.getCode()).isEqualTo("404-1");
+    }
+
+
+
 }
+
