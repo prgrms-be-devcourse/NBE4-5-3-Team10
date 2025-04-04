@@ -99,6 +99,35 @@ public class TripScheduleServiceTest {
     }
 
     @Test
+    @DisplayName("여행 일정 생성 실패 - 여행 정보 도시 불일치")
+    void createScheduleFailTripInfoCityMismatch() {
+        // user1이 서울을 선택했지만, 여행 정보의 장소가 다른 도시인 경우
+        TripScheduleReqDto reqDto = new TripScheduleReqDto();
+        reqDto.setMemberId(loginedMember.getId());
+        reqDto.setTitle("서울 여행");
+        reqDto.setDescription("서울 여행 설명");
+        reqDto.setCityName("서울");  // 선택 도시: 서울
+        reqDto.setStartDate(LocalDate.of(2023, 9, 1));
+        reqDto.setEndDate(LocalDate.of(2023, 9, 10));
+
+        // 여행 정보 예시: 해당 장소의 도시가 "부산" 등 서울과 다른 경우
+        TripInformationReqDto infoReq = new TripInformationReqDto();
+        infoReq.setPlaceId(6L); // 6L은 부산의 도시 장소Id
+        infoReq.setVisitTime(LocalDateTime.of(2025, 4, 10, 9, 0));
+        infoReq.setDuration(2);
+        infoReq.setTransportation(Transportation.SUBWAY);
+        infoReq.setCost(3000);
+        infoReq.setNotes("부산 명소 방문");
+
+        reqDto.setTripInformations(List.of(infoReq));
+
+        ServiceException ex = assertThrows(ServiceException.class, () -> {
+            tripScheduleService.createSchedule(reqDto, token);
+        });
+        assertThat(ex.getCode()).isEqualTo("400-1");
+    }
+
+    @Test
     @DisplayName("여행 일정 삭제 성공")
     void deleteScheduleSuccess() {
 
