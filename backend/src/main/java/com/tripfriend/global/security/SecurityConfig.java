@@ -75,7 +75,6 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
         // 허용할 출처를 명시합니다.
         configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
-        configuration.setAllowedOrigins(Arrays.asList("https://tripfriend.vercel.app"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.setAllowCredentials(true);
