@@ -165,6 +165,42 @@ public class TripScheduleServiceTest {
         assertThat(updateRes.getUpdatedTripInformations().get(0).getDuration()).isEqualTo(1);
     }
 
+    @Test
+    @DisplayName("여행 일정 수정 실패 - 일정 생성자가 아님")
+    void updateTripFailNotOwner() {
+
+        // 여행 스케줄 id
+        Long scheduleId = 1L;
+        // 세부 스케줄 id
+        Long tripInfoId = 1L;
+
+        // 업데이트 DTO 생성
+        TripScheduleUpdateReqDto updateSchedule = new TripScheduleUpdateReqDto();
+        updateSchedule.setTitle("수정된 제목");
+        updateSchedule.setDescription("수정된 설명");
+
+        TripInformationUpdateReqDto updateTripInfo = new TripInformationUpdateReqDto();
+        updateTripInfo.setTripInformationId(tripInfoId);
+        updateTripInfo.setCost(5000); // 수정된 비용
+        updateTripInfo.setNotes("수정된 노트"); // 수정된 노트
+        updateTripInfo.setDuration(1);
+
+        // 업데이트 요청 DTO 생성
+        TripUpdateReqDto updateReq = new TripUpdateReqDto();
+        updateReq.setTripScheduleId(scheduleId);
+        updateReq.setScheduleUpdate(updateSchedule);
+        updateReq.setTripInformationUpdates(List.of(updateTripInfo));
+
+        // user2의 토큰 생성 (user1이 생성한 일정을 수정할 수 없음)
+        Member otherMember = memberRepository.findByUsername("user2").orElseThrow();
+        String otherToken = jwtUtil.generateAccessToken(otherMember.getUsername(), otherMember.getAuthority(), otherMember.isVerified());
+
+        ServiceException ex = assertThrows(ServiceException.class, () -> {
+            tripScheduleService.updateTrip(updateReq, otherToken);
+        });
+        // 일정 생성자가 아니므로 "403-1" 에러 코드가 발생해야 함
+        assertThat(ex.getCode()).isEqualTo("403-1");
+    }
 
     @Test
     @DisplayName("내 여행 일정 조회 성공")
