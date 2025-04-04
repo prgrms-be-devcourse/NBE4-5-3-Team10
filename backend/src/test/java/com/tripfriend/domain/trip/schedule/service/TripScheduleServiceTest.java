@@ -247,6 +247,22 @@ public class TripScheduleServiceTest {
     }
 
     @Test
+    @DisplayName("여행 일정 세부 정보 조회 실패 - 소유자가 아님")
+    void getTripInfoFailNotOwner() {
+        // user1이 생성한 일정 id가 1L라 가정
+        Long scheduleId = 1L;
+
+        // user2의 토큰 생성 (user1이 생성한 일정을 조회할 수 없음)
+        Member otherMember = memberRepository.findByUsername("user2").orElseThrow();
+        String otherToken = jwtUtil.generateAccessToken(otherMember.getUsername(), otherMember.getAuthority(), otherMember.isVerified());
+
+        ServiceException ex = assertThrows(ServiceException.class, () -> {
+            tripScheduleService.getTripInfo(otherToken, scheduleId);
+        });
+        assertThat(ex.getCode()).isEqualTo("403-1");
+    }
+
+    @Test
     @DisplayName("특정 회원의 여행 일정 조회 실패 - 회원 미존재")
     void getSchedulesByMemberIdFailNotFound() {
         // 존재하지 않는 회원 ID 사용 (예: 9999L)
