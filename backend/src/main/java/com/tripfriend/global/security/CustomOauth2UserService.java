@@ -68,21 +68,23 @@ public class CustomOauth2UserService extends DefaultOAuth2UserService {
             System.out.println("OAuth 로그인이 최초입니다.");
 
             // 새로운 Member 객체 생성 (기본 정보만 저장)
-            Member memberEntity = Member.builder()
-                    .username(username)
-                    .email(email)
-                    .password(password)
-                    .nickname(username)
-                    .gender(Gender.UNKNOWN)
-                    .ageRange(AgeRange.UNKNOWN)
-                    .travelStyle(TravelStyle.UNKNOWN)
-                    .rating(rating)
-                    .authority(authority)
-                    .verified(verified)
-                    .provider(provider)
-                    .providerId(providerId)
-                    .deleted(false)
-                    .build();
+            Member memberEntity = new Member();
+
+            memberEntity.setUsername(username);
+            memberEntity.setEmail(email);
+            memberEntity.setPassword(password);
+            memberEntity.setNickname(username);
+            memberEntity.setGender(Gender.UNKNOWN);
+            memberEntity.setAgeRange(AgeRange.UNKNOWN);
+            memberEntity.setTravelStyle(TravelStyle.UNKNOWN);
+            memberEntity.setRating(rating);
+            memberEntity.setAuthority(authority);
+            memberEntity.setVerified(verified);
+            memberEntity.setProvider(provider);
+            memberEntity.setProviderId(providerId);
+            memberEntity.setDeleted(false);
+
+            memberRepository.save(memberEntity);
 
             // 새로운 회원 DB에 저장
             memberRepository.save(memberEntity);
