@@ -166,37 +166,33 @@ class MemberServiceTest {
             .aboutMe("프로필 업데이트")
             .build()
 
-        val originalMember = Member.builder()
-            .id(memberId)
-            .username("testuser")
-            .email("test@example.com")
-            .password("encrypted_password")
-            .nickname("테스트유저")
-            .gender(Gender.MALE)
-            .ageRange(AgeRange.TWENTIES)
-            .travelStyle(TravelStyle.TOURISM)
-            .aboutMe("안녕하세요")
-            .rating(0.0)
-            .authority("ROLE_USER")
-            .createdAt(LocalDateTime.now())
-            .updatedAt(LocalDateTime.now())
-            .build()
+        val originalMember = Member(
+            id = memberId,
+            username = "testuser",
+            email = "test@example.com",
+            password = "encrypted_password",
+            nickname = "테스트유저",
+            gender = Gender.MALE,
+            ageRange = AgeRange.TWENTIES,
+            travelStyle = TravelStyle.TOURISM,
+            aboutMe = "안녕하세요",
+            rating = 0.0,
+            authority = "ROLE_USER",
+            verified = true,
+            createdAt = LocalDateTime.now(),
+            updatedAt = LocalDateTime.now()
+        )
 
-        val updatedMember = Member.builder()
-            .id(memberId)
-            .username("testuser")
-            .email(updateRequestDto.email)
-            .password(updateRequestDto.password)
-            .nickname(updateRequestDto.nickname)
-            .gender(updateRequestDto.gender)
-            .ageRange(updateRequestDto.ageRange)
-            .travelStyle(updateRequestDto.travelStyle)
-            .aboutMe(updateRequestDto.aboutMe)
-            .rating(0.0)
-            .authority("ROLE_USER")
-            .createdAt(originalMember.createdAt)
-            .updatedAt(LocalDateTime.now())
-            .build()
+        val updatedMember = originalMember.copy(
+            email = updateRequestDto.email,
+            password = updateRequestDto.password,
+            nickname = updateRequestDto.nickname,
+            gender = updateRequestDto.gender,
+            ageRange = updateRequestDto.ageRange,
+            travelStyle = updateRequestDto.travelStyle,
+            aboutMe = updateRequestDto.aboutMe,
+            updatedAt = LocalDateTime.now()
+        )
 
         // When
         every { memberRepository.findById(memberId) } returns Optional.of(originalMember)
@@ -256,39 +252,29 @@ class MemberServiceTest {
     fun deleteMemberSuccess() {
         // Given
         val memberId = 1L
-        val member = Member.builder()
-            .id(memberId)
-            .username("testuser")
-            .email("test@example.com")
-            .password("password")
-            .nickname("테스트유저")
-            .gender(Gender.MALE)
-            .ageRange(AgeRange.TWENTIES)
-            .travelStyle(TravelStyle.TOURISM)
-            .rating(0.0)
-            .authority("ROLE_USER")
-            .createdAt(LocalDateTime.now())
-            .updatedAt(LocalDateTime.now())
-            .build()
+        val member = Member(
+            id = memberId,
+            username = "testuser",
+            email = "test@example.com",
+            password = "password",
+            nickname = "테스트유저",
+            gender = Gender.MALE,
+            ageRange = AgeRange.TWENTIES,
+            travelStyle = TravelStyle.TOURISM,
+            rating = 0.0,
+            authority = "ROLE_USER",
+            verified = true,
+            createdAt = LocalDateTime.now(),
+            updatedAt = LocalDateTime.now()
+        )
 
         val request = mockk<HttpServletRequest>()
         val response = mockk<HttpServletResponse>()
 
         // 삭제된 회원 정보를 모킹
-        val deletedMember = Member.builder()
-            .id(memberId)
-            .username("testuser")
-            .email("test@example.com")
-            .password("password")
-            .nickname("테스트유저")
-            .gender(Gender.MALE)
-            .ageRange(AgeRange.TWENTIES)
-            .travelStyle(TravelStyle.TOURISM)
-            .rating(0.0)
-            .authority("ROLE_USER")
-            .createdAt(member.createdAt)
-            .updatedAt(LocalDateTime.now())
-            .build()
+        val deletedMember = member.copy(
+            updatedAt = LocalDateTime.now()
+        )
 
         // deletedAt과 deleted 상태를 확인
         every { memberRepository.findById(memberId) } returns Optional.of(member)
@@ -296,7 +282,7 @@ class MemberServiceTest {
         every { memberRepository.save(any()) } answers {
             // 저장할 때 deleted와 deletedAt이 설정되었음을 검증
             val savedMember = firstArg<Member>()
-            assertTrue(savedMember.isDeleted)  // getter 사용
+            assertTrue(savedMember.deleted)  // getter 사용
             assertNotNull(savedMember.deletedAt)  // getter 사용
             deletedMember
         }
@@ -322,7 +308,7 @@ class MemberServiceTest {
         val deletedMember = mockk<Member>(relaxed = true)  // 모든 setter를 처리하기 위해 relaxed 모킹 사용
 
         // 삭제된 회원 동작 정의
-        every { deletedMember.isDeleted } returns true
+        every { deletedMember.deleted } returns true
         every { deletedMember.deletedAt } returns LocalDateTime.now().minusDays(5)
         every { deletedMember.canBeRestored() } returns true
 
@@ -335,7 +321,7 @@ class MemberServiceTest {
 
         // Verify
         verify { memberRepository.findByIdAndDeletedTrue(memberId) }
-        verify { deletedMember.isDeleted = false }  // isDeleted setter가 false로 호출되었는지 확인
+        verify { deletedMember.deleted = false }  // isDeleted setter가 false로 호출되었는지 확인
         verify { deletedMember.deletedAt = null }   // deletedAt setter가 null로 호출되었는지 확인
         verify { memberRepository.save(any()) }
     }
@@ -375,19 +361,21 @@ class MemberServiceTest {
         // Given
         val memberId = 1L
         val username = "testuser"
-        val member = Member.builder()
-            .id(memberId)
-            .username(username)
-            .email("test@example.com")
-            .nickname("테스트유저")
-            .gender(Gender.MALE)
-            .ageRange(AgeRange.TWENTIES)
-            .travelStyle(TravelStyle.TOURISM)
-            .rating(0.0)
-            .authority("ROLE_USER")
-            .createdAt(LocalDateTime.now())
-            .updatedAt(LocalDateTime.now())
-            .build()
+        val member = Member(
+            id = memberId,
+            username = "testuser",
+            email = "test@example.com",
+            password = "password",
+            nickname = "테스트유저",
+            gender = Gender.MALE,
+            ageRange = AgeRange.TWENTIES,
+            travelStyle = TravelStyle.TOURISM,
+            rating = 0.0,
+            authority = "ROLE_USER",
+            verified = true,
+            createdAt = LocalDateTime.now(),
+            updatedAt = LocalDateTime.now()
+        )
 
         // When
         every { memberRepository.findById(memberId) } returns Optional.of(member)
@@ -412,20 +400,21 @@ class MemberServiceTest {
         val memberId = 1L
         val username = "testuser"
         val otherUsername = "otheruser"
-        val member = Member.builder()
-            .id(memberId)
-            .username(username)
-            .email("test@example.com")
-            .password("password")
-            .nickname("테스트유저")
-            .gender(Gender.MALE)
-            .ageRange(AgeRange.TWENTIES)
-            .travelStyle(TravelStyle.TOURISM)
-            .rating(0.0)
-            .authority("ROLE_USER")
-            .createdAt(LocalDateTime.now())
-            .updatedAt(LocalDateTime.now())
-            .build()
+        val member = Member(
+            id = memberId,
+            username = "testuser",
+            email = "test@example.com",
+            password = "password",
+            nickname = "테스트유저",
+            gender = Gender.MALE,
+            ageRange = AgeRange.TWENTIES,
+            travelStyle = TravelStyle.TOURISM,
+            rating = 0.0,
+            authority = "ROLE_USER",
+            verified = true,
+            createdAt = LocalDateTime.now(),
+            updatedAt = LocalDateTime.now()
+        )
 
         // When
         every { memberRepository.findById(memberId) } returns Optional.of(member)
@@ -449,15 +438,51 @@ class MemberServiceTest {
     fun getAllMembersTest() {
         // Given
         val members = listOf(
-            Member.builder().id(1L).username("user1").email("user1@test.com").nickname("유저1")
-                .gender(Gender.MALE).ageRange(AgeRange.TWENTIES).travelStyle(TravelStyle.TOURISM)
-                .rating(0.0).authority("ROLE_USER").createdAt(LocalDateTime.now()).updatedAt(LocalDateTime.now()).build(),
-            Member.builder().id(2L).username("user2").email("user2@test.com").nickname("유저2")
-                .gender(Gender.FEMALE).ageRange(AgeRange.THIRTIES).travelStyle(TravelStyle.SHOPPING)
-                .rating(0.0).authority("ROLE_USER").createdAt(LocalDateTime.now()).updatedAt(LocalDateTime.now()).build(),
-            Member.builder().id(3L).username("user3").email("user3@test.com").nickname("유저3")
-                .gender(Gender.MALE).ageRange(AgeRange.FORTIES_PLUS).travelStyle(TravelStyle.RELAXATION)
-                .rating(0.0).authority("ROLE_USER").createdAt(LocalDateTime.now()).updatedAt(LocalDateTime.now()).build()
+            Member(
+                id = 1L,
+                username = "user1",
+                password = "password1",
+                email = "user1@test.com",
+                nickname = "유저1",
+                gender = Gender.MALE,
+                ageRange = AgeRange.TWENTIES,
+                travelStyle = TravelStyle.TOURISM,
+                rating = 0.0,
+                authority = "ROLE_USER",
+                verified = true,
+                createdAt = LocalDateTime.now(),
+                updatedAt = LocalDateTime.now()
+            ),
+            Member(
+                id = 2L,
+                username = "user2",
+                password = "password2",
+                email = "user2@test.com",
+                nickname = "유저2",
+                gender = Gender.FEMALE,
+                ageRange = AgeRange.THIRTIES,
+                travelStyle = TravelStyle.SHOPPING,
+                rating = 0.0,
+                authority = "ROLE_USER",
+                verified = true,
+                createdAt = LocalDateTime.now(),
+                updatedAt = LocalDateTime.now()
+            ),
+            Member(
+                id = 3L,
+                username = "user3",
+                password = "password2",
+                email = "user3@test.com",
+                nickname = "유저3",
+                gender = Gender.MALE,
+                ageRange = AgeRange.FORTIES_PLUS,
+                travelStyle = TravelStyle.RELAXATION,
+                rating = 0.0,
+                authority = "ROLE_USER",
+                verified = true,
+                createdAt = LocalDateTime.now(),
+                updatedAt = LocalDateTime.now()
+            )
         )
 
         // When
@@ -483,8 +508,36 @@ class MemberServiceTest {
     fun purgeExpiredDeletedMembersTest() {
         // Given
         val expiredMembers = listOf(
-            Member.builder().id(1L).username("expired1").build(),
-            Member.builder().id(2L).username("expired2").build()
+            Member(
+                id = 1L,
+                username = "expired1",
+                password = "password1",
+                email = "",
+                nickname = "",
+                gender = Gender.MALE, // 또는 기본값에 맞게 적절히 설정
+                ageRange = AgeRange.TWENTIES, // 또는 적절한 기본값
+                travelStyle = TravelStyle.TOURISM, // 기본값 필요
+                rating = 0.0,
+                authority = "ROLE_USER",
+                verified = true,
+                createdAt = LocalDateTime.now(),
+                updatedAt = LocalDateTime.now()
+            ),
+            Member(
+                id = 2L,
+                username = "expired2",
+                password = "password2",
+                email = "",
+                nickname = "",
+                gender = Gender.MALE,
+                ageRange = AgeRange.TWENTIES,
+                travelStyle = TravelStyle.TOURISM,
+                rating = 0.0,
+                authority = "ROLE_USER",
+                verified = true,
+                createdAt = LocalDateTime.now(),
+                updatedAt = LocalDateTime.now()
+            )
         )
 
         // When
@@ -512,7 +565,7 @@ class MemberServiceTest {
 
         // When
         every { memberRepository.findById(memberId) } returns Optional.of(member)
-        every { member.isDeleted } returns true
+        every { member.deleted } returns true
 
         // Then
         val result = memberService.isSoftDeleted(memberId)
