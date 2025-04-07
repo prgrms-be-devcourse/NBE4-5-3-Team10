@@ -1,76 +1,60 @@
-package com.tripfriend.domain.trip.information.entity;
+package com.tripfriend.domain.trip.information.entity
 
-import com.tripfriend.domain.place.place.entity.Place;
-import com.tripfriend.domain.trip.information.dto.TripInformationUpdateReqDto;
-import com.tripfriend.domain.trip.schedule.entity.TripSchedule;
-import jakarta.persistence.*;
-import lombok.*;
-import org.hibernate.annotations.ColumnDefault;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import com.tripfriend.domain.place.place.entity.Place
+import com.tripfriend.domain.trip.information.dto.TripInformationUpdateReqDto
+import com.tripfriend.domain.trip.schedule.entity.TripSchedule
+import jakarta.persistence.*
+import org.hibernate.annotations.ColumnDefault
+import org.springframework.data.jpa.domain.support.AuditingEntityListener
+import java.time.LocalDateTime
 
 @Entity
-@Getter
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@EntityListeners(AuditingEntityListener::class)
 @Table(name = "trip_information")
-public class TripInformation {
-
+open class TripInformation(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "trip_Information_id")
-    private Long id; // 개별 Id 추가
+    var id: Long? = null, // 개별 Id 추가
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "trip_schedule_id", nullable = false)
-    private TripSchedule tripSchedule; // 여행일정Id - FK
+    var tripSchedule: TripSchedule? = null, // 여행일정Id - FK
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "place_id", nullable = false)
-    private Place place; // 여행지Id - FK
+    var place: Place? = null, // 여행지Id - FK
 
     @Column(name = "visit_time", nullable = false)
-    private LocalDateTime visitTime; // 방문시간
+    var visitTime: LocalDateTime? = null, // 방문시간
 
     @Column(name = "duration", nullable = false)
-    private Integer duration; // 방문기간(날짜 단위)
+    var duration: Int? = null, // 방문기간(날짜 단위)
 
     @Column(name = "transportation", nullable = false)
-    private Transportation transportation; // 교통 수단
+    var transportation: Transportation? = null, // 교통 수단
 
     @Column(name = "cost")
-    private int cost; // 여행 경비
+    var cost: Int = 0, // 여행 경비
 
     @Column(name = "notes", columnDefinition = "TEXT")
-    private String notes; // 메모
-
-//    @Column(name = "priority")
-//    private Integer priority; // 우선 순위
+    var notes: String? = null, // 메모
 
     @Column(name = "is_visited", nullable = false)
     @ColumnDefault("false")
-    private boolean isVisited; // 방문여부
-
-    public void setTripSchedule(TripSchedule tripSchedule) {
-        this.tripSchedule = tripSchedule;
-    }
-
-    public void setPlace(Place place) {
-        this.place = place;
-    }
-
-    public void setVisited(boolean isVisited){this.isVisited = isVisited;}
+    var isVisited: Boolean = false // 방문여부
+) {
+    // 코틀린의 기본값 덕분에 별도의 no-arg 생성자가 제공됩니다.
+    // 혹시 필요하다면 아래와 같이 명시적으로 protected no-arg 생성자를 추가할 수 있습니다.
+    //
+    // protected constructor() : this(null, null, null, null, null, null, 0, null, false)
 
     // 여행 정보 수정 메서드
-    public void updateTripInformation(TripInformationUpdateReqDto updateDto){
-        this.visitTime = updateDto.getVisitTime();
-        this.duration = updateDto.getDuration();
-        this.transportation = updateDto.getTransportation();
-        this.cost = updateDto.getCost();
-        this.notes = updateDto.getNotes();
+    fun updateTripInformation(updateDto: TripInformationUpdateReqDto) {
+        visitTime = updateDto.visitTime
+        duration = updateDto.duration
+        transportation = updateDto.transportation
+        cost = updateDto.cost
+        notes = updateDto.notes
     }
 }
