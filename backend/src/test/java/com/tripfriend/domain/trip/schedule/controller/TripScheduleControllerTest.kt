@@ -4,20 +4,19 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.tripfriend.domain.trip.schedule.dto.TripScheduleInfoResDto
 import com.tripfriend.domain.trip.schedule.dto.TripScheduleResDto
 import com.tripfriend.domain.trip.schedule.service.TripScheduleService
+import io.mockk.impl.annotations.MockK
+import io.mockk.junit5.MockKExtension
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.ArgumentMatchers.any
 import org.mockito.ArgumentMatchers.eq
 import org.mockito.Mockito.doReturn
 import org.mockito.kotlin.doNothing
 import org.mockito.kotlin.whenever
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 
 import org.springframework.http.MediaType
 import org.springframework.test.context.ActiveProfiles
-import org.springframework.test.context.bean.override.mockito.MockitoBean
-import org.springframework.test.context.bean.override.mockito.MockitoSpyBean
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
@@ -26,16 +25,16 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPat
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
 @ActiveProfiles("test")
-@WebMvcTest(TripScheduleController::class)
+@ExtendWith(MockKExtension::class)
 class TripScheduleControllerTest {
 
-    @Autowired
+    @MockK
     private lateinit var mockMvc: MockMvc
 
-    @MockitoBean
+    @MockK
     private lateinit var tripScheduleService: TripScheduleService
 
-    @Autowired
+    @MockK
     private lateinit var objectMapper: ObjectMapper
 
     @Test
