@@ -29,11 +29,15 @@ public class EventService {
     }
 
     public EventResponse create(EventRequest request) {
-        Event event = Event.builder()
-                .title(request.getTitle())
-                .description(request.getDescription())
-                .eventDate(request.getEventDate())
-                .build();
+        Event event = new Event(
+                null,
+                request.getTitle(),
+                request.getDescription(),
+                request.getEventDate(),
+                null,
+                null
+        );
+
 
         Event saved = eventRepository.save(event);
 
