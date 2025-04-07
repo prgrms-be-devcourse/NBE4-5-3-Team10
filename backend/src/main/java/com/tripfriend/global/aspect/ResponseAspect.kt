@@ -1,21 +1,21 @@
-package com.tripfriend.global.aspect;
+package com.tripfriend.global.aspect
 
-import com.tripfriend.global.dto.RsData;
-import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
-import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.Around;
-import org.aspectj.lang.annotation.Aspect;
-import org.springframework.stereotype.Component;
+import com.tripfriend.global.dto.RsData
+import jakarta.servlet.http.HttpServletResponse
+import org.aspectj.lang.ProceedingJoinPoint
+import org.aspectj.lang.annotation.Around
+import org.aspectj.lang.annotation.Aspect
+import org.springframework.stereotype.Component
 
 @Aspect
 @Component
-@RequiredArgsConstructor
-public class ResponseAspect {
+class ResponseAspect(
+    private val response: HttpServletResponse
+) {
 
-    private final HttpServletResponse response;
 
-    @Around("""
+    @Around(
+        """
             (
                 within
                 (
@@ -34,15 +34,17 @@ public class ResponseAspect {
             )
             ||
             @annotation(org.springframework.web.bind.annotation.ResponseBody)
-            """)
-    public Object responseAspect(ProceedingJoinPoint joinPoint) throws Throwable {
-        Object rst = joinPoint.proceed();
+            """
+    )
 
-        if (rst instanceof RsData rsData) {
-            int statusCode = rsData.getStatusCode();
-            response.setStatus(statusCode);
+    fun responseAspect(joinPoint: ProceedingJoinPoint): Any {
+        val rst = joinPoint.proceed()
+
+        if (rst is RsData<*>) {
+            val statusCode = rst.statusCode
+            response!!.status = statusCode
         }
 
-        return rst;
+        return rst
     }
 }
