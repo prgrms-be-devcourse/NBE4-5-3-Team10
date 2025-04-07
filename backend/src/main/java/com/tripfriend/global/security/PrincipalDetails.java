@@ -66,7 +66,7 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
     }
 
     public boolean isVerified() {
-        return member.isVerified();  // 이메일 인증 여부를 체크
+        return member.getVerified();  // 이메일 인증 여부를 체크
     }
 
     public Member getMember() {

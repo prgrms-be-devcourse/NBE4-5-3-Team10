@@ -39,12 +39,12 @@ public class AuthService {
         }
 
         // 계정이 삭제된 상태인 경우
-        if (member.isDeleted()) {
+        if (member.getDeleted()) {
             // 복구 가능한 경우
             if (member.canBeRestored()) {
                 // 복구 가능한 경우에만 특별한 토큰 발급
-                String accessToken = jwtUtil.generateAccessToken(member.getUsername(), member.getAuthority(), member.isVerified(), true);
-                String refreshToken = jwtUtil.generateRefreshToken(member.getUsername(), member.getAuthority(), member.isVerified(), true);
+                String accessToken = jwtUtil.generateAccessToken(member.getUsername(), member.getAuthority(), member.getVerified(), true);
+                String refreshToken = jwtUtil.generateRefreshToken(member.getUsername(), member.getAuthority(), member.getVerified(), true);
 
                 // 액세스 토큰과 리프레시 토큰을 쿠키에 저장
                 addCookie(response, "accessToken", accessToken, 10 * 60); // 10분
@@ -58,8 +58,8 @@ public class AuthService {
         }
 
         // 토큰 생성 (Redis에 저장됨)
-        String accessToken = jwtUtil.generateAccessToken(member.getUsername(), member.getAuthority(), member.isVerified());
-        String refreshToken = jwtUtil.generateRefreshToken(member.getUsername(), member.getAuthority(), member.isVerified());
+        String accessToken = jwtUtil.generateAccessToken(member.getUsername(), member.getAuthority(), member.getVerified());
+        String refreshToken = jwtUtil.generateRefreshToken(member.getUsername(), member.getAuthority(), member.getVerified());
 
         // 액세스 토큰과 리프레시 토큰을 쿠키에 저장
         addCookie(response, "accessToken", accessToken, 30 * 60); // 30분

@@ -2,7 +2,10 @@ package com.tripfriend.global.init;
 
 import com.tripfriend.domain.blacklist.entity.Blacklist;
 import com.tripfriend.domain.blacklist.repository.BlacklistRepository;
-import com.tripfriend.domain.member.member.entity.*;
+import com.tripfriend.domain.member.member.entity.AgeRange;
+import com.tripfriend.domain.member.member.entity.Gender;
+import com.tripfriend.domain.member.member.entity.Member;
+import com.tripfriend.domain.member.member.entity.TravelStyle;
 import com.tripfriend.domain.member.member.repository.MemberRepository;
 import com.tripfriend.domain.notice.entity.Notice;
 import com.tripfriend.domain.notice.repository.NoticeRepository;
@@ -17,6 +20,8 @@ import com.tripfriend.domain.recruit.apply.entity.Apply;
 import com.tripfriend.domain.recruit.apply.repository.ApplyRepository;
 import com.tripfriend.domain.recruit.recruit.entity.Recruit;
 import com.tripfriend.domain.recruit.recruit.repository.RecruitRepository;
+import com.tripfriend.domain.review.entity.Comment;
+import com.tripfriend.domain.review.entity.Review;
 import com.tripfriend.domain.review.repository.CommentRepository;
 import com.tripfriend.domain.review.repository.ReviewRepository;
 import com.tripfriend.domain.trip.information.entity.Transportation;
@@ -24,11 +29,7 @@ import com.tripfriend.domain.trip.information.entity.TripInformation;
 import com.tripfriend.domain.trip.information.repository.TripInformationRepository;
 import com.tripfriend.domain.trip.schedule.entity.TripSchedule;
 import com.tripfriend.domain.trip.schedule.repository.TripScheduleRepository;
-import com.tripfriend.domain.trip.schedule.service.TripScheduleService;
-import com.tripfriend.domain.review.entity.Review;
-import com.tripfriend.domain.review.entity.Comment;
 import com.tripfriend.global.exception.ServiceException;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -77,64 +78,69 @@ public class BaseInitData implements CommandLineRunner {
     // 회원 등록
     private void initMembers() {
         if (memberRepository.count() == 0) {
-            Member user1 = Member.builder()
-                    .username("user1")
-                    .email("user1@example.com")
-                    .password(passwordEncoder.encode("12341234"))
-                    .nickname("user1")
-                    .gender(Gender.MALE)
-                    .ageRange(AgeRange.TWENTIES)
-                    .travelStyle(TravelStyle.TOURISM)
-                    .aboutMe("hello")
-                    .rating(0.0)
-                    .authority("USER")
-                    .verified(true)
-                    .build();
+
+            Member user1 = new Member();
+
+            user1.setUsername("user1");
+            user1.setEmail("user1@example.com");
+            user1.setPassword(passwordEncoder.encode("12341234"));
+            user1.setNickname("user1");
+            user1.setGender(Gender.MALE);
+            user1.setAgeRange(AgeRange.TWENTIES);
+            user1.setTravelStyle(TravelStyle.TOURISM);
+            user1.setAboutMe("hello");
+            user1.setRating(0.0);
+            user1.setAuthority("USER");
+            user1.setVerified(true);
+
             memberRepository.save(user1);
 
-            Member user2 = Member.builder()
-                    .username("user2")
-                    .email("user2@example.com")
-                    .password(passwordEncoder.encode("12341234"))
-                    .nickname("user2")
-                    .gender(Gender.FEMALE)
-                    .ageRange(AgeRange.THIRTIES)
-                    .travelStyle(TravelStyle.SHOPPING)
-                    .aboutMe("hello")
-                    .rating(0.0)
-                    .authority("USER")
-                    .verified(true)
-                    .build();
+            Member user2 = new Member();
+
+            user2.setUsername("user2");
+            user2.setEmail("user2@example.com");
+            user2.setPassword(passwordEncoder.encode("12341234"));
+            user2.setNickname("user2");
+            user2.setGender(Gender.FEMALE);
+            user2.setAgeRange(AgeRange.THIRTIES);
+            user2.setTravelStyle(TravelStyle.SHOPPING);
+            user2.setAboutMe("hello");
+            user2.setRating(0.0);
+            user2.setAuthority("USER");
+            user2.setVerified(true);
+
             memberRepository.save(user2);
 
-            Member user3 = Member.builder()
-                    .username("user3")
-                    .email("user3@example.com")
-                    .password(passwordEncoder.encode("12341234"))
-                    .nickname("user3")
-                    .gender(Gender.MALE)
-                    .ageRange(AgeRange.FORTIES_PLUS)
-                    .travelStyle(TravelStyle.RELAXATION)
-                    .aboutMe("hello")
-                    .rating(0.0)
-                    .authority("USER")
-                    .verified(true)
-                    .build();
+            Member user3 = new Member();
+
+            user3.setUsername("user3");
+            user3.setEmail("user3@example.com");
+            user3.setPassword(passwordEncoder.encode("12341234"));
+            user3.setNickname("user3");
+            user3.setGender(Gender.MALE);
+            user3.setAgeRange(AgeRange.FORTIES_PLUS);
+            user3.setTravelStyle(TravelStyle.RELAXATION);
+            user3.setAboutMe("hello");
+            user3.setRating(0.0);
+            user3.setAuthority("USER");
+            user3.setVerified(true);
+
             memberRepository.save(user3);
 
-            Member admin = Member.builder()
-                    .username("admin")
-                    .email("admin@example.com")
-                    .password(passwordEncoder.encode("12341234"))
-                    .nickname("admin")
-                    .gender(Gender.FEMALE)
-                    .ageRange(AgeRange.THIRTIES)
-                    .travelStyle(TravelStyle.SHOPPING)
-                    .aboutMe("hello")
-                    .rating(0.0)
-                    .authority("ADMIN")
-                    .verified(true)
-                    .build();
+            Member admin = new Member();
+
+            admin.setUsername("admin");
+            admin.setEmail("admin@example.com");
+            admin.setPassword(passwordEncoder.encode("12341234"));
+            admin.setNickname("admin");
+            admin.setGender(Gender.FEMALE);
+            admin.setAgeRange(AgeRange.THIRTIES);
+            admin.setTravelStyle(TravelStyle.SHOPPING);
+            admin.setAboutMe("hello");
+            admin.setRating(0.0);
+            admin.setAuthority("ADMIN");
+            admin.setVerified(true);
+
             memberRepository.save(admin);
 
             System.out.println("회원 테스트 데이터가 등록되었습니다.");

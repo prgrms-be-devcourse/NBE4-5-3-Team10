@@ -22,7 +22,7 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
 
         // 인증 시점에서 검증 상태 확인 (선택적)
-        if (!member.isVerified()) {
+        if (!member.getVerified()) {
             throw new UsernameNotFoundException("검증되지 않은 사용자입니다.");
         }
 
@@ -34,7 +34,7 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .orElseThrow(() -> new OAuth2AuthenticationException("Member not found"));
 
         // 검증 상태 확인 (선택적)
-        if (!member.isVerified()) {
+        if (!member.getVerified()) {
             throw new OAuth2AuthenticationException("검증되지 않은 사용자입니다.");
         }
 

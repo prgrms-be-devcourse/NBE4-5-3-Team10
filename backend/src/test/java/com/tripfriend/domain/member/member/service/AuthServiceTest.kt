@@ -68,8 +68,8 @@ class AuthServiceTest {
         `when`(testMember.username).thenReturn(username)
         `when`(testMember.password).thenReturn(encodedPassword)
         `when`(testMember.authority).thenReturn("ROLE_USER")
-        `when`(testMember.isVerified()).thenReturn(true)
-        `when`(testMember.isDeleted()).thenReturn(false)
+        `when`(testMember.verified).thenReturn(true)
+        `when`(testMember.deleted).thenReturn(false)
 
         `when`(redisTemplate.opsForValue()).thenReturn(valueOperations)
 
@@ -127,8 +127,8 @@ class AuthServiceTest {
         `when`(testMember.username).thenReturn(username)
         `when`(testMember.password).thenReturn(encodedPassword)
         `when`(testMember.authority).thenReturn("ROLE_USER")
-        `when`(testMember.isVerified()).thenReturn(true)
-        `when`(testMember.isDeleted()).thenReturn(true)
+        `when`(testMember.verified).thenReturn(true)
+        `when`(testMember.deleted).thenReturn(true)
         `when`(testMember.canBeRestored()).thenReturn(true)
 
         `when`(redisTemplate.opsForValue()).thenReturn(valueOperations)
@@ -156,7 +156,7 @@ class AuthServiceTest {
         val testMember = mock(Member::class.java)
         `when`(testMember.username).thenReturn(username)
         `when`(testMember.password).thenReturn(encodedPassword)
-        `when`(testMember.isDeleted()).thenReturn(true)
+        `when`(testMember.deleted).thenReturn(true)
         `when`(testMember.canBeRestored()).thenReturn(false)
 
         val loginRequestDto = LoginRequestDto(username, password)
