@@ -61,6 +61,6 @@ open class Place {
 
     fun addTripInformation(tripInformation: TripInformation) {
         tripInformations.add(tripInformation)
-        tripInformation.setPlace(this) // 연관관계 설정
+        tripInformation.place = this // 연관관계 설정
     }
 }

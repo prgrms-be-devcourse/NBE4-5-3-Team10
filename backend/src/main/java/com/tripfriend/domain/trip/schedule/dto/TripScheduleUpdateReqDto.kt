@@ -1,26 +1,13 @@
-package com.tripfriend.domain.trip.schedule.dto;
+package com.tripfriend.domain.trip.schedule.dto
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import lombok.*;
+import java.time.LocalDate
 
-import java.time.LocalDate;
+data class TripScheduleUpdateReqDto(
+    var title: String,
 
-@Getter
-@Setter
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-public class TripScheduleUpdateReqDto {
-    @NotBlank
-    private String title;
+    var description: String? = null,
 
-    @NotBlank
-    private String description;
+    var startDate: LocalDate,
 
-    @NotNull
-    private LocalDate startDate;
-
-    @NotNull
-    private LocalDate endDate;
-}
+    var endDate: LocalDate,
+)

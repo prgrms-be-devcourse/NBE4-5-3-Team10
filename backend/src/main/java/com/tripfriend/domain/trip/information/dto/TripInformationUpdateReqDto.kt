@@ -1,28 +1,20 @@
-package com.tripfriend.domain.trip.information.dto;
+package com.tripfriend.domain.trip.information.dto
 
-import com.tripfriend.domain.trip.information.entity.Transportation;
-import lombok.*;
+import com.tripfriend.domain.trip.information.entity.Transportation
+import java.time.LocalDateTime
 
-import java.time.LocalDateTime;
+data class TripInformationUpdateReqDto(
+    var tripInformationId: Long? = null, // 여행 정보 ID
 
-@Getter
-@Setter
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-public class TripInformationUpdateReqDto {
+    var placeId: Long? = null,           // 장소 ID
 
-    private Long tripInformationId; // 여행 정보 ID
+    var visitTime: LocalDateTime? = null,
 
-    private Long placeId; // 장소 ID
+    var duration: Int? = null,
 
-    private LocalDateTime visitTime;
+    var transportation: Transportation? = null,
 
-    private Integer duration;
+    var cost: Int = 0,
 
-    private Transportation transportation;
-
-    private int cost;
-
-    private String notes;
-}
+    var notes: String? = null,
+)
