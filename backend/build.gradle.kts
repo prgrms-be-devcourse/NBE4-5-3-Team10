@@ -32,6 +32,7 @@ dependencies {
 	// Kotlin
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+	testImplementation("org.mockito.kotlin:mockito-kotlin:4.0.0")
 
 	// Development tools
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
@@ -76,6 +77,7 @@ dependencies {
 	// lombok
 	compileOnly("org.projectlombok:lombok")
 	annotationProcessor("org.projectlombok:lombok")
+	implementation(kotlin("stdlib-jdk8"))
 }
 
 kotlin {
