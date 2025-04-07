@@ -1,27 +1,20 @@
-package com.tripfriend.global.exception;
+package com.tripfriend.global.exception
 
-import com.tripfriend.global.dto.RsData;
+import com.tripfriend.global.dto.Empty
+import com.tripfriend.global.dto.RsData
 
-public class ServiceException extends RuntimeException{
+class ServiceException(
+    private val _code: String,
+    override val message: String
+) : RuntimeException(message) {
+    private val rsData: RsData<Empty> = RsData(_code, message)
 
-    private RsData<?> rsData;
+    val code: String
+        get() = rsData.code
 
-    public ServiceException(String code, String msg){
-        super(msg);
-        rsData = new RsData<>(code, msg);
-    }
+    val msg: String
+        get() = rsData.msg
 
-    public String getCode(){
-        return rsData.getCode();
-    }
-
-    public String getMsg(){
-        return rsData.getMsg();
-    }
-
-    public int getStatusCode(){
-        return rsData.getStatusCode();
-    }
-
+    val statusCode: Int
+        get() = rsData.statusCode
 }
-
