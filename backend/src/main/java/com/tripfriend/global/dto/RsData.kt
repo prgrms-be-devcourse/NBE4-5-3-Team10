@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonInclude
 class RsData<T>(
     val code: String,
     val msg: String,
-    val data: T
+    val data: T,
 ) {
     constructor(code: String, msg: String) : this(code, msg, Empty() as T)
 
