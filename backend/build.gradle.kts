@@ -46,6 +46,11 @@ dependencies {
 	testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
+	// (선택) Spring Test 포함 시
+	testImplementation("org.springframework.boot:spring-boot-starter-test") {
+		exclude(group = "org.mockito") // mockito 제외 가능 (MockK 사용 시)
+	}
+
 	// Swagger
 	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0")
 
