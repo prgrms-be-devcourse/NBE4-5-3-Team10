@@ -48,7 +48,7 @@ public class TripScheduleServiceTest {
     void setup() {
         // test 데이터베이스에 user1이 존재한다고 가정합니다.
         loginedMember = memberRepository.findByUsername("user1").orElseThrow();
-        token = jwtUtil.generateAccessToken(loginedMember.getUsername(), loginedMember.getAuthority(), loginedMember.isVerified());
+        token = jwtUtil.generateAccessToken(loginedMember.getUsername(), loginedMember.getAuthority(), loginedMember.getVerified());
     }
 
     @Test
@@ -148,7 +148,7 @@ public class TripScheduleServiceTest {
 
         // user2의 토큰을 사용해 삭제 시도
         Member otherMember = memberRepository.findByUsername("user2").orElseThrow();
-        String otherToken = jwtUtil.generateAccessToken(otherMember.getUsername(), otherMember.getAuthority(), otherMember.isVerified());
+        String otherToken = jwtUtil.generateAccessToken(otherMember.getUsername(), otherMember.getAuthority(), otherMember.getVerified());
 
         ServiceException ex = assertThrows(ServiceException.class, () -> {
             tripScheduleService.deleteSchedule(scheduleId, otherToken);
@@ -222,7 +222,7 @@ public class TripScheduleServiceTest {
 
         // user2의 토큰 생성 (user1이 생성한 일정을 수정할 수 없음)
         Member otherMember = memberRepository.findByUsername("user2").orElseThrow();
-        String otherToken = jwtUtil.generateAccessToken(otherMember.getUsername(), otherMember.getAuthority(), otherMember.isVerified());
+        String otherToken = jwtUtil.generateAccessToken(otherMember.getUsername(), otherMember.getAuthority(), otherMember.getVerified());
 
         ServiceException ex = assertThrows(ServiceException.class, () -> {
             tripScheduleService.updateTrip(updateReq, otherToken);
@@ -254,7 +254,7 @@ public class TripScheduleServiceTest {
 
         // user2의 토큰 생성 (user1이 생성한 일정을 조회할 수 없음)
         Member otherMember = memberRepository.findByUsername("user2").orElseThrow();
-        String otherToken = jwtUtil.generateAccessToken(otherMember.getUsername(), otherMember.getAuthority(), otherMember.isVerified());
+        String otherToken = jwtUtil.generateAccessToken(otherMember.getUsername(), otherMember.getAuthority(), otherMember.getVerified());
 
         ServiceException ex = assertThrows(ServiceException.class, () -> {
             tripScheduleService.getTripInfo(otherToken, scheduleId);
