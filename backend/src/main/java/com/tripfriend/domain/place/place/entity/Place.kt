@@ -18,7 +18,7 @@ open class Place {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "place_id")
-    private var id: Long? = null
+    private var id: Long? = null // 여행지 Id
 
     // 여행 스케줄 연결 테이블 리스트
     @OneToMany(mappedBy = "place", cascade = [CascadeType.ALL], orphanRemoval = true)
@@ -62,6 +62,6 @@ open class Place {
 
     fun addTripInformation(tripInformation: TripInformation) {
         tripInformations.add(tripInformation)
-        tripInformation.place = this // 연관관계 설정
+        tripInformation.setPlace(this) // 연관관계 설정
     }
 }
