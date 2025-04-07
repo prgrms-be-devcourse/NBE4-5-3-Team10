@@ -1,7 +1,6 @@
 package com.tripfriend.domain.place.place.service
 
 import com.tripfriend.domain.place.place.dto.PlaceCreateReqDto
-import com.tripfriend.domain.place.place.dto.PlaceUpdateReqDto
 import com.tripfriend.domain.place.place.entity.Category
 import com.tripfriend.domain.place.place.entity.Place
 import com.tripfriend.domain.place.place.repository.PlaceRepository
@@ -15,14 +14,12 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import org.mockito.kotlin.mock
 import org.springframework.web.multipart.MultipartFile
 import java.io.IOException
 import java.util.*
 
 @ExtendWith(MockKExtension::class)
 class PlaceServiceTest {
-
     @MockK
     private lateinit var placeRepository: PlaceRepository
 
@@ -41,22 +38,24 @@ class PlaceServiceTest {
     @DisplayName("여행 장소 등록 테스트 - 이미지 파일이 없는 경우")
     fun createPlaceWithoutImageTest() {
         // Given
-        val req = PlaceCreateReqDto().apply {
-            cityName = "서울"
-            placeName = "남산타워"
-            description = "서울의 등대"
-            category = Category.PLACE
-            imageUrl = null // 이미지 파일 없음
-        }
+        val req =
+            PlaceCreateReqDto().apply {
+                cityName = "서울"
+                placeName = "남산타워"
+                description = "서울의 등대"
+                category = Category.PLACE
+                imageUrl = null // 이미지 파일 없음
+            }
 
-        val savedPlace = Place().apply {
-            id = 1L
-            cityName = req.cityName
-            placeName = req.placeName
-            description = req.description
-            category = req.category
-            imageUrl = null
-        }
+        val savedPlace =
+            Place().apply {
+                id = 1L
+                cityName = req.cityName
+                placeName = req.placeName
+                description = req.description
+                category = req.category
+                imageUrl = null
+            }
 
         every { placeRepository.save(any()) } returns savedPlace
 
@@ -78,24 +77,26 @@ class PlaceServiceTest {
         val mockFile = mockk<MultipartFile>()
         every { mockFile.isEmpty } returns false
 
-        val req = PlaceCreateReqDto().apply {
-            cityName = "부산"
-            placeName = "감천문화마을"
-            description = "벽화가 아름다운 마을"
-            category = Category.PLACE
-            imageUrl = mockFile
-        }
+        val req =
+            PlaceCreateReqDto().apply {
+                cityName = "부산"
+                placeName = "감천문화마을"
+                description = "벽화가 아름다운 마을"
+                category = Category.PLACE
+                imageUrl = mockFile
+            }
 
         every { imageUtil.saveImage(mockFile) } returns mockImageUrl
 
-        val savedPlace = Place().apply {
-            id = 2L
-            cityName = req.cityName
-            placeName = req.placeName
-            description = req.description
-            category = req.category
-            imageUrl = req.imageUrl.toString()
-        }
+        val savedPlace =
+            Place().apply {
+                id = 2L
+                cityName = req.cityName
+                placeName = req.placeName
+                description = req.description
+                category = req.category
+                imageUrl = req.imageUrl.toString()
+            }
         every { placeRepository.save(any()) } returns savedPlace
 
         // When
@@ -115,20 +116,22 @@ class PlaceServiceTest {
         val mockFile = mockk<MultipartFile>()
         every { mockFile.isEmpty } returns false
 
-        val req = PlaceCreateReqDto().apply {
-            cityName = "제주"
-            placeName = "한라산"
-            description = "백록담이 아름다운 산"
-            category = Category.PLACE
-            imageUrl = mockFile
-        }
+        val req =
+            PlaceCreateReqDto().apply {
+                cityName = "제주"
+                placeName = "한라산"
+                description = "백록담이 아름다운 산"
+                category = Category.PLACE
+                imageUrl = mockFile
+            }
 
         every { imageUtil.saveImage(mockFile) } throws IOException("Upload error")
 
         // When, Then
-        val exception = assertThrows(ServiceException::class.java) {
-            placeService.createPlace(req)
-        }
+        val exception =
+            assertThrows(ServiceException::class.java) {
+                placeService.createPlace(req)
+            }
         assertEquals("404-2", exception.code)
         verify(exactly = 1) { imageUtil.saveImage(mockFile) }
         verify { placeRepository wasNot Called }
@@ -138,10 +141,11 @@ class PlaceServiceTest {
     @DisplayName("전체 여행 장소 조회 테스트")
     fun getAllPlacesTest() {
         // Given
-        val places = listOf(
-            Place().apply { id = 1L },
-            Place().apply { id = 2L }
-        )
+        val places =
+            listOf(
+                Place().apply { id = 1L },
+                Place().apply { id = 2L },
+            )
         every { placeRepository.findAll() } returns places
 
         // When
@@ -157,10 +161,11 @@ class PlaceServiceTest {
     fun getPlacesByCityTest() {
         // Given
         val city = "Seoul"
-        val places = listOf(
-            Place().apply { cityName = city },
-            Place().apply { cityName = city }
-        )
+        val places =
+            listOf(
+                Place().apply { cityName = city },
+                Place().apply { cityName = city },
+            )
         every { placeRepository.findByCityName(city) } returns places
 
         // When
@@ -195,9 +200,10 @@ class PlaceServiceTest {
         every { placeRepository.findById(placeId) } returns Optional.empty()
 
         // When & Then
-        val exception = assertThrows(ServiceException::class.java) {
-            placeService.getPlace(placeId)
-        }
+        val exception =
+            assertThrows(ServiceException::class.java) {
+                placeService.getPlace(placeId)
+            }
         assertEquals("404-1", exception.code)
         verify(exactly = 1) { placeRepository.findById(placeId) }
     }
@@ -207,7 +213,7 @@ class PlaceServiceTest {
     fun deletePlaceTest() {
         // Given
         val place = Place().apply { id = 1L }
-        every { placeRepository.delete(place) } just Runs  // void 메서드에 대한 stub 설정
+        every { placeRepository.delete(place) } just Runs // void 메서드에 대한 stub 설정
 
         // When
         placeService.deletePlace(place)
@@ -222,12 +228,13 @@ class PlaceServiceTest {
         // Given
         val name = "숲"
         val city = "서울"
-        val places = listOf(
-            Place().apply {
-                placeName = "서울숲"
-                cityName = "서울"
-            }
-        )
+        val places =
+            listOf(
+                Place().apply {
+                    placeName = "서울숲"
+                    cityName = "서울"
+                },
+            )
         every { placeRepository.findByPlaceNameContainingIgnoreCaseAndCityNameContainingIgnoreCase(name, city) } returns places
 
         // When
@@ -245,9 +252,10 @@ class PlaceServiceTest {
     fun searchPlaceWithNameOnlyTest() {
         // Given
         val name = "숲"
-        val places = listOf(
-            Place().apply { placeName = "서울숲" }
-        )
+        val places =
+            listOf(
+                Place().apply { placeName = "서울숲" },
+            )
         every { placeRepository.findByPlaceNameContainingIgnoreCase(name) } returns places
 
         // When
@@ -263,9 +271,10 @@ class PlaceServiceTest {
     fun searchPlaceWithCityOnlyTest() {
         // Given
         val city = "서울"
-        val places = listOf(
-            Place().apply { cityName = "서울" }
-        )
+        val places =
+            listOf(
+                Place().apply { cityName = "서울" },
+            )
         every { placeRepository.findByCityNameContainingIgnoreCase(city) } returns places
 
         // When

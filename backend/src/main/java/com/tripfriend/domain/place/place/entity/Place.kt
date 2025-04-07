@@ -14,7 +14,6 @@ import java.time.LocalDateTime
 @EntityListeners(AuditingEntityListener::class)
 @Table(name = "place")
 open class Place {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "place_id")
