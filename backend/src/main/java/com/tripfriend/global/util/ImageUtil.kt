@@ -60,7 +60,7 @@ class ImageUtil {
         val fileName = imagePath.substring(imagePath.lastIndexOf("/") + 1)
 
         // 실제 파일 경로 생성
-        val fullPath = Paths.get(uploadDir, fileName)
+        val fullPath = Paths.get(uploadDir, fileName).toAbsolutePath()
         if (!fullPath.startsWith(Paths.get(uploadDir).toAbsolutePath())) {
             throw IOException("잘못된 파일 경로입니다.")
         }
