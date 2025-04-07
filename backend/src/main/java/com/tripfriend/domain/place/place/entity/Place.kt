@@ -18,47 +18,47 @@ open class Place {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "place_id")
-    private var id: Long? = null // 여행지 Id
+    var id: Long? = null // 여행지 Id
 
     // 여행 스케줄 연결 테이블 리스트
     @OneToMany(mappedBy = "place", cascade = [CascadeType.ALL], orphanRemoval = true)
     @JsonIgnore
-    private val tripInformations: MutableList<TripInformation> = mutableListOf()
+    val tripInformations: MutableList<TripInformation> = mutableListOf()
 
     // 이미지 저장 URL
     @Column(name = "image_url")
-    private var imageUrl: String? = null
+    var imageUrl: String? = null
 
     // 동행 게시글 1:N 연결 (null 대신 빈 컬렉션으로 초기화)
     @OneToMany(mappedBy = "place", cascade = [CascadeType.REMOVE])
     @JsonIgnore
-    private var recruits: MutableList<Recruit> = mutableListOf()
+    var recruits: MutableList<Recruit> = mutableListOf()
 
     // 후기 게시글 1:N 연결 (null 대신 빈 컬렉션으로 초기화)
     @OneToMany(mappedBy = "place", cascade = [CascadeType.REMOVE])
     @JsonIgnore
-    private var reviews: MutableList<Review> = mutableListOf()
+    var reviews: MutableList<Review> = mutableListOf()
 
     @Column(name = "city_name", nullable = false)
-    private var cityName: String? = null // 도시명
+    var cityName: String? = null // 도시명
 
     @Column(name = "place_name", nullable = false)
-    private var placeName: String? = null // 장소명
+    var placeName: String? = null // 장소명
 
     @Column(name = "description", columnDefinition = "TEXT")
-    private var description: String? = null // 설명
+    var description: String? = null // 설명
 
     @Enumerated(EnumType.STRING)
     @Column(name = "category", nullable = false)
-    private var category: Category? = null // 카테고리
+    var category: Category? = null // 카테고리
 
     @CreatedDate
     @Column(name = "created_at", updatable = false)
-    private var createdAt: LocalDateTime? = null // 생성일
+    var createdAt: LocalDateTime? = null // 생성일
 
     @LastModifiedDate
     @Column(name = "updated_at")
-    private var updatedAt: LocalDateTime? = null // 수정일
+    var updatedAt: LocalDateTime? = null // 수정일
 
     fun addTripInformation(tripInformation: TripInformation) {
         tripInformations.add(tripInformation)
