@@ -1,32 +1,22 @@
-package com.tripfriend.global.dto;
+package com.tripfriend.global.dto
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NonNull;
+import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.annotation.JsonInclude
 
-@AllArgsConstructor
-@Getter
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class RsData<T> {
+class RsData<T>(
+    val code: String,
+    val msg: String,
+    val data: T
+) {
+    constructor(code: String, msg: String) : this(code, msg, Empty() as T)
 
-    @NonNull
-    private String code;
-
-    @NonNull
-    private String msg;
-
-    private T data;
-
-    public RsData(String code, String msg){
-        this(code, msg, null);
-    }
-
-    // StatusCode가 Json 포함 되지 않는다.
-    @JsonIgnore
-    public int getStatusCode(){
-        String statusCodeStr = code.split("-")[0];
-        return Integer.parseInt(statusCodeStr);
-    }
+    @get:JsonIgnore
+    val statusCode: Int
+        // StatusCode가 Json 포함 되지 않는다.
+        get() {
+            val statusCodeStr =
+                code.split("-".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[0]
+            return statusCodeStr.toInt() // code값 정수 반환
+        }
 }
