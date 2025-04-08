@@ -12,7 +12,7 @@ data class TripInformationUpdateReqDto(
 
     var duration: Int? = null,
 
-    var transportation: Transportation,
+    var transportation: Transportation? = null,
 
     var cost: Int = 0,
 
