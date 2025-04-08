@@ -145,7 +145,7 @@ public class BaseInitData implements CommandLineRunner {
             memberRepository.save(admin);
 
             System.out.println("회원 테스트 데이터가 등록되었습니다.");
-        }else {
+        } else {
             System.out.println("이미 회원 데이터가 존재합니다.");
         }
     }
@@ -258,7 +258,6 @@ public class BaseInitData implements CommandLineRunner {
             System.out.println("이미 동행 요청(댓글) 데이터가 존재합니다.");
         }
     }
-
 
 
     // 여행지 등록
@@ -398,31 +397,29 @@ public class BaseInitData implements CommandLineRunner {
             );
 
             // 2. 첫 번째 여행 일정 (서울 힐링 여행)
-            TripSchedule tripSchedule1 = TripSchedule.builder()
-                    .member(member)
-                    .title("서울 힐링 여행")
-                    .description("서울에서 고궁과 명소를 둘러보고 맛집 탐방")
-                    .startDate(LocalDate.of(2025, 4, 10))
-                    .endDate(LocalDate.of(2025, 4, 12))
-                    .build();
+            TripSchedule tripSchedule1 = new TripSchedule();
+            tripSchedule1.setMember(member);
+            tripSchedule1.setTitle("서울 힐링 여행");
+            tripSchedule1.setDescription("서울에서 고궁과 명소를 둘러보고 맛집 탐방");
+            tripSchedule1.setStartDate(LocalDate.of(2025, 4, 10));
+            tripSchedule1.setEndDate(LocalDate.of(2025, 4, 12));
             tripScheduleRepository.save(tripSchedule1);
 
             List<TripInformation> tripInformations1 = List.of(
                     createTripInformation(tripSchedule1, 1L, LocalDateTime.of(2025, 4, 10, 9, 0), Transportation.SUBWAY, 3000, "경복궁에서 한복 체험"),
-                    createTripInformation(tripSchedule1, 4L, LocalDateTime.of(2025, 4, 10, 12, 0), Transportation.WALK, 0,"명동교자에서 점심"),
+                    createTripInformation(tripSchedule1, 4L, LocalDateTime.of(2025, 4, 10, 12, 0), Transportation.WALK, 0, "명동교자에서 점심"),
                     createTripInformation(tripSchedule1, 3L, LocalDateTime.of(2025, 4, 10, 16, 0), Transportation.BUS, 2000, "스타벅스 더종로점에서 카페 타임")
             );
             tripInformationRepository.saveAll(tripInformations1);
-            tripInformations1.forEach(tripSchedule1::addTripInfromation);
+            tripInformations1.forEach(tripSchedule1::addTripInformation);
 
             // 3. 두 번째 여행 일정 (부산 바다 여행)
-            TripSchedule tripSchedule2 = TripSchedule.builder()
-                    .member(member)
-                    .title("부산 바다 여행")
-                    .description("부산 해운대와 광안대교 야경을 즐기는 일정")
-                    .startDate(LocalDate.of(2025, 5, 15))
-                    .endDate(LocalDate.of(2025, 5, 17))
-                    .build();
+            TripSchedule tripSchedule2 = new TripSchedule();
+            tripSchedule2.setMember(member);
+            tripSchedule2.setTitle("부산 바다 여행");
+            tripSchedule2.setDescription("부산 해운대와 광안대교 야경을 즐기는 일정");
+            tripSchedule2.setStartDate(LocalDate.of(2025, 5, 15));
+            tripSchedule2.setEndDate(LocalDate.of(2025, 5, 17));
             tripScheduleRepository.save(tripSchedule2);
 
             List<TripInformation> tripInformations2 = List.of(
@@ -431,16 +428,15 @@ public class BaseInitData implements CommandLineRunner {
                     createTripInformation(tripSchedule2, 8L, LocalDateTime.of(2025, 5, 16, 12, 0), Transportation.BUS, 2500, "초량밀면에서 부산 밀면 맛보기")
             );
             tripInformationRepository.saveAll(tripInformations2);
-            tripInformations2.forEach(tripSchedule2::addTripInfromation);
+            tripInformations2.forEach(tripSchedule2::addTripInformation);
 
             // 4. 세 번째 여행 일정 (제주도 탐방)
-            TripSchedule tripSchedule3 = TripSchedule.builder()
-                    .member(member)
-                    .title("제주도 탐방")
-                    .description("제주도의 대표 명소와 맛집을 방문하는 여행")
-                    .startDate(LocalDate.of(2025, 6, 20))
-                    .endDate(LocalDate.of(2025, 6, 23))
-                    .build();
+            TripSchedule tripSchedule3 = new TripSchedule();
+            tripSchedule3.setMember(member);
+            tripSchedule3.setTitle("제주도 탐방");
+            tripSchedule3.setDescription("제주도의 대표 명소와 맛집을 방문하는 여행");
+            tripSchedule3.setStartDate(LocalDate.of(2025, 6, 20));
+            tripSchedule3.setEndDate(LocalDate.of(2025, 6, 23));
             tripScheduleRepository.save(tripSchedule3);
 
             List<TripInformation> tripInformations3 = List.of(
@@ -449,16 +445,15 @@ public class BaseInitData implements CommandLineRunner {
                     createTripInformation(tripSchedule3, 11L, LocalDateTime.of(2025, 6, 21, 18, 30), Transportation.TAXI, 15000, "제주 흑돼지 거리에서 저녁 식사")
             );
             tripInformationRepository.saveAll(tripInformations3);
-            tripInformations3.forEach(tripSchedule3::addTripInfromation);
+            tripInformations3.forEach(tripSchedule3::addTripInformation);
 
             // 5. 네 번째 여행 일정 (속초 먹거리 여행)
-            TripSchedule tripSchedule4 = TripSchedule.builder()
-                    .member(member)
-                    .title("속초 먹거리 여행")
-                    .description("속초에서 재래시장과 해산물 맛집 방문")
-                    .startDate(LocalDate.of(2025, 7, 5))
-                    .endDate(LocalDate.of(2025, 7, 7))
-                    .build();
+            TripSchedule tripSchedule4 = new TripSchedule();
+            tripSchedule4.setMember(member);
+            tripSchedule4.setTitle("속초 먹거리 여행");
+            tripSchedule4.setDescription("속초에서 재래시장과 해산물 맛집 방문");
+            tripSchedule4.setStartDate(LocalDate.of(2025, 7, 5));
+            tripSchedule4.setEndDate(LocalDate.of(2025, 7, 7));
             tripScheduleRepository.save(tripSchedule4);
 
             List<TripInformation> tripInformations4 = List.of(
@@ -467,7 +462,7 @@ public class BaseInitData implements CommandLineRunner {
                     createTripInformation(tripSchedule4, 14L, LocalDateTime.of(2025, 7, 6, 18, 0), Transportation.TAXI, 8000, "봉포머구리집에서 신선한 해산물 맛보기")
             );
             tripInformationRepository.saveAll(tripInformations4);
-            tripInformations4.forEach(tripSchedule4::addTripInfromation);
+            tripInformations4.forEach(tripSchedule4::addTripInformation);
 
             System.out.println("네 개의 여행 일정이 등록되었습니다.");
         } else {
@@ -481,17 +476,16 @@ public class BaseInitData implements CommandLineRunner {
                 () -> new ServiceException("404-2", "해당 장소가 존재하지 않습니다. ID: " + placeId)
         );
 
-        return TripInformation.builder()
-                .tripSchedule(tripSchedule)
-                .place(place)
-                .visitTime(visitTime)
-                .duration(2) // 2시간 머무름
-                .transportation(transportation) // 교통 수단 설정
-                .cost(cost) // 비용 설정
-                .notes(notes) // 방문 목적 및 기타 정보 추가
-                //.priority(priority) // 우선순위 설정
-                .isVisited(false) // 기본값은 방문하지 않음
-                .build();
+        TripInformation tripInformation = new TripInformation();
+        tripInformation.setTripSchedule(tripSchedule);
+        tripInformation.setPlace(place);
+        tripInformation.setVisitTime(visitTime);
+        tripInformation.setDuration(2); // 2시간 머무름
+        tripInformation.setTransportation(transportation); // 교통 수단 설정
+        tripInformation.setCost(cost); // 비용 설정
+        tripInformation.setNotes(notes); // 방문 목적 및 기타 정보 추가
+        tripInformation.setVisited(false); // 기본값은 방문하지 않음
+        return tripInformation;
     }
 
     // 리뷰 데이터 등록

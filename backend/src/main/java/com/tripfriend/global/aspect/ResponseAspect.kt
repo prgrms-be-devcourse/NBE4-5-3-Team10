@@ -42,7 +42,7 @@ class ResponseAspect(
 
         if (rst is RsData<*>) {
             val statusCode = rst.statusCode
-            response!!.status = statusCode
+            response.status = statusCode
         }
 
         return rst
