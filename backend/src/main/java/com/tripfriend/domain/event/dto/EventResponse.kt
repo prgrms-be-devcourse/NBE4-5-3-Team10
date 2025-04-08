@@ -1,19 +1,18 @@
-package com.tripfriend.domain.event.dto;
+package com.tripfriend.domain.event.dto
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import lombok.AllArgsConstructor
+import lombok.Builder
+import lombok.Getter
+import java.time.LocalDate
+import java.time.LocalDateTime
 
 @Getter
 @AllArgsConstructor
 @Builder
-public class EventResponse {
-    private Long id;
-    private String title;
-    private String description;
-    private LocalDate eventDate;
-    private LocalDateTime createdAt;
-}
+class EventResponse (
+     val id: Long?,
+     val title: String,
+     val description: String,
+     val eventDate: LocalDate,
+     val createdAt: LocalDateTime?
+    )
