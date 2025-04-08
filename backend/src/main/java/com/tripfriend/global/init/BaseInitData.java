@@ -351,17 +351,18 @@ public class BaseInitData implements CommandLineRunner {
             }
 
             List<Apply> applies = List.of(
-                    Apply.builder().content("한강 피크닉 너무 좋아요! 같이 해요.").member(members.get(2)).recruit(recruits.get(0)).build(),
-                    Apply.builder().content("부산 바다 진짜 가고 싶었는데 함께해요!").member(members.get(0)).recruit(recruits.get(1)).build(),
-                    Apply.builder().content("강릉 커피 투어 너무 흥미로워요!").member(members.get(1)).recruit(recruits.get(2)).build(),
-                    Apply.builder().content("서울 야경 투어 같이 하고 싶어요!").member(members.get(0)).recruit(recruits.get(3)).build(),
-                    Apply.builder().content("제주도 일출 보러 가는 거 기대돼요!").member(members.get(2)).recruit(recruits.get(4)).build(),
-                    Apply.builder().content("속초 여행 너무 재밌겠어요!").member(members.get(1)).recruit(recruits.get(5)).build(),
-                    Apply.builder().content("설악산 단풍 너무 기대돼요!").member(members.get(0)).recruit(recruits.get(6)).build(),
-                    Apply.builder().content("강릉 바다 드라이브 코스 완전 좋아요!").member(members.get(2)).recruit(recruits.get(7)).build(),
-                    Apply.builder().content("부산 감천마을 너무 가고 싶었어요!").member(members.get(0)).recruit(recruits.get(8)).build(),
-                    Apply.builder().content("경주 역사 탐방 너무 흥미로워요!").member(members.get(1)).recruit(recruits.get(9)).build()
+                    new Apply(null, members.get(2), recruits.get(0), "한강 피크닉 너무 좋아요! 같이 해요."),
+                    new Apply(null, members.get(0), recruits.get(1), "부산 바다 진짜 가고 싶었는데 함께해요!"),
+                    new Apply(null, members.get(1), recruits.get(2), "강릉 커피 투어 너무 흥미로워요!"),
+                    new Apply(null, members.get(0), recruits.get(3), "서울 야경 투어 같이 하고 싶어요!"),
+                    new Apply(null, members.get(2), recruits.get(4), "제주도 일출 보러 가는 거 기대돼요!"),
+                    new Apply(null, members.get(1), recruits.get(5), "속초 여행 너무 재밌겠어요!"),
+                    new Apply(null, members.get(0), recruits.get(6), "설악산 단풍 너무 기대돼요!"),
+                    new Apply(null, members.get(2), recruits.get(7), "강릉 바다 드라이브 코스 완전 좋아요!"),
+                    new Apply(null, members.get(0), recruits.get(8), "부산 감천마을 너무 가고 싶었어요!"),
+                    new Apply(null, members.get(1), recruits.get(9), "경주 역사 탐방 너무 흥미로워요!")
             );
+
 
             applyRepository.saveAll(applies);
             System.out.println("동행 요청(댓글) 20개가 등록되었습니다.");
