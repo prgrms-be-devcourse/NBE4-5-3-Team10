@@ -2,6 +2,7 @@ plugins {
 	kotlin("jvm") version "1.9.25"
 	kotlin("plugin.spring") version "1.9.25"
 	kotlin("plugin.jpa") version "1.9.25"
+	kotlin("kapt") version "1.9.25"  // kapt 플러그인 추가
 	id("org.springframework.boot") version "3.2.4"
 	id("io.spring.dependency-management") version "1.1.7"
 }
@@ -67,11 +68,11 @@ dependencies {
 	runtimeOnly("io.jsonwebtoken:jjwt-impl:0.12.6")
 	runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.12.6")
 
-	// QueryDSL
+	// QueryDSL - annotationProcessor를 kapt로 변경
 	implementation("com.querydsl:querydsl-jpa:${queryDslVersion}:jakarta")
-	annotationProcessor("com.querydsl:querydsl-apt:${queryDslVersion}:jakarta")
-	annotationProcessor("jakarta.annotation:jakarta.annotation-api")
-	annotationProcessor("jakarta.persistence:jakarta.persistence-api")
+	kapt("com.querydsl:querydsl-apt:${queryDslVersion}:jakarta")
+	kapt("jakarta.annotation:jakarta.annotation-api")
+	kapt("jakarta.persistence:jakarta.persistence-api")
 
 	// OAuth2
 	implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
@@ -89,29 +90,52 @@ kotlin {
 	compilerOptions {
 		freeCompilerArgs.addAll("-Xjsr305=strict")
 	}
+
+	// 필요한 경우 sourceSets 설정
+	sourceSets.main {
+		kotlin.srcDir("src/main/kotlin")
+		kotlin.srcDir("src/main/java") // 자바 디렉토리에 있는 코틀린 파일도 컴파일
+	}
 }
 
 tasks.withType<Test> {
 	useJUnitPlatform()
 }
 
-// QueryDSL setup
+// QueryDSL 설정
 val querydslDir = "$buildDir/generated/querydsl"
 
-// Configure the querydsl directory
+// kapt 설정 (코틀린을 위한 어노테이션 프로세싱)
+kapt {
+	arguments {
+		arg("querydsl.generatedAnnotationClass", "javax.annotation.Generated")
+	}
+	correctErrorTypes = true
+	javacOptions {
+		option("Xmaxerrs", 2000)
+	}
+	keepJavacAnnotationProcessors = true
+}
+
+// sourceSets 설정 (자바와 코틀린 소스를 모두 포함)
 sourceSets {
 	main {
 		java.srcDir(querydslDir)
 	}
 }
 
-tasks.withType<JavaCompile> {
-	options.generatedSourceOutputDirectory.set(file(querydslDir))
-}
-
-// Clean generated sources
+// 생성된 QClass 파일을 clean 태스크에 포함
 tasks.named("clean") {
 	doLast {
 		file(querydslDir).deleteRecursively()
 	}
+}
+
+allOpen {
+	annotation("jakarta.persistence.Entity")
+	annotation("jakarta.persistence.MappedSuperclass")
+	annotation("jakarta.persistence.Embeddable")
+	annotation("org.springframework.data.annotation.CreatedDate")
+	annotation("org.springframework.data.annotation.LastModifiedDate")
+	// 필요한 경우 더 많은 애노테이션 추가
 }
