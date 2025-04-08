@@ -161,65 +161,176 @@ public class BaseInitData implements CommandLineRunner {
             }
 
             List<Recruit> recruits = List.of(
-                    Recruit.builder().member(members.get(0)).place(places.get(0))
-                            .title("서울 한강에서 피크닉 함께해요!").content("한강에서 맛있는 음식과 함께 피크닉 즐길 분 모집합니다.")
-                            .isClosed(false).startDate(LocalDate.now().plusDays(3)).endDate(LocalDate.now().plusDays(3))
-                            .travelStyle(com.tripfriend.domain.recruit.recruit.entity.TravelStyle.RELAXATION)
-                            .sameGender(false).sameAge(false).budget(20000).groupSize(4).build(),
+                    new Recruit(
+                            null,
+                            members.get(0),
+                            new ArrayList<>(),
+                            places.get(0),
+                            "서울 한강에서 피크닉 함께해요!",
+                            "한강에서 맛있는 음식과 함께 피크닉 즐길 분 모집합니다.",
+                            false,
+                            LocalDate.now().plusDays(3),
+                            LocalDate.now().plusDays(3),
 
-                    Recruit.builder().member(members.get(1)).place(places.get(1))
-                            .title("부산 바다 여행! 해운대, 광안리 방문 예정").content("바다 여행을 좋아하시는 분과 함께하면 좋겠어요!")
-                            .isClosed(false).startDate(LocalDate.now().plusDays(5)).endDate(LocalDate.now().plusDays(8))
-                            .travelStyle(com.tripfriend.domain.recruit.recruit.entity.TravelStyle.ADVENTURE)
-                            .sameGender(true).sameAge(true).budget(50000).groupSize(3).build(),
+                            com.tripfriend.domain.recruit.recruit.entity.TravelStyle.RELAXATION,
+                            false,
+                            false,
+                            20000,
+                            4
+                    ),
+                    new Recruit(
+                            null,
+                            members.get(1),
+                            new ArrayList<>(),
+                            places.get(1),
+                            "부산 바다 여행! 해운대, 광안리 방문 예정",
+                            "바다 여행을 좋아하시는 분과 함께하면 좋겠어요!",
+                            false,
+                            LocalDate.now().plusDays(5),
+                            LocalDate.now().plusDays(8),
 
-                    Recruit.builder().member(members.get(2)).place(places.get(3))
-                            .title("강릉 커피 투어 동행 모집").content("강릉의 유명한 커피 명소를 함께 방문할 동행을 찾습니다.")
-                            .isClosed(false).startDate(LocalDate.now().plusDays(7)).endDate(LocalDate.now().plusDays(10))
-                            .travelStyle(com.tripfriend.domain.recruit.recruit.entity.TravelStyle.GOURMET)
-                            .sameGender(false).sameAge(false).budget(30000).groupSize(2).build(),
+                            com.tripfriend.domain.recruit.recruit.entity.TravelStyle.ADVENTURE,
+                            true,
+                            true,
+                            50000,
+                            3
+                    ),
+                    new Recruit(
+                            null,
+                            members.get(2),
+                            new ArrayList<>(),
+                            places.get(3),
+                            "강릉 커피 투어 동행 모집",
+                            "강릉의 유명한 커피 명소를 함께 방문할 동행을 찾습니다.",
+                            false,
+                            LocalDate.now().plusDays(7),
+                            LocalDate.now().plusDays(10),
 
-                    Recruit.builder().member(members.get(1)).place(places.get(5))
-                            .title("서울 도심 야경 투어").content("남산, 한강, 롯데타워 전망대 등을 함께 돌면서 야경을 감상해요.")
-                            .isClosed(false).startDate(LocalDate.now().plusDays(2)).endDate(LocalDate.now().plusDays(2))
-                            .travelStyle(com.tripfriend.domain.recruit.recruit.entity.TravelStyle.RELAXATION)
-                            .sameGender(true).sameAge(true).budget(25000).groupSize(5).build(),
+                            com.tripfriend.domain.recruit.recruit.entity.TravelStyle.GOURMET,
+                            false,
+                            false,
+                            30000,
+                            2
+                    ),
+                    new Recruit(
+                            null,
+                            members.get(1),
+                            new ArrayList<>(),
+                            places.get(5),
+                            "서울 도심 야경 투어",
+                            "남산, 한강, 롯데타워 전망대 등을 함께 돌면서 야경을 감상해요.",
+                            false,
+                            LocalDate.now().plusDays(2),
+                            LocalDate.now().plusDays(2),
 
-                    Recruit.builder().member(members.get(0)).place(places.get(8))
-                            .title("제주도 성산일출봉 트레킹").content("이른 아침 일출을 보러 함께 가실 분 구해요!")
-                            .isClosed(false).startDate(LocalDate.now().plusDays(10)).endDate(LocalDate.now().plusDays(12))
-                            .travelStyle(com.tripfriend.domain.recruit.recruit.entity.TravelStyle.ADVENTURE)
-                            .sameGender(false).sameAge(true).budget(60000).groupSize(3).build(),
+                            com.tripfriend.domain.recruit.recruit.entity.TravelStyle.RELAXATION,
+                            true,
+                            true,
+                            25000,
+                            5
+                    ),
+                    new Recruit(
+                            null,
+                            members.get(0),
+                            new ArrayList<>(),
+                            places.get(8),
+                            "제주도 성산일출봉 트레킹",
+                            "이른 아침 일출을 보러 함께 가실 분 구해요!",
+                            false,
+                            LocalDate.now().plusDays(10),
+                            LocalDate.now().plusDays(12),
 
-                    Recruit.builder().member(members.get(2)).place(places.get(10))
-                            .title("속초 중앙시장 & 바닷가 투어").content("속초에서 맛집 탐방과 바닷가 드라이브 할 분!")
-                            .isClosed(false).startDate(LocalDate.now().plusDays(4)).endDate(LocalDate.now().plusDays(6))
-                            .travelStyle(com.tripfriend.domain.recruit.recruit.entity.TravelStyle.GOURMET)
-                            .sameGender(true).sameAge(false).budget(40000).groupSize(4).build(),
+                            com.tripfriend.domain.recruit.recruit.entity.TravelStyle.ADVENTURE,
+                            false,
+                            true,
+                            60000,
+                            3
+                    ),
+                    new Recruit(
+                            null,
+                            members.get(2),
+                            new ArrayList<>(),
+                            places.get(10),
+                            "속초 중앙시장 & 바닷가 투어",
+                            "속초에서 맛집 탐방과 바닷가 드라이브 할 분!",
+                            false,
+                            LocalDate.now().plusDays(4),
+                            LocalDate.now().plusDays(6),
 
-                    Recruit.builder().member(members.get(1)).place(places.get(12))
-                            .title("설악산 단풍 여행 같이 가요!").content("가을 단풍을 보며 힐링할 분 찾습니다.")
-                            .isClosed(false).startDate(LocalDate.now().plusDays(15)).endDate(LocalDate.now().plusDays(17))
-                            .travelStyle(com.tripfriend.domain.recruit.recruit.entity.TravelStyle.RELAXATION)
-                            .sameGender(false).sameAge(false).budget(50000).groupSize(3).build(),
+                            com.tripfriend.domain.recruit.recruit.entity.TravelStyle.GOURMET,
+                            true,
+                            false,
+                            40000,
+                            4
+                    ),
+                    new Recruit(
+                            null,
+                            members.get(1),
+                            new ArrayList<>(),
+                            places.get(12),
+                            "설악산 단풍 여행 같이 가요!",
+                            "가을 단풍을 보며 힐링할 분 찾습니다.",
+                            false,
+                            LocalDate.now().plusDays(15),
+                            LocalDate.now().plusDays(17),
 
-                    Recruit.builder().member(members.get(0)).place(places.get(13))
-                            .title("강릉 바다 드라이브 & 맛집 투어").content("바다 드라이브와 유명 맛집 코스를 함께할 분!")
-                            .isClosed(false).startDate(LocalDate.now().plusDays(6)).endDate(LocalDate.now().plusDays(9))
-                            .travelStyle(com.tripfriend.domain.recruit.recruit.entity.TravelStyle.GOURMET)
-                            .sameGender(false).sameAge(false).budget(70000).groupSize(5).build(),
+                            com.tripfriend.domain.recruit.recruit.entity.TravelStyle.RELAXATION,
+                            false,
+                            false,
+                            50000,
+                            3
+                    ),
+                    new Recruit(
+                            null,
+                            members.get(0),
+                            new ArrayList<>(),
+                            places.get(13),
+                            "강릉 바다 드라이브 & 맛집 투어",
+                            "바다 드라이브와 유명 맛집 코스를 함께할 분!",
+                            false,
+                            LocalDate.now().plusDays(6),
+                            LocalDate.now().plusDays(9),
 
-                    Recruit.builder().member(members.get(2)).place(places.get(9))
-                            .title("부산 감천마을 & 국제시장 투어").content("부산 여행을 알차게 즐길 분 구해요!")
-                            .isClosed(false).startDate(LocalDate.now().plusDays(8)).endDate(LocalDate.now().plusDays(10))
-                            .travelStyle(com.tripfriend.domain.recruit.recruit.entity.TravelStyle.SHOPPING)
-                            .sameGender(true).sameAge(false).budget(35000).groupSize(3).build(),
+                            com.tripfriend.domain.recruit.recruit.entity.TravelStyle.GOURMET,
+                            false,
+                            false,
+                            70000,
+                            5
+                    ),
+                    new Recruit(
+                            null,
+                            members.get(2),
+                            new ArrayList<>(),
+                            places.get(9),
+                            "부산 감천마을 & 국제시장 투어",
+                            "부산 여행을 알차게 즐길 분 구해요!",
+                            false,
+                            LocalDate.now().plusDays(8),
+                            LocalDate.now().plusDays(10),
 
-                    Recruit.builder().member(members.get(1)).place(places.get(7))
-                            .title("경주 문화유산 탐방").content("불국사, 석굴암 등 문화유적지를 돌면서 역사 탐방해요!")
-                            .isClosed(false).startDate(LocalDate.now().plusDays(12)).endDate(LocalDate.now().plusDays(15))
-                            .travelStyle(com.tripfriend.domain.recruit.recruit.entity.TravelStyle.SIGHTSEEING)
-                            .sameGender(false).sameAge(true).budget(45000).groupSize(4).build()
+                            com.tripfriend.domain.recruit.recruit.entity.TravelStyle.SHOPPING,
+                            true,
+                            false,
+                            35000,
+                            3
+                    ),
+                    new Recruit(
+                            null,
+                            members.get(1),
+                            new ArrayList<>(),
+                            places.get(7),
+                            "경주 문화유산 탐방",
+                            "불국사, 석굴암 등 문화유적지를 돌면서 역사 탐방해요!",
+                            false,
+                            LocalDate.now().plusDays(12),
+                            LocalDate.now().plusDays(15),
+
+                            com.tripfriend.domain.recruit.recruit.entity.TravelStyle.SIGHTSEEING,
+                            false,
+                            true,
+                            45000,
+                            4
+                    )
             );
 
             recruitRepository.saveAll(recruits);
