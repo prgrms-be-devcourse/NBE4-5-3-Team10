@@ -99,7 +99,7 @@ public class TripInformationService {
         information.setDuration(reqDto.getDuration());
         information.setCost(reqDto.getCost());
         information.setNotes(reqDto.getNotes());
-        information.setTripSchedule(schedule);
+        information.setTransportation(reqDto.getTransportation());
         tripInformationRepository.save(information);
         return new TripInformationResDto(information);
     }

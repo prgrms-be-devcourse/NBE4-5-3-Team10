@@ -34,7 +34,7 @@ open class TripInformation(
 
     @Enumerated(EnumType.STRING)
     @Column(name = "transportation", nullable = false)
-    var transportation: Transportation? = null, // 교통 수단
+    var transportation: Transportation, // 교통 수단
 
     @Column(name = "cost")
     var cost: Int = 0, // 여행 경비
