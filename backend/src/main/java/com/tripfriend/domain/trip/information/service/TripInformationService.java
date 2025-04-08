@@ -126,6 +126,7 @@ public class TripInformationService {
                     tripInformation.setPlace(place);
                     tripInformation.setVisitTime(infoReq.getVisitTime());
                     tripInformation.setDuration(infoReq.getDuration());
+                    tripInformation.setTransportation(infoReq.getTransportation());
                     tripInformation.setCost(infoReq.getCost());
                     tripInformation.setNotes(infoReq.getNotes());
 
