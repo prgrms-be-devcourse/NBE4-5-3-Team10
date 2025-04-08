@@ -8,12 +8,12 @@ import java.time.LocalDateTime
 
 data class RecruitListResponseDto(
     val recruitId: Long,
-    val memberProfileImage: String,
-    val memberNickname: String,
+    val memberProfileImage: String?,
+    val memberNickname: String?,
     val genderRestriction: String,
     val ageRestriction: String,
-    val placeCityName: String,
-    val placePlaceName: String,
+    val placeCityName: String?,
+    val placePlaceName: String?,
     val title: String,
     @JsonProperty("isClosed")
     val isClosed: Boolean,
@@ -22,8 +22,8 @@ data class RecruitListResponseDto(
     val travelStyle: String,
     val budget: Int = 0,
     val groupSize: Int = 2,
-    val createdAt: LocalDateTime,
-    val updatedAt: LocalDateTime
+    val createdAt: LocalDateTime?,
+    val updatedAt: LocalDateTime?
 ) {
     constructor(recruit: Recruit) : this(
         recruitId = recruit.recruitId!!,

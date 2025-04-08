@@ -10,14 +10,14 @@ import java.time.LocalDateTime
 
 data class RecruitDetailResponseDto(
     val recruitId: Long,
-    val memberId: Long,
-    val memberProfileImage: String,
+    val memberId: Long?,
+    val memberProfileImage: String?,
     val memberNickname: String,
     val genderRestriction: String,
     val ageRestriction: String,
     val placeId: Long,
-    val placeCityName: String,
-    val placePlaceName: String,
+    val placeCityName: String?,
+    val placePlaceName: String?,
     val title: String,
     val content: String,
     @JsonProperty("isClosed")
@@ -29,8 +29,8 @@ data class RecruitDetailResponseDto(
     val sameAge: Boolean,
     val budget: Int = 0,
     val groupSize: Int = 2,
-    val createdAt: LocalDateTime,
-    val updatedAt: LocalDateTime,
+    val createdAt: LocalDateTime?,
+    val updatedAt: LocalDateTime?,
     val applies: List<ApplyResponseDto> = emptyList()
 ) {
         companion object {
