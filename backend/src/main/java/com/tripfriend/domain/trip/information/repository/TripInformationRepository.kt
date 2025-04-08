@@ -1,12 +1,9 @@
-package com.tripfriend.domain.trip.information.repository;
+package com.tripfriend.domain.trip.information.repository
 
-import com.tripfriend.domain.trip.information.entity.TripInformation;
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.tripfriend.domain.trip.information.entity.TripInformation
+import org.springframework.data.jpa.repository.JpaRepository
 
-import java.util.List;
-
-public interface TripInformationRepository extends JpaRepository<TripInformation, Long> {
-
+interface TripInformationRepository : JpaRepository<TripInformation?, Long?> {
     // 여행 일정 id에 따른 여행 정보 조회
-    List<TripInformation> findByTripScheduleId(Long id);
+    fun findByTripScheduleId(id: Long?): List<TripInformation?>?
 }
