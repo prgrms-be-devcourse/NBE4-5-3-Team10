@@ -3,6 +3,7 @@ package com.tripfriend.domain.recruit.recruit.service
 import com.tripfriend.domain.member.member.entity.AgeRange
 import com.tripfriend.domain.member.member.entity.Gender
 import com.tripfriend.domain.member.member.entity.Member
+import com.tripfriend.domain.member.member.repository.MemberRepository
 import com.tripfriend.domain.member.member.service.AuthService
 import com.tripfriend.domain.place.place.repository.PlaceRepository
 import com.tripfriend.domain.recruit.apply.dto.ApplyResponseDto
@@ -19,12 +20,13 @@ import java.util.*
 @Service
 class RecruitService(
     private val recruitRepository: RecruitRepository,
+    private val memberRepository: MemberRepository,
     private val placeRepository: PlaceRepository,
     private val authService: AuthService
 ) {
 
     fun getLoggedInMember(token: String?): Member {
-        val member = authService.getLoggedInMember(token!!)
+        val member = authService.getLoggedInMember(token)
         return member ?: throw ServiceException("401-1", "로그인이 필요합니다.")
     }
 
@@ -40,7 +42,7 @@ class RecruitService(
     @Transactional
     fun create(requestDto: RecruitRequestDto, token: String?): RecruitDetailResponseDto {
         val member = getLoggedInMember(token)
-        val place = placeRepository.findById(requestDto.placeId!!)
+        val place = placeRepository.findById(requestDto.placeId)
             .orElseThrow { ServiceException("404-2", "해당 장소가 존재하지 않습니다.") }
 
         val recruit = requestDto.toEntity(member, place)
@@ -105,7 +107,7 @@ class RecruitService(
         val recruit = recruitRepository.findById(recruitId)
             .orElseThrow { ServiceException("404-3", "해당 모집글이 존재하지 않습니다.") }
 
-        val place = placeRepository.findById(requestDto.placeId!!)
+        val place = placeRepository.findById(requestDto.placeId)
             .orElseThrow { ServiceException("404-2", "해당 장소가 존재하지 않습니다.") }
 
         val member = getLoggedInMember(token)
