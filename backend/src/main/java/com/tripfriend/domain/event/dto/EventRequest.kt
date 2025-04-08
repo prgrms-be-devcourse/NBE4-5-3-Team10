@@ -1,14 +1,12 @@
-package com.tripfriend.domain.event.dto;
+package com.tripfriend.domain.event.dto
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Getter
+import lombok.Setter
+import java.time.LocalDate
 
-import java.time.LocalDate;
 
-@Getter
-@Setter
-public class EventRequest {
-    private String title;
-    private String description;
-    private LocalDate eventDate;
-}
+class EventRequest (
+     val title: String,
+     val description: String,
+     val eventDate: LocalDate
+)
