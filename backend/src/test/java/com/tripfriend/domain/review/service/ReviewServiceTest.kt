@@ -100,6 +100,7 @@ class ReviewServiceTest {
         // 테스트 리뷰 조회수 모킹
         testViewCount = mockk<ReviewViewCount>()
         every { testViewCount.count } returns 5
+        every { testViewCount.increment() } just runs
 
         // 테스트 리뷰 요청 DTO 설정
         testReviewRequest = ReviewRequestDto().apply {
@@ -108,6 +109,19 @@ class ReviewServiceTest {
             rating = 4.5
             placeId = 1L
         }
+
+        // QueryDSL 관련 메서드 모킹 추가
+        every { reviewRepository.findAllOrderByCommentCountDesc() } returns listOf(arrayOf(testReview, 3L))
+        every { reviewRepository.findAllByOrderByRatingDesc() } returns listOf(testReview)
+        every { reviewRepository.findAllByOrderByRatingAsc() } returns listOf(testReview)
+        every { reviewRepository.findAllByOrderByCreatedAtDesc() } returns listOf(testReview)
+        every { reviewRepository.findAllByOrderByCreatedAtAsc() } returns listOf(testReview)
+        every { reviewRepository.findByPlace_IdOrderByRatingDesc(any()) } returns listOf(testReview)
+        every { reviewRepository.findByPlace_IdOrderByRatingAsc(any()) } returns listOf(testReview)
+
+        // 추가 모킹 - 인기 리뷰 관련
+        every { viewCountRepository.findAll() } returns listOf(testViewCount)
+        every { reviewRepository.findAll() } returns listOf(testReview)
     }
 
     @Nested
@@ -233,6 +247,7 @@ class ReviewServiceTest {
                 viewCountRepository.findById(1L)
                 commentRepository.findByReviewReviewIdOrderByCreatedAtAsc(1L)
                 viewCountRepository.save(any())
+                testViewCount.increment()
             }
         }
 
@@ -256,6 +271,7 @@ class ReviewServiceTest {
             }
             verify(exactly = 0) {
                 viewCountRepository.save(any())
+                testViewCount.increment()
             }
         }
 
@@ -266,6 +282,7 @@ class ReviewServiceTest {
             every { viewCountRepository.findById(1L) } returns Optional.empty()
             val newViewCount = mockk<ReviewViewCount>()
             every { newViewCount.count } returns 0
+            every { newViewCount.increment() } just runs
             every { viewCountRepository.save(any()) } returns newViewCount
 
             // When
@@ -331,9 +348,7 @@ class ReviewServiceTest {
         @DisplayName("리뷰 수정 성공")
         fun updateReviewSuccess() {
             // Given
-            every { testReview.title = "수정된 리뷰" } just runs
-            every { testReview.content = "이것은 수정된 리뷰입니다" } just runs
-            every { testReview.rating = 5.0 } just runs
+            every { testReview.update(any(), any(), any()) } just runs
 
             // 수정 후 값을 반환하도록 모킹
             every { testReview.title } returns "수정된 리뷰"
@@ -351,6 +366,7 @@ class ReviewServiceTest {
 
             verify {
                 reviewRepository.findById(1L)
+                testReview.update(any(), any(), any())
                 viewCountRepository.findById(1L)
                 commentRepository.findByReviewReviewIdOrderByCreatedAtAsc(1L)
             }
@@ -379,10 +395,9 @@ class ReviewServiceTest {
         @DisplayName("다른 사용자의 리뷰 수정 실패")
         fun updateOtherUserReviewFail() {
             // Given
-            val otherMember = Member().apply {
-                id = 2L
-                username = "otherUser"
-            }
+            val otherMember = mockk<Member>()
+            every { otherMember.id } returns 2L
+            every { otherMember.username } returns "otherUser"
 
             // When & Then
             val exception = assertFailsWith<ServiceException> {
@@ -469,10 +484,9 @@ class ReviewServiceTest {
         @DisplayName("다른 사용자의 리뷰 삭제 실패")
         fun deleteOtherUserReviewFail() {
             // Given
-            val otherMember = Member().apply {
-                id = 2L
-                username = "otherUser"
-            }
+            val otherMember = mockk<Member>()
+            every { otherMember.id } returns 2L
+            every { otherMember.username } returns "otherUser"
 
             // When & Then
             val exception = assertFailsWith<ServiceException> {
