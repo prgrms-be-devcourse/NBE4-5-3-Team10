@@ -12,14 +12,15 @@ import java.time.LocalDateTime
 @EntityListeners(AuditingEntityListener::class)
 @Table(name = "trip_information")
 open class TripInformation(
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "trip_Information_id")
-    var id: Long? = null, // 개별 Id 추가
+    var id: Long, // 개별 Id 추가
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "trip_schedule_id", nullable = false)
-    var tripSchedule: TripSchedule? = null, // 여행일정Id - FK
+    var tripSchedule: TripSchedule, // 여행일정Id - FK
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "place_id", nullable = false)
@@ -31,6 +32,7 @@ open class TripInformation(
     @Column(name = "duration", nullable = false)
     var duration: Int? = null, // 방문기간(날짜 단위)
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "transportation", nullable = false)
     var transportation: Transportation? = null, // 교통 수단
 
@@ -44,10 +46,6 @@ open class TripInformation(
     @ColumnDefault("false")
     var isVisited: Boolean = false // 방문여부
 ) {
-    // 코틀린의 기본값 덕분에 별도의 no-arg 생성자가 제공됩니다.
-    // 혹시 필요하다면 아래와 같이 명시적으로 protected no-arg 생성자를 추가할 수 있습니다.
-    //
-    // protected constructor() : this(null, null, null, null, null, null, 0, null, false)
 
     // 여행 정보 수정 메서드
     fun updateTripInformation(updateDto: TripInformationUpdateReqDto) {

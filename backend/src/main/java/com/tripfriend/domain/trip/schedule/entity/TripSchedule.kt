@@ -26,16 +26,16 @@ open class TripSchedule(
     var member: Member? = null, // 여행 일정을 생성한 회원
 
     @Column(name = "title", nullable = false)
-    var title: String, // 여행 일정 제목
+    var title: String? = null, // 여행 일정 제목
 
     @Column(name = "description", columnDefinition = "TEXT")
     var description: String? = null, // 여행 일정 상세 설명
 
     @Column(name = "start_date", nullable = false)
-    var startDate: LocalDate, // 시작일
+    var startDate: LocalDate? = null, // 시작일
 
     @Column(name = "end_date", nullable = false)
-    var endDate: LocalDate, // 종료일
+    var endDate: LocalDate? = null, // 종료일
 
     @CreatedDate
     @Column(name = "created_at", updatable = false)
