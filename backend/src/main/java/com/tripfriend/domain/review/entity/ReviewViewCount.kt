@@ -4,7 +4,7 @@ import jakarta.persistence.*
 
 @Entity
 @Table(name = "review_view_count")
-open class ReviewViewCount {
+class ReviewViewCount {
 
     @Id
     var reviewId: Long? = null  // Review의 ID를 PK로 사용

@@ -177,7 +177,8 @@ class JwtUtil(
     }
 
     fun extractVerified(token: String): Boolean {
-        return getClaims(token).get("verified", Boolean::class.java)
+        val verifiedClaim = getClaims(token)["verified"]
+        return verifiedClaim is Boolean && verifiedClaim == true
     }
 
     fun isTokenExpired(token: String): Boolean {
@@ -205,13 +206,8 @@ class JwtUtil(
     }
 
     fun isDeletedAccount(token: String): Boolean {
-        return try {
-            val claims = getClaims(token)
-            val deletedClaim = claims["deleted"]
-            deletedClaim != null && deletedClaim as Boolean
-        } catch (e: Exception) {
-            false
-        }
+        val deletedClaim = getClaims(token)["deleted"]
+        return deletedClaim is Boolean && deletedClaim == true
     }
 
     fun getRefreshTokenExpiration(): Long {
