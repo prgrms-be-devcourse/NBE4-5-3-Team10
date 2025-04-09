@@ -177,12 +177,15 @@ class TripScheduleServiceTest {
             // 필요한 경우 startDate, endDate 등 추가 프로퍼티 설정
         }
 
-        val updateTripInfo = TripInformationUpdateReqDto().apply {
-            tripInformationId = tripInfoId
-            cost = 5000 // 수정된 비용
-            notes = "수정된 노트" // 수정된 노트
-            duration = 1    // 수정된 일정
-        }
+        val updateTripInfo = TripInformationUpdateReqDto(
+            tripInformationId = tripInfoId,
+            placeId = 1L,    // 수정된 장소 ID
+            cost = 5000, // 수정된 비용
+            notes = "수정된 노트", // 수정된 노트
+            duration = 1,
+            visitTime = LocalDateTime.of(2025, 4, 10, 9, 0),
+            transportation = Transportation.SUBWAY,    // 수정된 일정
+        )
 
         val updateReq = TripUpdateReqDto(
             tripScheduleId = scheduleId,
@@ -210,12 +213,15 @@ class TripScheduleServiceTest {
             description = "수정된 설명"
         }
 
-        val updateTripInfo = TripInformationUpdateReqDto().apply {
-            tripInformationId = tripInfoId
-            cost = 5000
-            notes = "수정된 노트"
-            duration = 1
-        }
+        val updateTripInfo = TripInformationUpdateReqDto(
+            tripInformationId = tripInfoId,
+            placeId = 1L,    // 수정된 장소 ID
+            cost = 5000, // 수정된 비용
+            notes = "수정된 노트", // 수정된 노트
+            duration = 1,
+            visitTime = LocalDateTime.of(2025, 4, 10, 9, 0),
+            transportation = Transportation.SUBWAY,    // 수정된 일정
+        )
 
         val updateReq = TripUpdateReqDto(
             tripScheduleId = scheduleId,
