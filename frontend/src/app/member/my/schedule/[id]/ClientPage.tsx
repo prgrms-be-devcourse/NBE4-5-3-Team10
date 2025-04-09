@@ -20,7 +20,6 @@ interface TripInformation {
   transportation: string;
   cost: number;
   notes: string;
-  //priority: number;
   visited: boolean;
 }
 
@@ -41,6 +40,18 @@ interface ApiResponse {
   data: TripSchedule[];
 }
 
+// 영어 교통수단 옵션 배열
+const transportationOptions = ["WALK", "BUS", "SUBWAY", "CAR", "TAXI", "ETC"];
+// 교통수단 한글 매핑 객체
+const transportationMapping: Record<string, string> = {
+  WALK: "도보",
+  BUS: "버스",
+  SUBWAY: "기차",
+  CAR: "자가용",
+  TAXI: "택시",
+  ETC: "기타",
+};
+
 export default function ClientPage() {
   const { id } = useParams();
   const router = useRouter();
@@ -57,12 +68,8 @@ export default function ClientPage() {
     transportation: "",
     cost: 0,
     notes: "",
-    //priority: 0,
   });
   const [newTripPlaces, setNewTripPlaces] = useState<Place[]>([]);
-
-  // 교통수단 옵션
-  const transportationOptions = ["WALK", "BUS", "SUBWAY", "CAR", "TAXI", "ETC"];
 
   // 여행 일정 조회
   useEffect(() => {
@@ -174,7 +181,9 @@ export default function ClientPage() {
           body: JSON.stringify(payload),
         }
       );
-      console.log("세빙일정 등록 : ", payload);
+
+      // console.log("세부 일정 등록 : ", payload);
+
       if (!res.ok) throw new Error("세부 일정 등록 실패");
       alert("세부 일정 등록 성공");
       const result = await res.json();
@@ -370,7 +379,7 @@ export default function ClientPage() {
                   />
                 </div>
                 <div className="mb-2">
-                  <label className="block mb-1">교통수단</label>
+                  <label className="block mb-1">이동 수단</label>
                   <select
                     name="transportation"
                     value={newTripInfo.transportation}
@@ -381,7 +390,7 @@ export default function ClientPage() {
                     <option value="">선택하세요</option>
                     {transportationOptions.map((opt) => (
                       <option key={opt} value={opt}>
-                        {opt}
+                        {transportationMapping[opt] || opt}
                       </option>
                     ))}
                   </select>
@@ -406,16 +415,6 @@ export default function ClientPage() {
                     rows={2}
                   />
                 </div>
-                {/* <div className="mb-2">
-                  <label className="block mb-1">우선순위</label>
-                  <input
-                    type="number"
-                    name="priority"
-                    value={newTripInfo.priority || ""}
-                    onChange={handleNewTripInfoChange}
-                    className="w-full border rounded p-2"
-                  />
-                </div> */}
                 <div className="flex justify-end gap-2">
                   <button
                     type="submit"
@@ -457,7 +456,8 @@ export default function ClientPage() {
                     </p>
                     <p className="text-md text-gray-600">
                       <span className="font-semibold">이동 수단:</span>{" "}
-                      {info.transportation}
+                      {transportationMapping[info.transportation] ||
+                        info.transportation}
                     </p>
                     <p className="text-md text-gray-600">
                       <span className="font-semibold">비용:</span> {info.cost}원

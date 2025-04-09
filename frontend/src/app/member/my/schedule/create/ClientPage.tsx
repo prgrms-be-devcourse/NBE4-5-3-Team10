@@ -27,6 +27,19 @@ interface TripSchedule {
   tripInformations: TripInformation[];
 }
 
+// 교통수단 옵션 (영문 값)
+const transportationOptions = ["WALK", "BUS", "SUBWAY", "CAR", "TAXI", "ETC"];
+
+// 교통수단 한글 매핑 객체 (enum Transportation 참조)
+const transportationMapping: Record<string, string> = {
+  WALK: "도보",
+  BUS: "버스",
+  SUBWAY: "기차",
+  CAR: "자가용",
+  TAXI: "택시",
+  ETC: "기타",
+};
+
 export default function ClientPage() {
   const router = useRouter();
 
@@ -45,9 +58,6 @@ export default function ClientPage() {
   // 도시 목록 및 장소 목록을 위한 상태
   const [cities, setCities] = useState<string[]>([]);
   const [places, setPlaces] = useState<Place[]>([]);
-
-  // 교통수단 옵션
-  const transportationOptions = ["WALK", "BUS", "SUBWAY", "CAR", "TAXI", "ETC"];
 
   // 컴포넌트 마운트 시 중복 제거된 도시 목록을 가져옴
   useEffect(() => {
@@ -328,7 +338,7 @@ export default function ClientPage() {
                       <option value="">선택하세요</option>
                       {transportationOptions.map((opt) => (
                         <option key={opt} value={opt}>
-                          {opt}
+                          {transportationMapping[opt] || opt}
                         </option>
                       ))}
                     </select>
@@ -359,21 +369,7 @@ export default function ClientPage() {
                       rows={2}
                     />
                   </div>
-                  {/* <div>
-                    <label className="block mb-1">우선순위</label>
-                    <input
-                      type="number"
-                      value={info.priority || ""}
-                      onChange={(e) =>
-                        updateTripInformation(
-                          index,
-                          "priority",
-                          parseInt(e.target.value, 10) || 0
-                        )
-                      }
-                      className="w-full border rounded p-2"
-                    />
-                  </div> */}
+                  {/* 주석 처리된 우선순위 필드 */}
                 </div>
               </div>
             ))
