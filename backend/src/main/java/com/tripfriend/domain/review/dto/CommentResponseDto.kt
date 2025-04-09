@@ -24,7 +24,7 @@ data class CommentResponseDto(
         updatedAt = comment.updatedAt
     )
 
-    constructor(comment: Comment, memberName: String, profileImage: String) : this(
+    constructor(comment: Comment, memberName: String, profileImage: String?) : this(
         commentId = comment.commentId,
         content = comment.content,
         reviewId = comment.review?.reviewId,
