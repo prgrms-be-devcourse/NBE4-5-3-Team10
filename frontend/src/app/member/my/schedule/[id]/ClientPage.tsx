@@ -20,7 +20,7 @@ interface TripInformation {
   transportation: string;
   cost: number;
   notes: string;
-  visited: boolean;
+  isVisited: boolean;
 }
 
 interface TripSchedule {
@@ -270,7 +270,7 @@ export default function ClientPage() {
           ...sch,
           tripInformations: sch.tripInformations?.map((info) =>
             info.tripInformationId === tripInformationId
-              ? { ...info, visited: newStatus }
+              ? { ...info, isVisited: newStatus }
               : info
           ),
         }))
@@ -468,7 +468,7 @@ export default function ClientPage() {
                     <label className="flex items-center gap-2 mt-2">
                       <input
                         type="checkbox"
-                        checked={info.visited}
+                        checked={info.isVisited}
                         onChange={(e) =>
                           updateVisitedStatus(
                             info.tripInformationId,
@@ -476,7 +476,7 @@ export default function ClientPage() {
                           )
                         }
                       />
-                      {info.visited ? "✅ 방문 완료" : "❌ 방문 예정"}
+                      {info.isVisited ? "✅ 방문 완료" : "❌ 방문 예정"}
                     </label>
                     <div className="flex gap-2 mt-2">
                       <button
