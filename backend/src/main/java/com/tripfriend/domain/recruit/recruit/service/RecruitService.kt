@@ -24,7 +24,7 @@ class RecruitService(
 ) {
 
     fun getLoggedInMember(token: String?): Member {
-        val member = authService.getLoggedInMember(token)
+        val member = authService.getLoggedInMember(token!!)
         return member ?: throw ServiceException("401-1", "로그인이 필요합니다.")
     }
 
