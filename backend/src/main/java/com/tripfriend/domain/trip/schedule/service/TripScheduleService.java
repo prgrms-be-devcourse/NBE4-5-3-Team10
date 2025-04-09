@@ -6,7 +6,6 @@ import com.tripfriend.domain.member.member.service.AuthService;
 import com.tripfriend.domain.place.place.entity.Place;
 import com.tripfriend.domain.place.place.repository.PlaceRepository;
 import com.tripfriend.domain.trip.information.dto.TripInformationReqDto;
-import com.tripfriend.domain.trip.information.dto.TripInformationResDto;
 import com.tripfriend.domain.trip.information.entity.TripInformation;
 import com.tripfriend.domain.trip.information.repository.TripInformationRepository;
 import com.tripfriend.domain.trip.information.service.TripInformationService;
@@ -20,7 +19,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -70,8 +68,8 @@ public class TripScheduleService {
         }
 
         // 응답 DTO 생성
-        List<TripInformationResDto> tripInfoDtos = buildTripInformationResDtos(req.getTripInformations());
-        return new TripScheduleInfoResDto(newSchedule, tripInfoDtos);
+//        List<TripInformationResDto> tripInfoDtos = buildTripInformationResDtos(req.getTripInformations());
+        return new TripScheduleInfoResDto(newSchedule);
     }
 
     // 도시명 유효성 검증
@@ -108,30 +106,30 @@ public class TripScheduleService {
         });
     }
 
-    // TripInformation 응답 DTO 리스트 생성
-    private List<TripInformationResDto> buildTripInformationResDtos(List<TripInformationReqDto> tripInfos) {
-        return Optional.ofNullable(tripInfos)
-                .orElse(List.of())
-                .stream()
-                .map(tripInfo -> {
-                    Place place = placeRepository.findById(tripInfo.getPlaceId())
-                            .orElseThrow(() -> new ServiceException("404-2", "해당 장소가 존재하지 않습니다."));
-                    return new TripInformationResDto(
-                            tripInfo.getTripInformationId(),
-                            tripInfo.getPlaceId(),
-                            place.getCityName(),
-                            place.getPlaceName(),
-                            tripInfo.getVisitTime(),
-                            tripInfo.getDuration(),
-                            tripInfo.getTransportation(),
-                            tripInfo.getCost(),
-                            tripInfo.getNotes(),
-                            //tripInfo.getPriority(),
-                            false
-                    );
-                })
-                .collect(Collectors.toList());
-    }
+    // TripInformation 응답 DTO 리스트 생성(필요없음)
+//    private List<TripInformationResDto> buildTripInformationResDtos(List<TripInformationReqDto> tripInfos) {
+//        return Optional.ofNullable(tripInfos)
+//                .orElse(List.of())
+//                .stream()
+//                .map(tripInfo -> {
+//                    Place place = placeRepository.findById(tripInfo.getPlaceId())
+//                            .orElseThrow(() -> new ServiceException("404-2", "해당 장소가 존재하지 않습니다."));
+//                    return new TripInformationResDto(
+//                            tripInfo.getTripInformationId(),
+//                            tripInfo.getPlaceId(),
+//                            place.getCityName(),
+//                            place.getPlaceName(),
+//                            tripInfo.getVisitTime(),
+//                            tripInfo.getDuration(),
+//                            tripInfo.getTransportation(),
+//                            tripInfo.getCost(),
+//                            tripInfo.getNotes(),
+//                            //tripInfo.getPriority(),
+//                            false
+//                    );
+//                })
+//                .collect(Collectors.toList());
+//    }
 
     // 전체 일정 조회(필요없을듯)
     @Transactional(readOnly = true)
@@ -296,12 +294,12 @@ public class TripScheduleService {
         }
 
         // 여행 일정에 포함된 여행 정보 조회 후 DTO 변환
-        List<TripInformationResDto> tripInformations = tripInformationRepository.findByTripScheduleId(id)
-                .stream()
-                .map(TripInformationResDto::new) // DTO 변환
-                .collect(Collectors.toList());
+//        List<TripInformationResDto> tripInformations = tripInformationRepository.findByTripScheduleId(id)
+//                .stream()
+//                .map(TripInformationResDto::new) // DTO 변환
+//                .collect(Collectors.toList());
 
-        return List.of(new TripScheduleInfoResDto(schedule, tripInformations));
+        return List.of(new TripScheduleInfoResDto(schedule));
     }
 
 }

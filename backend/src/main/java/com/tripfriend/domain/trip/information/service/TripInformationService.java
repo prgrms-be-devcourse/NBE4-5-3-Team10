@@ -171,7 +171,7 @@ public class TripInformationService {
     @Transactional
     public void updateVisited(VisitedReqDto req, String token) {
         TripInformation tripInformation = checkInfo(req.getTripInformationId(), token);
-        tripInformation.setVisited(req.getIsVisited());
+        tripInformation.setVisited(req.isVisited());
         tripInformationRepository.save(tripInformation);
     }
 
