@@ -1,19 +1,16 @@
 package com.tripfriend.domain.member.member.dto
 
 data class AuthResponseDto(
-    var accessToken: String? = null,
-    var refreshToken: String? = null,
-    var isDeletedAccount: Boolean = false
+    val accessToken: String,
+    val refreshToken: String? = null,
+    val isDeletedAccount: Boolean = false,
+    val authority: String? = null
 ) {
-    constructor(accessToken: String) : this(
-        accessToken = accessToken,
-        refreshToken = null,
-        isDeletedAccount = false
-    )
 
-    constructor(accessToken: String, isDeletedAccount: Boolean) : this(
+    constructor(accessToken: String, refreshToken: String?, isDeletedAccount: Boolean) : this(
         accessToken = accessToken,
-        refreshToken = null,
-        isDeletedAccount = isDeletedAccount
+        refreshToken = refreshToken,
+        isDeletedAccount = isDeletedAccount,
+        authority = null  // 권한 정보 없이 호출될 경우 null로 설정
     )
 }
