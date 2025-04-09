@@ -9,7 +9,7 @@ import java.time.LocalDate
 
 data class
 RecruitRequestDto(
-    val placeId: Long,
+    val placeId: Long?,
     val title: String,
     val content: String,
     @JsonProperty("isClosed")
