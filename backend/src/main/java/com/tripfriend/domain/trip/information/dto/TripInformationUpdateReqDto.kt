@@ -6,13 +6,13 @@ import java.time.LocalDateTime
 data class TripInformationUpdateReqDto(
     var tripInformationId: Long? = null, // 여행 정보 ID
 
-    var placeId: Long? = null,           // 장소 ID
+    var placeId: Long,           // 장소 ID
 
-    var visitTime: LocalDateTime? = null,
+    var visitTime: LocalDateTime,
 
-    var duration: Int? = null,
+    var duration: Int,
 
-    var transportation: Transportation? = null,
+    var transportation: Transportation,
 
     var cost: Int = 0,
 
