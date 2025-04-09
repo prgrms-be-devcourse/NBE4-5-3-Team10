@@ -15,4 +15,5 @@ data class TripUpdateReqDto(
     @field:Valid
     val tripInformationUpdates: List<TripInformationUpdateReqDto>, // 여행 정보 수정 리스트
 ) {
+
 }

@@ -11,6 +11,6 @@ class TripUpdateResDto(tripSchedule: TripSchedule, tripInformations: List<TripIn
 
     // 수정된 여행 정보 리스트를 담는 DTO
     val updatedTripInformations: List<TripInformationResDto> = tripInformations.stream()
-        .map { tripInformation: TripInformation? -> TripInformationResDto(tripInformation) }  // 여행 정보 리스트를 DTO로 변환
+        .map { tripInformation: TripInformation? -> tripInformation?.let { TripInformationResDto(it) } }  // 여행 정보 리스트를 DTO로 변환
         .toList()
 }

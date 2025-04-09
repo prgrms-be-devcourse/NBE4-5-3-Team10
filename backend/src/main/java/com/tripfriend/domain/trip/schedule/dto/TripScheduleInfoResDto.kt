@@ -17,6 +17,6 @@ class TripScheduleInfoResDto(tripSchedule: TripSchedule) {
 
     val tripInformations: List<TripInformationResDto> = tripSchedule.tripInformations
         .stream()
-        .map { tripInformation: TripInformation? -> TripInformationResDto(tripInformation) }
+        .map { tripInformation: TripInformation? -> tripInformation?.let { TripInformationResDto(it) } }
         .collect(Collectors.toList()) // 해당 여행지 일정에 대한 정보
 }

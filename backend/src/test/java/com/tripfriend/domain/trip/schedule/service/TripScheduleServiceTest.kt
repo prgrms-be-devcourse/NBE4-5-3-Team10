@@ -2,7 +2,6 @@ package com.tripfriend.domain.trip.schedule.service
 
 import com.tripfriend.domain.member.member.entity.Member
 import com.tripfriend.domain.member.member.repository.MemberRepository
-import com.tripfriend.domain.member.member.service.MemberService
 import com.tripfriend.domain.trip.information.dto.TripInformationReqDto
 import com.tripfriend.domain.trip.information.dto.TripInformationUpdateReqDto
 import com.tripfriend.domain.trip.information.entity.Transportation
@@ -30,9 +29,6 @@ class TripScheduleServiceTest {
 
     @Autowired
     private lateinit var tripScheduleService: TripScheduleService
-
-    @Autowired
-    private lateinit var memberService: MemberService
 
     @Autowired
     private lateinit var memberRepository: MemberRepository
@@ -188,11 +184,11 @@ class TripScheduleServiceTest {
             duration = 1    // 수정된 일정
         }
 
-        val updateReq = TripUpdateReqDto().apply {
-            tripScheduleId = scheduleId
-            scheduleUpdate = updateSchedule
+        val updateReq = TripUpdateReqDto(
+            tripScheduleId = scheduleId,
+            scheduleUpdate = updateSchedule,
             tripInformationUpdates = listOf(updateTripInfo)
-        }
+        )
 
         val updateRes = tripScheduleService.updateTrip(updateReq, token)
 
@@ -221,11 +217,11 @@ class TripScheduleServiceTest {
             duration = 1
         }
 
-        val updateReq = TripUpdateReqDto().apply {
-            tripScheduleId = scheduleId
-            scheduleUpdate = updateSchedule
+        val updateReq = TripUpdateReqDto(
+            tripScheduleId = scheduleId,
+            scheduleUpdate = updateSchedule,
             tripInformationUpdates = listOf(updateTripInfo)
-        }
+        )
 
         // user2의 토큰 생성 (user1이 생성한 일정을 수정할 수 없음)
         val otherMember = memberRepository.findByUsername("user2").orElseThrow()
