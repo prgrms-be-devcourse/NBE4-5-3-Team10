@@ -10,7 +10,7 @@ import java.time.LocalDateTime
 @Entity
 @EntityListeners(AuditingEntityListener::class)
 @Table(name = "trip_information")
-open class TripInformation(
+class TripInformation(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
