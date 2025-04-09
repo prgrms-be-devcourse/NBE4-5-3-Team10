@@ -1,21 +1,14 @@
 package com.tripfriend.domain.trip.schedule.controller;
 
-import com.tripfriend.domain.member.member.entity.Member;
-import com.tripfriend.domain.member.member.repository.MemberRepository;
-import com.tripfriend.domain.member.member.service.AuthService;
 import com.tripfriend.domain.trip.schedule.dto.*;
 import com.tripfriend.domain.trip.schedule.entity.TripSchedule;
 import com.tripfriend.domain.trip.schedule.service.TripScheduleService;
 import com.tripfriend.global.annotation.CheckPermission;
 import com.tripfriend.global.dto.RsData;
-import com.tripfriend.global.exception.ServiceException;
-import com.tripfriend.global.util.JwtUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

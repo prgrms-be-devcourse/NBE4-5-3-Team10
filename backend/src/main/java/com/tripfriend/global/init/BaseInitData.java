@@ -883,8 +883,8 @@ public class BaseInitData implements CommandLineRunner {
         if (noticeRepository.count() == 0) {
             Member admin = memberRepository.findByUsername("admin").orElseThrow();
 
-            noticeRepository.save(new Notice("공지사항 1", "첫 번째 공지입니다.", admin, LocalDateTime.now()));
-            noticeRepository.save(new Notice("공지사항 2", "두 번째 공지입니다.", admin, LocalDateTime.now()));
+            noticeRepository.save(new Notice("공지사항 1", "첫 번째 공지입니다.", LocalDateTime.now(), LocalDateTime.now()));
+            noticeRepository.save(new Notice("공지사항 2", "두 번째 공지입니다.", LocalDateTime.now(), LocalDateTime.now()));
 
             System.out.println("공지사항 데이터가 등록되었습니다.");
         } else {

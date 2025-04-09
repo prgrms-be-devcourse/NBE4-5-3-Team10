@@ -6,7 +6,7 @@ import com.tripfriend.domain.event.service.EventService
 import com.tripfriend.global.annotation.CheckPermission
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
-import lombok.RequiredArgsConstructor
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @Tag(name = "Event API", description = "이벤트 관리 기능을 제공합니다.")
@@ -30,8 +30,9 @@ class EventController(
     @DeleteMapping("/{id}")
     @CheckPermission("ADMIN")
     @Operation(summary = "이벤트 삭제", description = "ID를 통해 특정 이벤트를 삭제합니다.")
-    fun delete(@PathVariable id: Long) {
+    fun delete(@PathVariable id: Long): ResponseEntity<String> {
         eventService.delete(id)
+        return ResponseEntity.ok("삭제가 완료되었습니다.")
     }
 
     @PutMapping("/{id}")
