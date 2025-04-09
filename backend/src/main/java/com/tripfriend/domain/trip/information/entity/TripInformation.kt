@@ -4,7 +4,6 @@ import com.tripfriend.domain.place.place.entity.Place
 import com.tripfriend.domain.trip.information.dto.TripInformationUpdateReqDto
 import com.tripfriend.domain.trip.schedule.entity.TripSchedule
 import jakarta.persistence.*
-import org.hibernate.annotations.ColumnDefault
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
 import java.time.LocalDateTime
 
@@ -43,7 +42,6 @@ open class TripInformation(
     var notes: String? = null, // 메모
 
     @Column(name = "is_visited", nullable = false)
-    @ColumnDefault("false")
     var isVisited: Boolean = false // 방문여부
 ) {
 

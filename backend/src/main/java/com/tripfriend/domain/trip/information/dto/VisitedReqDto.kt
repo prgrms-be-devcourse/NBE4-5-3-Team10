@@ -1,16 +1,10 @@
-package com.tripfriend.domain.trip.information.dto;
+package com.tripfriend.domain.trip.information.dto
 
-import jakarta.validation.constraints.NotNull;
-import lombok.*;
+import com.fasterxml.jackson.annotation.JsonProperty
 
-@Getter
-@Setter
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-public class VisitedReqDto {
-    @NotNull
-    private Long tripInformationId;
-    @NotNull
-    private Boolean isVisited;
-}
+data class VisitedReqDto(
+    var tripInformationId: Long,
+
+    @JsonProperty("isVisited")
+    var isVisited: Boolean,
+)
