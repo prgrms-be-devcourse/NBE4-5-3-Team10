@@ -1,53 +1,41 @@
-package com.tripfriend.domain.notice.service;
+package com.tripfriend.domain.notice.service
 
-import com.tripfriend.domain.notice.entity.Notice;
-import com.tripfriend.domain.notice.repository.NoticeRepository;
-import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
+import com.tripfriend.domain.notice.entity.Notice
+import com.tripfriend.domain.notice.repository.NoticeRepository
+import jakarta.transaction.Transactional
+import org.springframework.stereotype.Service
 
 @Service
-@RequiredArgsConstructor
-public class NoticeService {
-    private final NoticeRepository noticeRepository;
-
-    //공지사항 저장
-    public Notice createNotice(String title, String content) {
-        Notice notice = Notice.builder()
-                .title(title)
-                .content(content)
-                .build();
-        return noticeRepository.save(notice);
+class NoticeService(
+    private val noticeRepository: NoticeRepository
+) {
+    // 공지사항 생성
+    fun createNotice(title: String, content: String): Notice {
+        val notice = Notice(title = title, content = content)
+        return noticeRepository.save(notice)
     }
 
-    //공지사항 전체 조회
-    public List<Notice> getAllNotices() {
-        return noticeRepository.findAll();
-    }
+    // 전체 공지사항 조회
+    fun getAllNotices(): List<Notice> = noticeRepository.findAll()
 
-    //공지사항 검색
-    public Notice getNoticeById(Long id) {
-        return noticeRepository.findById(id)
-                .orElseThrow(()-> new RuntimeException("해당 공지사항을 찾을 수 없습니다."));
-    }
+    // 단건 공지사항 조회
+    fun getNoticeById(id: Long): Notice =
+        noticeRepository.findById(id)
+            .orElseThrow { IllegalArgumentException("해당 공지사항을 찾을 수 없습니다. id: $id") }
 
-    //공지사항 수정
+
+    // 공지사항 수정
     @Transactional
-    public Notice updateNoticeById(Long id, String title, String content) {
-        Notice notice = getNoticeById(id);
-        notice.update(title,content);
-        return notice;
-
+    fun updateNoticeById(id: Long, title: String, content: String): Notice {
+        val notice = getNoticeById(id)
+        notice.update(title, content)
+        return notice
     }
 
 
-    //공지사항 삭제
-    public void deleteNotice(Long id){
-        Notice notice = getNoticeById(id);
-        noticeRepository.deleteById(id);
-
+    // 공지사항 삭제
+    fun deleteNotice(id: Long) {
+        val notice = getNoticeById(id)
+        noticeRepository.delete(notice)
     }
-
 }
