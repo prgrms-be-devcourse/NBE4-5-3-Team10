@@ -14,7 +14,7 @@ import java.time.LocalDateTime
 @Entity
 @EntityListeners(AuditingEntityListener::class)
 @Table(name = "trip_schedule")
-open class TripSchedule(
+class TripSchedule(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
