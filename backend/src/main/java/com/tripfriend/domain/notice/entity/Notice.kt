@@ -1,63 +1,47 @@
-package com.tripfriend.domain.notice.entity;
+package com.tripfriend.domain.notice.entity
 
+import com.tripfriend.domain.member.member.entity.Member
+import jakarta.persistence.*
+import java.time.LocalDateTime
 
-import com.tripfriend.domain.member.member.entity.Member;
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
 
 @Entity
-@Getter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
-public class Notice {
+class Notice(
+    @Column(nullable = false, length = 255)
+    var title: String,
+
+    @Column(nullable = false, columnDefinition = "TEXT")
+    var content: String,
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    val member: Member,
+
+    @Column(nullable = false, updatable = false)
+    var createdAt: LocalDateTime = LocalDateTime.now(),
+
+    @Column(nullable = false)
+    var updatedAt: LocalDateTime = LocalDateTime.now()
+) {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-
-    @Column(nullable = false, length = 255)
-    private String title;
-
-
-    @Column(nullable = false, columnDefinition = "TEXT")
-    private String content;
-
-    @Column(nullable = false, updatable = false)
-    private LocalDateTime createdAt;
-
-    @Column(nullable = false)
-    private LocalDateTime updatedAt;
-
-    public Notice(String title, String content, Member member, LocalDateTime createdAt) {
-        this.title = title;
-        this.content = content;
-        this.createdAt = createdAt;
-        this.updatedAt = LocalDateTime.now();
-    }
-
-
+    val id: Long? = null
 
     @PrePersist
-    public void prePersist() {
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = LocalDateTime.now();
+    fun prePersist() {
+        val now = LocalDateTime.now()
+        createdAt = now
+        updatedAt = now
     }
-
 
     @PreUpdate
-    public void preUpdate() {
-        this.updatedAt = LocalDateTime.now();
+    fun preUpdate() {
+        updatedAt = LocalDateTime.now()
     }
 
-    public void update(String title, String content) {
-        this.title = title;
-        this.content = content;
+    fun update(title: String, content: String) {
+        this.title = title
+        this.content = content
     }
-
 }
