@@ -322,6 +322,6 @@ class AuthServiceTest {
         assertNotNull(result)
         assertEquals(username, result.username)
         assertEquals("ROLE_USER", result.authority)
-        assertTrue(result.isVerified)
+        assertTrue(result.verified)
     }
 }
