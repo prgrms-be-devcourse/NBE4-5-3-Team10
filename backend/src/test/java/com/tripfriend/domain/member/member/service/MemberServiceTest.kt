@@ -156,15 +156,15 @@ class MemberServiceTest {
 
         // Given
         val memberId = 1L
-        val updateRequestDto = MemberUpdateRequestDto.builder()
-            .email("updated@example.com")
-            .nickname("업데이트유저")
-            .password("newpassword123")
-            .gender(Gender.FEMALE)
-            .ageRange(AgeRange.THIRTIES)
-            .travelStyle(TravelStyle.SHOPPING)
-            .aboutMe("프로필 업데이트")
-            .build()
+        val updateRequestDto = MemberUpdateRequestDto(
+            email = "updated@example.com",
+            nickname = "업데이트유저",
+            password = "newpassword123",
+            gender = Gender.FEMALE,
+            ageRange = AgeRange.THIRTIES,
+            travelStyle = TravelStyle.SHOPPING,
+            aboutMe = "프로필 업데이트"
+        )
 
         val originalMember = Member(
             id = memberId,
@@ -184,15 +184,19 @@ class MemberServiceTest {
         )
 
         val updatedMember = originalMember.copy(
-            email = updateRequestDto.email,
-            password = updateRequestDto.password,
-            nickname = updateRequestDto.nickname,
-            gender = updateRequestDto.gender,
-            ageRange = updateRequestDto.ageRange,
-            travelStyle = updateRequestDto.travelStyle,
-            aboutMe = updateRequestDto.aboutMe,
+            // 필드가 null이 아닌 경우에만 업데이트
             updatedAt = LocalDateTime.now()
-        )
+        ).apply {
+            // 각 필드에 대해 null이 아닌 경우에만 값 업데이트
+            updateRequestDto.email?.let { this.email = it }
+            updateRequestDto.password?.let { this.password = it }
+            updateRequestDto.nickname?.let { this.nickname = it }
+            updateRequestDto.gender?.let { this.gender = it }
+            updateRequestDto.ageRange?.let { this.ageRange = it }
+            updateRequestDto.travelStyle?.let { this.travelStyle = it }
+            updateRequestDto.aboutMe?.let { this.aboutMe = it }
+            updateRequestDto.profileImage?.let { this.profileImage = it }
+        }
 
         // When
         every { memberRepository.findById(memberId) } returns Optional.of(originalMember)
@@ -226,9 +230,9 @@ class MemberServiceTest {
     fun updateMemberFailNotFound() {
         // Given
         val memberId = 1L
-        val updateRequestDto = MemberUpdateRequestDto.builder()
-            .email("updated@example.com")
-            .build()
+        val updateRequestDto = MemberUpdateRequestDto(
+            email = "updated@example.com"
+        )
 
         // When
         every { memberRepository.findById(memberId) } returns Optional.empty()

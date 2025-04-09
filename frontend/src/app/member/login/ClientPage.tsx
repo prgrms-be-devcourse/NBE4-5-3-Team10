@@ -27,7 +27,7 @@ interface AuthResponse {
   accessToken: string;
   refreshToken?: string;
   message?: string;
-  deletedAccount?: boolean; // 계정이 삭제 상태인지 여부 - 이름 수정
+  isDeletedAccount?: boolean; // 계정이 삭제 상태인지 여부 - 이름 수정
 }
 
 // RsData 응답 타입 정의
@@ -284,9 +284,9 @@ export default function ClientPage() {
         throw new Error("인증 정보가 없습니다.");
       }
 
-      // 소프트 딜리트된 계정인 경우 복구 모달 표시 - deletedAccount 체크로 수정
-      if (authData.deletedAccount) {
-        console.log("삭제된 계정으로 로그인 시도:", authData.deletedAccount);
+      // 소프트 딜리트된 계정인 경우 복구 모달 표시 - isDeletedAccount 체크로 수정
+      if (authData.isDeletedAccount) {
+        console.log("삭제된 계정으로 로그인 시도:", authData.isDeletedAccount);
 
         // 토큰 저장
         localStorage.setItem("accessToken", authData.accessToken);
