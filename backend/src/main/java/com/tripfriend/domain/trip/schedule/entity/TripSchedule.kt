@@ -43,12 +43,14 @@ open class TripSchedule(
 
     @LastModifiedDate
     @Column(name = "updated_at")
-    var updatedAt: LocalDateTime? = null // 일정 수정일
+    var updatedAt: LocalDateTime? = null, // 일정 수정일
 
-) {
     @OneToMany(mappedBy = "tripSchedule", cascade = [CascadeType.ALL], orphanRemoval = true)
     @JsonIgnore
-    val tripInformations: MutableList<TripInformation> = mutableListOf() // 여행 세부 일정 리스트
+    val tripInformations: MutableList<TripInformation> = mutableListOf()
+
+) {
+     // 여행 세부 일정 리스트
 
     // 여행 세부 일정 추가(단일)
     fun addTripInformation(tripInformation: TripInformation) {

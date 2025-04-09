@@ -53,22 +53,26 @@ class TripScheduleServiceTest {
     @Test
     @DisplayName("여행 일정 생성 성공")
     fun createScheduleSuccess() {
-        val reqDto = TripScheduleReqDto().apply {
-            memberId = loggedInMember.id
-            title = "서울 여행"
-            description = "서울 여행 설명"
-            cityName = "서울"
-            startDate = LocalDate.of(2023, 9, 1)
-            endDate = LocalDate.of(2023, 9, 10)
-            tripInformations = listOf(
-                TripInformationReqDto().apply {
-                    placeId = 1L // 사용 가능한 장소 ID로 변경 필요
-                    visitTime = LocalDateTime.of(2025, 4, 10, 9, 0)
-                    duration = 2
-                    transportation = Transportation.SUBWAY
-                    cost = 3000
-                    notes = "경복궁 방문"
-                }
+        val reqDto = TripScheduleReqDto(
+            memberId = loggedInMember.id,
+            title = "서울 여행",
+            cityName = "서울",
+            description = "서울 여행 설명",
+            startDate = LocalDate.of(2023, 9, 1),
+            endDate = LocalDate.of(2023, 9, 10),
+            tripInformations = mutableListOf(), // 초기 빈 리스트
+        ).apply {
+            tripInformations.add(
+                TripInformationReqDto(
+                    null, // tripScheduleId
+                    null, // tripInformationId
+                    1L,   // placeId (필수)
+                    LocalDateTime.of(2025, 4, 10, 9, 0), // visitTime
+                    2,    // duration
+                    Transportation.SUBWAY, // transportation
+                    3000, // cost
+                    "경복궁 방문" // notes
+                )
             )
         }
 
@@ -81,13 +85,26 @@ class TripScheduleServiceTest {
     @Test
     @DisplayName("여행 일정 생성 실패 - 빈 도시명")
     fun createScheduleFailEmptyCity() {
-        val reqDto = TripScheduleReqDto().apply {
-            title = "빈 도시 테스트"
-            description = "설명"
-            cityName = "" // 빈 도시명
-            startDate = LocalDate.of(2023, 9, 1)
-            endDate = LocalDate.of(2023, 9, 10)
-            tripInformations = listOf()
+        val reqDto = TripScheduleReqDto(
+            memberId = loggedInMember.id,
+            title = "빈 도시 테스트",
+            description = "설명",
+            startDate = LocalDate.of(2023, 9, 1),
+            endDate = LocalDate.of(2023, 9, 10),
+            tripInformations = mutableListOf(),
+        ).apply {
+            tripInformations.add(
+                TripInformationReqDto(
+                    null, // tripScheduleId
+                    null, // tripInformationId
+                    1L,   // placeId (필수)
+                    LocalDateTime.of(2025, 4, 10, 9, 0), // visitTime
+                    2,    // duration
+                    Transportation.SUBWAY, // transportation
+                    3000, // cost
+                    "경복궁 방문" // notes
+                )
+            )
         }
 
         val ex = assertThrows<ServiceException> {
@@ -99,22 +116,26 @@ class TripScheduleServiceTest {
     @Test
     @DisplayName("여행 일정 생성 실패 - 여행 정보 도시 불일치")
     fun createScheduleFailTripInfoCityMismatch() {
-        val reqDto = TripScheduleReqDto().apply {
-            memberId = loggedInMember.id
-            title = "서울 여행"
-            description = "서울 여행 설명"
-            cityName = "서울" // 선택 도시: 서울
-            startDate = LocalDate.of(2023, 9, 1)
-            endDate = LocalDate.of(2023, 9, 10)
-            tripInformations = listOf(
-                TripInformationReqDto().apply {
-                    placeId = 6L // 6L는 부산의 도시 장소 ID
-                    visitTime = LocalDateTime.of(2025, 4, 10, 9, 0)
-                    duration = 2
-                    transportation = Transportation.SUBWAY
-                    cost = 3000
-                    notes = "부산 명소 방문"
-                }
+        val reqDto = TripScheduleReqDto(
+            memberId = loggedInMember.id,
+            title = "서울 여행",
+            description = "서울 여행 설명",
+            cityName = "서울",// 선택 도시: 서울
+            startDate = LocalDate.of(2023, 9, 1),
+            endDate = LocalDate.of(2023, 9, 10),
+            tripInformations = mutableListOf(),
+        ).apply {
+            tripInformations.add(
+                TripInformationReqDto(
+                    null, // tripScheduleId
+                    null, // tripInformationId
+                    6L,   // placeId (부산의 도시 장소 ID)
+                    LocalDateTime.of(2025, 4, 10, 9, 0), // visitTime
+                    2,    // duration
+                    Transportation.SUBWAY, // transportation
+                    3000, // cost
+                    "부산 명소 방문" // notes
+                )
             )
         }
 
