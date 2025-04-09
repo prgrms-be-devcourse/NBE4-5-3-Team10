@@ -1,8 +1,9 @@
-package com.tripfriend.domain.event.service
+package com.tripfriend.domain.event.event.service
 
 import com.tripfriend.domain.event.dto.EventRequest
 import com.tripfriend.domain.event.entity.Event
 import com.tripfriend.domain.event.repository.EventRepository
+import com.tripfriend.domain.event.service.EventService
 import io.mockk.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
