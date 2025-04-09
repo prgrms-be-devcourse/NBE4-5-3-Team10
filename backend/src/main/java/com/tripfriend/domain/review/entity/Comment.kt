@@ -5,7 +5,7 @@ import jakarta.persistence.*
 import java.time.LocalDateTime
 
 @Entity
-open class Comment {
+class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

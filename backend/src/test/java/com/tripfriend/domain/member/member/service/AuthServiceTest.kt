@@ -76,8 +76,8 @@ class AuthServiceTest {
         val loginRequestDto = LoginRequestDto(username, password)
         `when`(memberRepository.findByUsername(username)).thenReturn(Optional.of(testMember))
         `when`(passwordEncoder.matches(password, encodedPassword)).thenReturn(true)
-        `when`(jwtUtil.generateAccessToken(eq(username), eq("ROLE_USER"), eq(true))).thenReturn(accessToken)
-        `when`(jwtUtil.generateRefreshToken(eq(username), eq("ROLE_USER"), eq(true))).thenReturn(refreshToken)
+        `when`(jwtUtil.generateAccessToken(username, "ROLE_USER", true)).thenReturn(accessToken)
+        `when`(jwtUtil.generateRefreshToken(username, "ROLE_USER", true)).thenReturn(refreshToken)
 
         // When
         val result = authService.login(loginRequestDto, httpServletResponse)
@@ -101,6 +101,8 @@ class AuthServiceTest {
             // When
             authService.login(loginRequestDto, httpServletResponse)
         }
+
+        verify(httpServletResponse, never()).addCookie(any(Cookie::class.java))
     }
 
     @Test
@@ -136,8 +138,8 @@ class AuthServiceTest {
         val loginRequestDto = LoginRequestDto(username, password)
         `when`(memberRepository.findByUsername(username)).thenReturn(Optional.of(testMember))
         `when`(passwordEncoder.matches(password, encodedPassword)).thenReturn(true)
-        `when`(jwtUtil.generateAccessToken(eq(username), eq("ROLE_USER"), eq(true), eq(true))).thenReturn(accessToken)
-        `when`(jwtUtil.generateRefreshToken(eq(username), eq("ROLE_USER"), eq(true), eq(true))).thenReturn(refreshToken)
+        `when`(jwtUtil.generateAccessToken(username, "ROLE_USER", true, true)).thenReturn(accessToken)
+        `when`(jwtUtil.generateRefreshToken(username, "ROLE_USER", true, true)).thenReturn(refreshToken)
 
         // When
         val result = authService.login(loginRequestDto, httpServletResponse)
@@ -197,14 +199,13 @@ class AuthServiceTest {
         `when`(jwtUtil.extractAuthority(accessToken)).thenReturn("ROLE_USER")
         `when`(jwtUtil.extractVerified(accessToken)).thenReturn(true)
         `when`(jwtUtil.isDeletedAccount(accessToken)).thenReturn(false)
-        `when`(jwtUtil.generateAccessToken(eq(username), eq("ROLE_USER"), eq(true))).thenReturn(newAccessToken)
 
         // Mock claims, expiration 확인
         val mockClaims = mock(Claims::class.java)
         val expirationDate = Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 6)
         `when`(mockClaims.expiration).thenReturn(expirationDate)
         `when`(jwtUtil.getClaims(refreshToken)).thenReturn(mockClaims)
-        `when`(jwtUtil.getRefreshTokenExpiration()).thenReturn(1000L * 60 * 60 * 24 * 7)
+        `when`(jwtUtil.generateAccessToken(username, "ROLE_USER", true)).thenReturn(newAccessToken)
 
         // When
         val result = authService.refreshToken(accessToken, httpServletResponse)

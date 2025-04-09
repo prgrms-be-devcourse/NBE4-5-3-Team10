@@ -6,7 +6,7 @@ import jakarta.persistence.*
 import java.time.LocalDateTime
 
 @Entity
-open class Review {
+class Review {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
