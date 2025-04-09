@@ -2,13 +2,8 @@ package com.tripfriend.domain.place.place.dto;
 
 import com.tripfriend.domain.place.place.entity.Category;
 import com.tripfriend.domain.place.place.entity.Place;
-import com.tripfriend.domain.trip.information.entity.TripInformation;
-import com.tripfriend.domain.trip.schedule.dto.TripScheduleResDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Getter
 @AllArgsConstructor

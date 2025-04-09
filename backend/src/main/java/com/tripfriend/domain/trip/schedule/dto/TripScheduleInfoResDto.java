@@ -1,7 +1,6 @@
 package com.tripfriend.domain.trip.schedule.dto;
 
 import com.tripfriend.domain.trip.information.dto.TripInformationResDto;
-import com.tripfriend.domain.trip.information.entity.TripInformation;
 import com.tripfriend.domain.trip.schedule.entity.TripSchedule;
 import lombok.Getter;
 

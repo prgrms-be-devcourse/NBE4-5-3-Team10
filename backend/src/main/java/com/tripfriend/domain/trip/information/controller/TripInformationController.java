@@ -1,17 +1,17 @@
 package com.tripfriend.domain.trip.information.controller;
 
-import com.tripfriend.domain.trip.information.dto.*;
+import com.tripfriend.domain.trip.information.dto.TripInformationReqDto;
+import com.tripfriend.domain.trip.information.dto.TripInformationResDto;
+import com.tripfriend.domain.trip.information.dto.TripInformationUpdateReqDto;
+import com.tripfriend.domain.trip.information.dto.VisitedReqDto;
 import com.tripfriend.domain.trip.information.entity.TripInformation;
 import com.tripfriend.domain.trip.information.service.TripInformationService;
 import com.tripfriend.global.dto.RsData;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.persistence.Entity;
 import jakarta.validation.Valid;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
