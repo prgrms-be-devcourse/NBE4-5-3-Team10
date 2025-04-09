@@ -15,7 +15,7 @@ data class RecruitDetailResponseDto(
     val memberNickname: String,
     val genderRestriction: String,
     val ageRestriction: String,
-    val placeId: Long,
+    val placeId: Long?,
     val placeCityName: String?,
     val placePlaceName: String?,
     val title: String,
