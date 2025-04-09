@@ -20,6 +20,6 @@ data class TripScheduleReqDto(
         description = trip.description,
         startDate = trip.startDate,
         endDate = trip.endDate,
-        tripInformations = trip.tripInformations.map { TripInformationReqDto(it) }.toMutableList()
+        tripInformations = trip.tripInformations.map { TripInformationReqDto() }.toMutableList()
     )
 }
