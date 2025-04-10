@@ -21,7 +21,7 @@ import { Label } from "@/components/ui/label";
 import { Search } from "lucide-react";
 
 const API_BASE_URL = `${process.env.NEXT_PUBLIC_API_URL}/recruits`;
-const PLACE_API_URL = `${process.env.NEXT_PUBLIC_API_URL}BLIC_API_BASE_URL}/place`;
+const PLACE_API_URL = `${process.env.NEXT_PUBLIC_API_URL}/place`;
 
 interface Place {
   id: number;
