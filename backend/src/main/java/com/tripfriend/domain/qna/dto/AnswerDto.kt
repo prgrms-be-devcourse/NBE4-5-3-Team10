@@ -1,23 +1,17 @@
-package com.tripfriend.domain.qna.dto;
+package com.tripfriend.domain.qna.dto
 
-import com.tripfriend.domain.qna.entity.Answer;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.tripfriend.domain.qna.entity.Answer
 
-@Getter
-@Setter
-@NoArgsConstructor
-public class AnswerDto {
-    private Long answerId;
-    private String content;
-    private String memberUsername;
-    private String createdAt;
-
-    public AnswerDto(Answer answer) {
-        this.answerId = answer.getId();
-        this.content = answer.getContent();
-        this.memberUsername = answer.getMember().getUsername();
-        this.createdAt = answer.getCreatedAt().toString();
-    }
+data class AnswerDto(
+    val answerId: Long?,
+    val content: String,
+    val memberUsername: String,
+    val createdAt: String
+) {
+    constructor(answer: Answer) : this(
+        answerId = answer.id,
+        content = answer.content,
+        memberUsername = answer.member.username,
+        createdAt = answer.createdAt.toString()
+    )
 }
