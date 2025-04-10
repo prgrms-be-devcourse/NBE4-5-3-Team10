@@ -10,7 +10,6 @@ import com.tripfriend.domain.recruit.recruit.entity.QRecruit
 import com.tripfriend.domain.recruit.recruit.entity.Recruit
 import org.springframework.stereotype.Repository
 import java.time.LocalDate
-import java.util.*
 
 @Repository
 class RecruitRepositoryCustomImpl(
@@ -41,59 +40,55 @@ class RecruitRepositoryCustomImpl(
     }
 
     override fun searchFilterSort(
-        keyword: Optional<String>,
-        placeCityName: Optional<String>,
-        isClosed: Optional<Boolean>,
-        startDate: Optional<LocalDate>,
-        endDate: Optional<LocalDate>,
-        travelStyle: Optional<String>,
-        sameGender: Optional<Boolean>,
-        sameAge: Optional<Boolean>,
-        minBudget: Optional<Int>,
-        maxBudget: Optional<Int>,
-        minGroupSize: Optional<Int>,
-        maxGroupSize: Optional<Int>,
-        sortBy: Optional<String>,
+        keyword: String?,
+        placeCityName: String?,
+        isClosed: Boolean?,
+        startDate: LocalDate?,
+        endDate: LocalDate?,
+        travelStyle: String?,
+        sameGender: Boolean?,
+        sameAge: Boolean?,
+        minBudget: Int?,
+        maxBudget: Int?,
+        minGroupSize: Int?,
+        maxGroupSize: Int?,
+        sortBy: String?,
         userGender: Gender?,
         userAgeRange: AgeRange?
     ): List<Recruit> {
         val builder = BooleanBuilder()
 
-        keyword.ifPresent { k ->
+        keyword?.let {
             builder.and(
-                recruit.title.containsIgnoreCase(k)
-                    .or(recruit.content.containsIgnoreCase(k))
+                recruit.title.containsIgnoreCase(it)
+                    .or(recruit.content.containsIgnoreCase(it))
             )
         }
 
-        placeCityName.ifPresent { city -> builder.and(recruit.place.cityName.eq(city)) }
-        isClosed.ifPresent { c -> builder.and(recruit.isClosed.eq(c)) }
-        startDate.ifPresent { start -> builder.and(recruit.startDate.goe(start)) }
-        endDate.ifPresent { end -> builder.and(recruit.endDate.loe(end)) }
-        travelStyle.ifPresent { style -> builder.and(recruit.travelStyle.stringValue().eq(style)) }
+        placeCityName?.let { builder.and(recruit.place.cityName.eq(it)) }
+        isClosed?.let { builder.and(recruit.isClosed.eq(it)) }
+        startDate?.let { builder.and(recruit.startDate.goe(it)) }
+        endDate?.let { builder.and(recruit.endDate.loe(it)) }
+        travelStyle?.let { builder.and(recruit.travelStyle.stringValue().eq(it)) }
 
-        sameGender.ifPresent { sg ->
-            if (sg && userGender != null) {
-                builder.and(
-                    recruit.member.gender.eq(userGender)
-                        .or(recruit.sameGender.isFalse)
-                )
-            }
+        if(sameGender == true && userGender != null){
+            builder.and(
+                recruit.member.gender.eq(userGender)
+                    .or(recruit.sameGender.isFalse)
+            )
         }
 
-        sameAge.ifPresent { sa ->
-            if (sa && userAgeRange != null) {
-                builder.and(
-                    recruit.member.ageRange.eq(userAgeRange)
-                        .or(recruit.sameAge.isFalse)
-                )
-            }
+        if(sameAge == true && userAgeRange != null){
+            builder.and(
+                recruit.member.ageRange.eq(userAgeRange)
+                    .or(recruit.sameAge.isFalse)
+            )
         }
 
-        minBudget.ifPresent { builder.and(recruit.budget.goe(it)) }
-        maxBudget.ifPresent { builder.and(recruit.budget.loe(it)) }
-        minGroupSize.ifPresent { builder.and(recruit.groupSize.goe(it)) }
-        maxGroupSize.ifPresent { builder.and(recruit.groupSize.loe(it)) }
+        minBudget?.let { builder.and(recruit.budget.goe(it)) }
+        maxBudget?.let { builder.and(recruit.budget.loe(it)) }
+        minGroupSize?.let { builder.and(recruit.groupSize.goe(it)) }
+        maxGroupSize?.let { builder.and(recruit.groupSize.loe(it)) }
 
         val orderSpecifier = getOrderSpecifier(sortBy)
 
@@ -103,8 +98,8 @@ class RecruitRepositoryCustomImpl(
             .fetch()
     }
 
-    private fun getOrderSpecifier(sortBy: Optional<String>): OrderSpecifier<*> {
-        return when (sortBy.orElse("created_desc").lowercase()) {
+    private fun getOrderSpecifier(sortBy: String?): OrderSpecifier<*> {
+        return when (sortBy?.lowercase() ?:"created_desc") {
             "startdate_asc" -> recruit.startDate.asc()
             "enddate_desc" -> recruit.endDate.desc()
             "trip_duration" -> Expressions.numberTemplate(

@@ -69,28 +69,28 @@ class RecruitService(
 
     @Transactional
     fun searchAndFilter(
-        keyword: Optional<String>,
-        placeCityName: Optional<String>,
-        isClosed: Optional<Boolean>,
-        startDate: Optional<LocalDate>,
-        endDate: Optional<LocalDate>,
-        travelStyle: Optional<String>,
-        sameGender: Optional<Boolean>,
-        sameAge: Optional<Boolean>,
-        minBudget: Optional<Int>,
-        maxBudget: Optional<Int>,
-        minGroupSize: Optional<Int>,
-        maxGroupSize: Optional<Int>,
-        sortBy: Optional<String>,
+        keyword: String?,
+        placeCityName: String?,
+        isClosed: Boolean?,
+        startDate: LocalDate?,
+        endDate: LocalDate?,
+        travelStyle: String?,
+        sameGender: Boolean?,
+        sameAge: Boolean?,
+        minBudget: Int?,
+        maxBudget: Int?,
+        minGroupSize: Int?,
+        maxGroupSize: Int?,
+        sortBy: String?,
         token: String?
     ): List<RecruitListResponseDto> {
-        val member = if (token.isNullOrBlank()) null else getLoggedInMember(token)
+        val member = token?.takeIf { it.isNotBlank() }?.let { getLoggedInMember(it) }
 
-        val userGender: Gender? = member?.gender
-        val userAgeRange: AgeRange? = member?.ageRange
+        val userGender = member?.gender
+        val userAgeRange = member?.ageRange
 
-        val adjustedSameGender = if (member != null) sameGender else Optional.empty()
-        val adjustedSameAge = if (member != null) sameAge else Optional.empty()
+        val adjustedSameGender = if (member != null) sameGender else null
+        val adjustedSameAge = if (member != null) sameAge else null
 
         return recruitRepository.searchFilterSort(
             keyword, placeCityName, isClosed, startDate, endDate,

@@ -51,19 +51,19 @@ class RecruitController (private val recruitService: RecruitService)
     @Operation(summary = "동행모집 글 여러 조건 검색 & 정렬", description = "여러 조건으로 동행모집 글을 검색 및 정렬합니다.")
     @GetMapping("/search3")
     fun searchAndFilter(
-        @RequestParam(name = "keyword") keyword: Optional<String>,
-        @RequestParam(name = "cityName") cityName: Optional<String>,
-        @RequestParam(name = "isClosed") isClosed: Optional<Boolean>,
-        @RequestParam(name = "startDate") startDate: Optional<LocalDate>,
-        @RequestParam(name = "endDate") endDate: Optional<LocalDate>,
-        @RequestParam(name = "travelStyle") travelStyle: Optional<String>,
-        @RequestParam(name = "sameGender") sameGender: Optional<Boolean>,
-        @RequestParam(name = "sameAge") sameAge: Optional<Boolean>,
-        @RequestParam(name = "minBudget") minBudget: Optional<Int>,
-        @RequestParam(name = "maxBudget") maxBudget: Optional<Int>,
-        @RequestParam(name = "minGroupSize") minGroupSize: Optional<Int>,
-        @RequestParam(name = "maxGroupSize") maxGroupSize: Optional<Int>,
-        @RequestParam(name = "sortBy") sortBy: Optional<String>,
+        @RequestParam(name = "keyword") keyword: String?,
+        @RequestParam(name = "cityName") cityName: String?,
+        @RequestParam(name = "isClosed") isClosed: Boolean?,
+        @RequestParam(name = "startDate") startDate: LocalDate?,
+        @RequestParam(name = "endDate") endDate: LocalDate?,
+        @RequestParam(name = "travelStyle") travelStyle: String?,
+        @RequestParam(name = "sameGender") sameGender: Boolean?,
+        @RequestParam(name = "sameAge") sameAge: Boolean?,
+        @RequestParam(name = "minBudget") minBudget: Int?,
+        @RequestParam(name = "maxBudget") maxBudget: Int?,
+        @RequestParam(name = "minGroupSize") minGroupSize: Int?,
+        @RequestParam(name = "maxGroupSize") maxGroupSize: Int?,
+        @RequestParam(name = "sortBy") sortBy: String?,
         @RequestHeader(value = "Authorization", required = false) token: String?
     ): RsData<List<RecruitListResponseDto>> =
         RsData(
