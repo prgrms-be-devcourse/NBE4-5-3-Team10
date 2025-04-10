@@ -1,68 +1,57 @@
-package com.tripfriend.domain.qna.entity;
+package com.tripfriend.domain.qna.entity
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.tripfriend.domain.member.member.entity.Member;
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import com.tripfriend.domain.member.member.entity.Member
+import jakarta.persistence.*
+import java.time.LocalDateTime
 
-import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
-@Getter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
-public class Question {
-
-    public Question(Member member, String title, String content, LocalDateTime createdAt) {
-        this.member = member;
-        this.title = title;
-        this.content = content;
-        this.createdAt = createdAt;
-        this.updatedAt = LocalDateTime.now();
-    }
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+class Question(
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-    private Member member;
+    @JsonIgnoreProperties("hibernateLazyInitializer", "handler")
+    val member: Member,
 
     @Column(nullable = false, length = 255)
-    private String title;
+    var title: String,
 
     @Column(nullable = false, columnDefinition = "TEXT")
-    private String content;
-
-    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Answer> answers; // 해당 질문에 대한 답변 리스트
+    var content: String,
 
     @Column(nullable = false, updatable = false)
-    private LocalDateTime createdAt;
+    var createdAt: LocalDateTime = LocalDateTime.now(),
 
     @Column(nullable = false)
-    private LocalDateTime updatedAt;
+    var updatedAt: LocalDateTime = LocalDateTime.now()
+) {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    val id: Long? = null
+
+    @OneToMany(mappedBy = "question", cascade = [CascadeType.ALL], orphanRemoval = true)
+    var answers: MutableList<Answer> = mutableListOf()
 
     @PrePersist
-    public void prePersist() {
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = LocalDateTime.now();
+    fun prePersist() {
+        val now = LocalDateTime.now()
+        createdAt = now
+        updatedAt = now
     }
 
     @PreUpdate
-    public void preUpdate() {
-        this.updatedAt = LocalDateTime.now();
+    fun preUpdate() {
+        updatedAt = LocalDateTime.now()
     }
 
-
-
-
-
+    constructor(member: Member, title: String, content: String, createdAt: LocalDateTime) : this(
+        member = member,
+        title = title,
+        content = content,
+        createdAt = createdAt,
+        updatedAt = LocalDateTime.now()
+    )
 }
+
