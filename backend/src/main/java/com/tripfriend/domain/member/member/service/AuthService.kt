@@ -44,8 +44,8 @@ class AuthService(
                 addCookie(response, "accessToken", accessToken, 10 * 60) // 10분
                 addCookie(response, "refreshToken", refreshToken, 60 * 60 * 24) // 1일
 
-                // 토큰 정보도 응답에 포함
-                return AuthResponseDto(accessToken, refreshToken, true)
+                // 토큰 정보와 삭제 여부, 권한 정보를 응답에 포함
+                return AuthResponseDto(accessToken, refreshToken, true, member.authority)
             } else {
                 throw RuntimeException("영구 삭제된 계정입니다. 새로운 계정으로 가입해주세요.")
             }
@@ -59,8 +59,8 @@ class AuthService(
         addCookie(response, "accessToken", accessToken, 30 * 60) // 30분
         addCookie(response, "refreshToken", refreshToken, 60 * 60 * 24 * 7) // 7일
 
-        // 토큰 정보도 응답에 포함
-        return AuthResponseDto(accessToken, refreshToken, false)
+        // 토큰 정보와 삭제 여부, 권한 정보를 응답에 포함
+        return AuthResponseDto(accessToken, refreshToken, false, member.authority)
     }
 
     // 로그아웃 처리 - Redis 블랙리스트 활용
@@ -129,8 +129,8 @@ class AuthService(
             }
         }
 
-        // 토큰 정보도 응답에 포함
-        return AuthResponseDto(newAccessToken, newRefreshToken, isDeleted)
+        // 토큰 정보와 권한 정보도 응답에 포함
+        return AuthResponseDto(newAccessToken, newRefreshToken, isDeleted, authority)
     }
 
     // 리프레시 토큰 갱신 필요 여부 확인
