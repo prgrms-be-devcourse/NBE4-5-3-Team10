@@ -14,7 +14,7 @@ class TripInformation(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "trip_Information_id")
+    @Column(name = "trip_information_id")
     var id: Long? = null, // 개별 Id 추가
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -26,10 +26,10 @@ class TripInformation(
     var place: Place, // 여행지Id - FK
 
     @Column(name = "visit_time", nullable = false)
-    var visitTime: LocalDateTime, // 방문시간
+    var visitTime: LocalDateTime?, // 방문시간
 
     @Column(name = "duration", nullable = false)
-    var duration: Int?, // 방문기간(날짜 단위)
+    var duration: Int, // 방문기간(날짜 단위)
 
     @Enumerated(EnumType.STRING)
     @Column(name = "transportation", nullable = false)

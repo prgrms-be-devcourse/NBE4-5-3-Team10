@@ -10,7 +10,7 @@ data class TripInformationUpdateReqDto(
 
     var visitTime: LocalDateTime,
 
-    var duration: Int?=null,
+    var duration: Int,
 
     var transportation: Transportation,
 
