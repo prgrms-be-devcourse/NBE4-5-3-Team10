@@ -217,10 +217,45 @@ class ReviewService(
                 when (sort) {
                     "newest" -> reviews.addAll(reviewRepository.findByPlace_IdOrderByCreatedAtDesc(placeId))
                     "oldest" -> reviews.addAll(reviewRepository.findByPlace_IdOrderByCreatedAtAsc(placeId))
-                    "highest_rating" -> reviews.addAll(reviewRepository.findByPlace_IdOrderByRatingDesc(placeId))
-                    "lowest_rating" -> reviews.addAll(reviewRepository.findByPlace_IdOrderByRatingAsc(placeId))
-                    "comments" -> reviews.addAll(reviewRepository.findByPlace_IdOrderByCommentCountDesc(placeId))
-                    "most_viewed" -> return getMostViewedReviewsByPlace(placeId)
+                    "highest_rating" -> {
+                        // 평점 높은순 → 조회수 → 최신순
+                        val placeReviews = reviewRepository.findByPlace_IdOrderByCreatedAtDesc(placeId)
+                        val sortedReviews = placeReviews.sortedWith(
+                            compareByDescending<Review> { it.rating }
+                                .thenByDescending { review ->
+                                    viewCountRepository.findById(review.reviewId!!).orElse(null)?.count ?: 0
+                                }
+                                .thenByDescending { it.createdAt }
+                        )
+                        reviews.addAll(sortedReviews)
+                    }
+                    "lowest_rating" -> {
+                        // 평점 낮은순 → 조회수 → 최신순
+                        val placeReviews = reviewRepository.findByPlace_IdOrderByCreatedAtDesc(placeId)
+                        val sortedReviews = placeReviews.sortedWith(
+                            compareBy<Review> { it.rating }
+                                .thenByDescending { review ->
+                                    viewCountRepository.findById(review.reviewId!!).orElse(null)?.count ?: 0
+                                }
+                                .thenByDescending { it.createdAt }
+                        )
+                        reviews.addAll(sortedReviews)
+                    }
+                    "comments" -> {
+                        // 댓글 많은순 → 최신순 (이미 Repository에서 처리됨)
+                        reviews.addAll(reviewRepository.findByPlace_IdOrderByCommentCountDesc(placeId))
+                    }
+                    "most_viewed" -> {
+                        // 조회수 높은순 → 최신순
+                        val placeReviews = reviewRepository.findByPlace_IdOrderByCreatedAtDesc(placeId)
+                        val sortedReviews = placeReviews.sortedWith(
+                            compareByDescending<Review> { review ->
+                                viewCountRepository.findById(review.reviewId!!).orElse(null)?.count ?: 0
+                            }
+                                .thenByDescending { it.createdAt }
+                        )
+                        reviews.addAll(sortedReviews)
+                    }
                     else -> reviews.addAll(reviewRepository.findByPlace_IdOrderByCreatedAtDesc(placeId))
                 }
             }
@@ -232,64 +267,62 @@ class ReviewService(
             else -> {
                 when (sort) {
                     "comments" -> {
+                        // 댓글 많은순 → 최신순 (이미 Repository에서 처리됨)
                         return processCommentSortedResults(reviewRepository.findAllOrderByCommentCountDesc())
                     }
                     "oldest" -> reviews.addAll(reviewRepository.findAllByOrderByCreatedAtAsc())
-                    "highest_rating" -> reviews.addAll(reviewRepository.findAllByOrderByRatingDesc())
-                    "lowest_rating" -> reviews.addAll(reviewRepository.findAllByOrderByRatingAsc())
-                    "most_viewed" -> return getMostViewedReviews()
+                    "newest" -> reviews.addAll(reviewRepository.findAllByOrderByCreatedAtDesc())
+                    "highest_rating" -> {
+                        // 평점 높은순 → 조회수 → 최신순
+                        val allReviews = reviewRepository.findAllByOrderByCreatedAtDesc()
+                        val sortedReviews = allReviews.sortedWith(
+                            compareByDescending<Review> { it.rating }
+                                .thenByDescending { review ->
+                                    viewCountRepository.findById(review.reviewId!!).orElse(null)?.count ?: 0
+                                }
+                                .thenByDescending { it.createdAt }
+                        )
+                        reviews.addAll(sortedReviews)
+                    }
+                    "lowest_rating" -> {
+                        // 평점 낮은순 → 조회수 → 최신순
+                        val allReviews = reviewRepository.findAllByOrderByCreatedAtDesc()
+                        val sortedReviews = allReviews.sortedWith(
+                            compareBy<Review> { it.rating }
+                                .thenByDescending { review ->
+                                    viewCountRepository.findById(review.reviewId!!).orElse(null)?.count ?: 0
+                                }
+                                .thenByDescending { it.createdAt }
+                        )
+                        reviews.addAll(sortedReviews)
+                    }
+                    "most_viewed" -> {
+                        // 조회수 많은순 → 최신순
+                        val sortedViewCounts = viewCountRepository.findAll()
+                            .sortedWith(
+                                compareByDescending<ReviewViewCount> { it.count }
+                                    .thenByDescending { it.review?.createdAt }
+                            )
+
+                        return sortedViewCounts.map { vc ->
+                            val review = vc.review!!
+                            val commentCount = commentRepository.findByReviewReviewIdOrderByCreatedAtAsc(review.reviewId!!).size
+                            val dto = ReviewResponseDto(review, review.member?.nickname ?: "", commentCount)
+                            dto.viewCount = vc.count
+                            dto
+                        }
+                    }
                     else -> reviews.addAll(reviewRepository.findAllByOrderByCreatedAtDesc())
                 }
             }
         }
+
 
         // DTO 변환
         return reviews.map { review ->
             val commentCount = commentRepository.findByReviewReviewIdOrderByCreatedAtAsc(review.reviewId!!).size
             val dto = ReviewResponseDto(review, review.member?.nickname ?: "", commentCount)
 
-            viewCountRepository.findById(review.reviewId!!)
-                .ifPresent { vc -> dto.viewCount = vc.count }
-            dto
-        }
-    }
-
-    // 조회수 기준 정렬
-    private fun getMostViewedReviews(): List<ReviewResponseDto> {
-        val sortedViewCounts = viewCountRepository.findAll()
-            .sortedByDescending { it.count }
-
-        return sortedViewCounts.map { vc ->
-            val review = vc.review!!
-            val commentCount = commentRepository.findByReviewReviewIdOrderByCreatedAtAsc(review.reviewId!!).size
-
-            val dto = ReviewResponseDto(review, review.member?.nickname ?: "", commentCount)
-            dto.viewCount = vc.count
-            dto
-        }
-    }
-
-    // 조회수 기준 정렬 - 특정 여행지
-    private fun getMostViewedReviewsByPlace(placeId: Long): List<ReviewResponseDto> {
-        val reviewsForPlace = reviewRepository.findByPlace_IdOrderByCreatedAtDesc(placeId)
-        val sortedReviews = reviewsForPlace.sortedByDescending { review ->
-            viewCountRepository.findById(review.reviewId!!).orElse(null)?.count ?: 0
-        }
-        return sortedReviews.map { review ->
-            val commentCount = commentRepository.findByReviewReviewIdOrderByCreatedAtAsc(review.reviewId!!).size
-            val dto = ReviewResponseDto(review, review.member?.nickname ?: "", commentCount)
-            viewCountRepository.findById(review.reviewId!!)
-                .ifPresent { vc -> dto.viewCount = vc.count }
-            dto
-        }
-    }
-
-    // 댓글 수 기준 정렬 (전체)
-    private fun processCommentSortedResults(commentCountResult: List<Array<Any>>): List<ReviewResponseDto> {
-        return commentCountResult.map { result ->
-            val review = result[0] as Review
-            val commentCount = (result[1] as Long).toInt()
-            val dto = ReviewResponseDto(review, review.member?.nickname ?: "", commentCount)
             viewCountRepository.findById(review.reviewId!!)
                 .ifPresent { vc -> dto.viewCount = vc.count }
             dto
@@ -307,6 +340,18 @@ class ReviewService(
         return reviews.map { review ->
             val commentCount = commentRepository
                 .findByReviewReviewIdOrderByCreatedAtAsc(review.reviewId!!).size
+            val dto = ReviewResponseDto(review, review.member?.nickname ?: "", commentCount)
+            viewCountRepository.findById(review.reviewId!!)
+                .ifPresent { vc -> dto.viewCount = vc.count }
+            dto
+        }
+    }
+
+    // 댓글 수 기준 정렬 (전체)
+    private fun processCommentSortedResults(commentCountResult: List<Array<Any>>): List<ReviewResponseDto> {
+        return commentCountResult.map { result ->
+            val review = result[0] as Review
+            val commentCount = (result[1] as Long).toInt()
             val dto = ReviewResponseDto(review, review.member?.nickname ?: "", commentCount)
             viewCountRepository.findById(review.reviewId!!)
                 .ifPresent { vc -> dto.viewCount = vc.count }
