@@ -214,11 +214,15 @@ class ReviewService(
             }
             // 특정 여행지 리뷰
             placeId != null -> {
-                reviews.addAll(when (sort) {
-                    "highest_rating" -> reviewRepository.findByPlace_IdOrderByRatingDesc(placeId)
-                    "lowest_rating" -> reviewRepository.findByPlace_IdOrderByRatingAsc(placeId)
-                    else -> reviewRepository.findByPlace_IdOrderByCreatedAtDesc(placeId)
-                })
+                when (sort) {
+                    "newest" -> reviews.addAll(reviewRepository.findByPlace_IdOrderByCreatedAtDesc(placeId))
+                    "oldest" -> reviews.addAll(reviewRepository.findByPlace_IdOrderByCreatedAtAsc(placeId))
+                    "highest_rating" -> reviews.addAll(reviewRepository.findByPlace_IdOrderByRatingDesc(placeId))
+                    "lowest_rating" -> reviews.addAll(reviewRepository.findByPlace_IdOrderByRatingAsc(placeId))
+                    "comments" -> reviews.addAll(reviewRepository.findByPlace_IdOrderByCommentCountDesc(placeId))
+                    "most_viewed" -> return getMostViewedReviewsByPlace(placeId)
+                    else -> reviews.addAll(reviewRepository.findByPlace_IdOrderByCreatedAtDesc(placeId))
+                }
             }
             // 제목 검색
             !keyword.isNullOrBlank() -> {
@@ -265,18 +269,27 @@ class ReviewService(
         }
     }
 
-    // 댓글 수 기준 정렬
+    // 조회수 기준 정렬 - 특정 여행지
+    private fun getMostViewedReviewsByPlace(placeId: Long): List<ReviewResponseDto> {
+        val reviewsForPlace = reviewRepository.findByPlace_IdOrderByCreatedAtDesc(placeId)
+        val sortedReviews = reviewsForPlace.sortedByDescending { review ->
+            viewCountRepository.findById(review.reviewId!!).orElse(null)?.count ?: 0
+        }
+        return sortedReviews.map { review ->
+            val commentCount = commentRepository.findByReviewReviewIdOrderByCreatedAtAsc(review.reviewId!!).size
+            val dto = ReviewResponseDto(review, review.member?.nickname ?: "", commentCount)
+            viewCountRepository.findById(review.reviewId!!)
+                .ifPresent { vc -> dto.viewCount = vc.count }
+            dto
+        }
+    }
+
+    // 댓글 수 기준 정렬 (전체)
     private fun processCommentSortedResults(commentCountResult: List<Array<Any>>): List<ReviewResponseDto> {
         return commentCountResult.map { result ->
             val review = result[0] as Review
             val commentCount = (result[1] as Long).toInt()
-
-            val dto = ReviewResponseDto(
-                review,
-                review.member?.nickname ?: "",
-                commentCount
-            )
-
+            val dto = ReviewResponseDto(review, review.member?.nickname ?: "", commentCount)
             viewCountRepository.findById(review.reviewId!!)
                 .ifPresent { vc -> dto.viewCount = vc.count }
             dto

@@ -27,14 +27,21 @@ interface ReviewRepository : JpaRepository<Review, Long> {
     // 제목으로 검색
     fun findByTitleContainingOrderByCreatedAtDesc(keyword: String): List<Review>
 
-    // 여행지 ID로 검색
+    // 여행지 ID로 검색 (최신순)
     fun findByPlace_IdOrderByCreatedAtDesc(placeId: Long): List<Review>
+
+    // 여행지 ID로 검색 (오래된순)
+    fun findByPlace_IdOrderByCreatedAtAsc(placeId: Long): List<Review>
 
     // 여행지 ID + 정렬 옵션 (평점 높은 순)
     fun findByPlace_IdOrderByRatingDesc(placeId: Long): List<Review>
 
     // 여행지 ID + 정렬 옵션 (평점 낮은 순)
     fun findByPlace_IdOrderByRatingAsc(placeId: Long): List<Review>
+
+    // 여행지 ID + 정렬 옵션 (댓글 많은순)
+    @Query("SELECT r FROM Review r LEFT JOIN Comment c ON r.reviewId = c.review.reviewId WHERE r.place.id = :placeId GROUP BY r ORDER BY COUNT(c) DESC")
+    fun findByPlace_IdOrderByCommentCountDesc(placeId: Long): List<Review>
 
     // 특정 사용자의 리뷰 목록
     fun findByMemberIdOrderByCreatedAtDesc(memberId: Long): List<Review>
