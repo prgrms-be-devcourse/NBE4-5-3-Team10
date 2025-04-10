@@ -39,17 +39,17 @@ class Place {
     var reviews: MutableList<Review> = mutableListOf()
 
     @Column(name = "city_name", nullable = false)
-    var cityName: String? = null // 도시명
+    lateinit var cityName: String // 도시명
 
     @Column(name = "place_name", nullable = false)
-    var placeName: String? = null // 장소명
+    lateinit var placeName: String // 장소명
 
     @Column(name = "description", columnDefinition = "TEXT")
     var description: String? = null // 설명
 
     @Enumerated(EnumType.STRING)
     @Column(name = "category", nullable = false)
-    var category: Category? = null // 카테고리
+    lateinit var category: Category // 카테고리
 
     @CreatedDate
     @Column(name = "created_at", updatable = false)

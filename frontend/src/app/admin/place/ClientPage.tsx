@@ -82,7 +82,10 @@ export default function ClientPage() {
 
   return (
     <div>
-      <button className="mb-4 text-blue-500" onClick={() => router.back()}>
+      <button
+        className="mb-4 text-blue-500"
+        onClick={() => router.push(`/admin`)}
+      >
         뒤로가기
       </button>
       <h2 className="text-2xl font-bold mb-4">전체 여행지</h2>
