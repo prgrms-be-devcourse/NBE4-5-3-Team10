@@ -13,8 +13,12 @@ export const metadata: Metadata = {
   title: "TripFriend - 리뷰 수정",
   description: "작성한 여행 리뷰를 수정합니다.",
 }
-
-export default function EditReviewPage({ params }: EditReviewPageProps) {
+// 서버 컴포넌트를 async로 선언
+export default async function EditReviewPage({ params }: EditReviewPageProps) {
+  // 동적 라우트 파라미터에 접근하기 전에 async/await 패턴을 사용
+  // params 객체가 완전히 로드될 때까지 기다립니다
+  const resolvedParams = await Promise.resolve(params);
+  const id = resolvedParams.id;
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="bg-blue-600 text-white">
@@ -29,8 +33,8 @@ export default function EditReviewPage({ params }: EditReviewPageProps) {
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-4xl mx-auto">
           <Suspense fallback={<div className="text-center py-10">리뷰 정보를 불러오는 중...</div>}>
-            <EditAuthCheck reviewId={params.id}>
-              <ReviewForm reviewId={params.id} />
+            <EditAuthCheck reviewId={id}>
+              <ReviewForm reviewId={id} />
             </EditAuthCheck>
           </Suspense>
         </div>

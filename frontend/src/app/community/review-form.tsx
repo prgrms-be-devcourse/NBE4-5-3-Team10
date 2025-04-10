@@ -92,35 +92,40 @@ export default function ReviewForm({ reviewId }: ReviewFormProps) {
     fetchPlaces();
   }, []);
 
-  // 수정 모드일 경우 리뷰 데이터 가져오기
-  useEffect(() => {
-    if (isEditMode && reviewId) {
-      const fetchReview = async () => {
-        try {
-          const review = await getReviewById(parseInt(reviewId));
+// 수정 모드일 경우 리뷰 데이터 가져오기
+useEffect(() => {
+  if (!isEditMode || !reviewId) return;
 
-          setFormData({
-            title: review.title,
-            content: review.content,
-            rating: review.rating,
-            placeId: review.placeId.toString(),
-            images: [],
-          });
+  const fetchReview = async () => {
+    try {
+      const parsedId = parseInt(reviewId);
+      if (isNaN(parsedId)) {
+        setFormError("잘못된 리뷰 ID입니다.");
+        return;
+      }
 
-          // 이미지 URL이 있다면 프리뷰 이미지 설정
-          // 백엔드에서 이미지 URL을 제공하는 경우에만 활성화
-          // if (review.images && review.images.length > 0) {
-          //   setPreviewImages(review.images);
-          // }
-        } catch (err) {
-          console.error("리뷰 정보를 불러오는 중 오류가 발생했습니다:", err);
-          setFormError("리뷰 정보를 불러오는 중 오류가 발생했습니다.");
-        }
-      };
+      const review = await getReviewById(parsedId);
 
-      fetchReview();
+      setFormData({
+        title: review.title ?? "",
+        content: review.content ?? "",
+        rating: review.rating ?? 0,
+        placeId: review.placeId?.toString() ?? "",
+        images: [],
+      });
+
+      // 👉 이미지 URL 프리뷰가 있다면 이곳에서 처리
+      // if (review.images && review.images.length > 0) {
+      //   setPreviewImages(review.images);
+      // }
+    } catch (err) {
+      console.error("리뷰 정보를 불러오는 중 오류가 발생했습니다:", err);
+      setFormError("리뷰 정보를 불러오는 데 실패했습니다. 다시 시도해주세요.");
     }
-  }, [isEditMode, reviewId]);
+  };
+
+  fetchReview();
+}, [isEditMode, reviewId]);
 
   // 입력값 변경 처리
   const handleInputChange = (
