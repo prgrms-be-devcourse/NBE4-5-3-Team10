@@ -1,41 +1,42 @@
-package com.tripfriend.domain.place.place.dto;
+package com.tripfriend.domain.place.place.dto
 
-import com.tripfriend.domain.place.place.entity.Category;
-import com.tripfriend.domain.place.place.entity.Place;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.springframework.web.multipart.MultipartFile;
+import com.tripfriend.domain.place.place.entity.Category
+import com.tripfriend.domain.place.place.entity.Place
+import jakarta.validation.constraints.NotBlank
+import jakarta.validation.constraints.NotNull
+import org.springframework.web.multipart.MultipartFile
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-public class PlaceCreateReqDto {
+data class PlaceCreateReqDto(
+    @field:NotBlank(message = "도시명을 입력해주세요.")
+    var cityName: String,
 
-    @NotBlank(message = "도시명을 입력해주세요.")
-    private String cityName;
+    @field:NotBlank(message = "장소명을 입력해주세요.")
+    var placeName: String,
 
-    @NotBlank(message = "장소명을 입력해주세요.")
-    private String placeName;
+    var description: String? = null,
 
-    private String description;
+    @field:NotNull(message = "카테고리를 선택해주세요")
+    var category: Category,
 
-    @NotNull(message = "카테고리를 선택해주세요")
-    private Category category;
+    var imageUrl: MultipartFile? = null  // 단일 이미지
+) {
 
-    private MultipartFile imageUrl; // 단일 이미지
+    constructor(): this(
+        cityName = "",
+        placeName = "",
+        description = "",
+        category = Category.PLACE,
+        imageUrl = null,
+    )
+
 
     // DTO -> Entity 변환
-    public Place toEntity(){
-        Place place = new Place();
-        place.setCityName(cityName);
-        place.setPlaceName(placeName);
-        place.setDescription(description);
-        place.setCategory(category);
-        return place;
+    fun toEntity(): Place {
+        return Place().apply {
+            this.cityName = cityName
+            this.placeName = placeName
+            this.description = description
+            this.category = category
+        }
     }
 }

@@ -1,7 +1,6 @@
 package com.tripfriend.domain.place.place.service;
 
 import com.tripfriend.domain.place.place.dto.PlaceCreateReqDto;
-import com.tripfriend.domain.place.place.dto.PlaceUpdateReqDto;
 import com.tripfriend.domain.place.place.entity.Place;
 import com.tripfriend.domain.place.place.repository.PlaceRepository;
 import com.tripfriend.global.annotation.CheckPermission;
@@ -77,16 +76,16 @@ public class PlaceService {
         placeRepository.delete(place);
     }
 
-    // 여행 장소 수정
-    @Transactional
-    public Place updatePlace(Place place, PlaceUpdateReqDto req) {
-        place.setCityName(req.getCityName());
-        place.setPlaceName(req.getPlaceName());
-        place.setDescription(req.getDescription());
-        place.setCategory(req.getCategory());
-
-        return placeRepository.save(place);
-    }
+    // 여행 장소 수정(사용안함)
+//    @Transactional
+//    public Place updatePlace(Place place, PlaceUpdateReqDto req) {
+//        place.setCityName(req.getCityName());
+//        place.setPlaceName(req.getPlaceName());
+//        place.setDescription(req.getDescription());
+//        place.setCategory(req.getCategory());
+//
+//        return placeRepository.save(place);
+//    }
 
     public List<Place> searchPlace(String name, String city) {
 

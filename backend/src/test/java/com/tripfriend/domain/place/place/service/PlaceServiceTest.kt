@@ -39,13 +39,13 @@ class PlaceServiceTest {
     fun createPlaceWithoutImageTest() {
         // Given
         val req =
-            PlaceCreateReqDto().apply {
-                cityName = "서울"
-                placeName = "남산타워"
-                description = "서울의 등대"
-                category = Category.PLACE
-                imageUrl = null // 이미지 파일 없음
-            }
+            PlaceCreateReqDto(
+                cityName = "서울",
+                placeName = "남산타워",
+                description = "서울의 등대",
+                category = Category.PLACE,
+                imageUrl = null, // 이미지 파일 없음
+            )
 
         val savedPlace =
             Place().apply {
@@ -78,13 +78,13 @@ class PlaceServiceTest {
         every { mockFile.isEmpty } returns false
 
         val req =
-            PlaceCreateReqDto().apply {
-                cityName = "부산"
-                placeName = "감천문화마을"
-                description = "벽화가 아름다운 마을"
-                category = Category.PLACE
-                imageUrl = mockFile
-            }
+            PlaceCreateReqDto(
+                cityName = "부산",
+                placeName = "감천문화마을",
+                description = "벽화가 아름다운 마을",
+                category = Category.PLACE,
+                imageUrl = mockFile,
+            )
 
         every { imageUtil.saveImage(mockFile) } returns mockImageUrl
 
@@ -117,13 +117,13 @@ class PlaceServiceTest {
         every { mockFile.isEmpty } returns false
 
         val req =
-            PlaceCreateReqDto().apply {
-                cityName = "제주"
-                placeName = "한라산"
-                description = "백록담이 아름다운 산"
-                category = Category.PLACE
-                imageUrl = mockFile
-            }
+            PlaceCreateReqDto(
+                cityName = "제주",
+                placeName = "한라산",
+                description = "백록담이 아름다운 산",
+                category = Category.PLACE,
+                imageUrl = mockFile,
+            )
 
         every { imageUtil.saveImage(mockFile) } throws IOException("Upload error")
 
@@ -235,7 +235,12 @@ class PlaceServiceTest {
                     cityName = "서울"
                 },
             )
-        every { placeRepository.findByPlaceNameContainingIgnoreCaseAndCityNameContainingIgnoreCase(name, city) } returns places
+        every {
+            placeRepository.findByPlaceNameContainingIgnoreCaseAndCityNameContainingIgnoreCase(
+                name,
+                city
+            )
+        } returns places
 
         // When
         val result = placeService.searchPlace(name, city)

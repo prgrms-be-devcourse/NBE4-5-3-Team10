@@ -2,7 +2,6 @@ package com.tripfriend.domain.place.place.controller;
 
 import com.tripfriend.domain.place.place.dto.PlaceCreateReqDto;
 import com.tripfriend.domain.place.place.dto.PlaceResDto;
-import com.tripfriend.domain.place.place.dto.PlaceUpdateReqDto;
 import com.tripfriend.domain.place.place.entity.Place;
 import com.tripfriend.domain.place.place.service.PlaceService;
 import com.tripfriend.global.annotation.CheckPermission;
@@ -13,9 +12,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -113,19 +110,20 @@ public class PlaceController {
         );
     }
 
-    // 특정 여행지 정보 수정
-    @PutMapping("/{id}")
-    @Operation(summary = "여행지 정보 수정", description = "특정 여행지의 정보를 수정할 수 있습니다.")
-    public RsData<PlaceResDto> updatePlace(@Parameter(description = "여행지 ID", required = true, example = "1")
-                                           @PathVariable Long id,
-                                           @RequestBody PlaceUpdateReqDto placeUpdateReqDto) {
-        Place place = placeService.getPlace(id);
-        Place updatePlace = placeService.updatePlace(place, placeUpdateReqDto);
-        PlaceResDto placeResDto = new PlaceResDto(updatePlace);
-        return new RsData<>(
-                "200-5",
-                "여행지 정보가 성공적으로 수정되었습니다.",
-                placeResDto
-        );
-    }
+    // 특정 여행지 정보 수정(사용안함)
+//    @PutMapping("/{id}")
+//    @CheckPermission("ADMIN") //관리자
+//    @Operation(summary = "여행지 정보 수정", description = "특정 여행지의 정보를 수정할 수 있습니다.")
+//    public RsData<PlaceResDto> updatePlace(@Parameter(description = "여행지 ID", required = true, example = "1")
+//                                           @PathVariable Long id,
+//                                           @RequestBody PlaceUpdateReqDto placeUpdateReqDto) {
+//        Place place = placeService.getPlace(id);
+//        Place updatePlace = placeService.updatePlace(place, placeUpdateReqDto);
+//        PlaceResDto placeResDto = new PlaceResDto(updatePlace);
+//        return new RsData<>(
+//                "200-5",
+//                "여행지 정보가 성공적으로 수정되었습니다.",
+//                placeResDto
+//        );
+//    }
 }

@@ -1,27 +1,22 @@
-package com.tripfriend.domain.place.place.dto;
+package com.tripfriend.domain.place.place.dto
 
-import com.tripfriend.domain.place.place.entity.Category;
-import com.tripfriend.domain.place.place.entity.Place;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import com.tripfriend.domain.place.place.entity.Category
+import com.tripfriend.domain.place.place.entity.Place
 
-@Getter
-@AllArgsConstructor
-public class PlaceResDto {
-    private Long id;
-    private String cityName;
-    private String placeName;
-    private String description;
-    private Category category;
-    private String imageUrl;
-
-
-    public PlaceResDto(Place place) {
-        this.id = place.getId();
-        this.cityName = place.getCityName();
-        this.placeName = place.getPlaceName();
-        this.description = place.getDescription();
-        this.category = place.getCategory();
-        this.imageUrl = place.getImageUrl();
-    }
+data class PlaceResDto(
+    val id: Long,
+    val cityName: String,
+    val placeName: String,
+    val description: String?,
+    val category: Category,
+    val imageUrl: String?,
+) {
+    constructor(place: Place) : this(
+        id = place.id!!,
+        cityName = place.cityName,
+        placeName = place.placeName,
+        description = place.description,
+        category = place.category,
+        imageUrl = place.imageUrl
+    )
 }
