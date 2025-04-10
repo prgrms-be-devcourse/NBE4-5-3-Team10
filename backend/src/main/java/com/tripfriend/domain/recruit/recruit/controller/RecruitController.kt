@@ -64,7 +64,7 @@ class RecruitController (private val recruitService: RecruitService)
         @RequestParam(name = "minGroupSize") minGroupSize: Optional<Int>,
         @RequestParam(name = "maxGroupSize") maxGroupSize: Optional<Int>,
         @RequestParam(name = "sortBy") sortBy: Optional<String>,
-        @RequestHeader(value = "Authorization", required = false) token: String
+        @RequestHeader(value = "Authorization", required = false) token: String?
     ): RsData<List<RecruitListResponseDto>> =
         RsData(
             "200-3", "동행 모집 글이 여러 조건으로 성공적으로 검색되었습니다.",
