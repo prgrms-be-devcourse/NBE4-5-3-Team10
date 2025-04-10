@@ -1,37 +1,23 @@
-package com.tripfriend.domain.qna.dto;
+package com.tripfriend.domain.qna.dto
 
-import com.tripfriend.domain.qna.entity.Answer;
-import com.tripfriend.domain.qna.entity.Question;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.tripfriend.domain.qna.entity.Question
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-@Getter
-@Setter
-@NoArgsConstructor
-public class QuestionWithAnswersDto {
-
-    private Long id;
-    private String title;
-    private String content;
-    private String createdAt;
-    private String updatedAt;
-    private String memberUsername;
-    private List<AnswerDto> answers;
-
-    public QuestionWithAnswersDto(Question question) {
-        this.id = question.getId();
-        this.title = question.getTitle();
-        this.content = question.getContent();
-        this.createdAt = question.getCreatedAt().toString();
-        this.updatedAt = question.getUpdatedAt().toString();
-        this.memberUsername = question.getMember().getUsername();
-        this.answers = question.getAnswers()
-                .stream()
-                .map(AnswerDto::new)
-                .collect(Collectors.toList());
-    }
+data class QuestionWithAnswersDto(
+    val id: Long?,
+    val title: String,
+    val content: String,
+    val createdAt: String,
+    val updatedAt: String,
+    val memberUsername: String,
+    val answers: List<AnswerDto>
+) {
+    constructor(question: Question) : this(
+        id = question.id,
+        title = question.title,
+        content = question.content,
+        createdAt = question.createdAt.toString(),
+        updatedAt = question.updatedAt.toString(),
+        memberUsername = question.member.username,
+        answers = question.answers.map { AnswerDto(it) }
+    )
 }
