@@ -266,19 +266,19 @@ class RecruitServiceTest {
         every { authService.getLoggedInMember(token) } returns member
         every {
             recruitRepository.searchFilterSort(
-                keyword = Optional.of("여행"),
-                placeCityName = Optional.of("서울"),
-                isClosed = Optional.of(false),
-                startDate = Optional.of(LocalDate.now()),
-                endDate = Optional.of(LocalDate.now().plusDays(3)),
-                travelStyle = Optional.of("RELAXATION"),
-                sameGender = Optional.of(true),
-                sameAge = Optional.of(false),
-                minBudget = Optional.of(10000),
-                maxBudget = Optional.of(500000),
-                minGroupSize = Optional.of(1),
-                maxGroupSize = Optional.of(5),
-                sortBy = Optional.of("budget_desc"),
+                keyword = "여행",
+                placeCityName = "서울",
+                isClosed = false,
+                startDate = LocalDate.now(),
+                endDate = LocalDate.now().plusDays(3),
+                travelStyle = "RELAXATION",
+                sameGender = true,
+                sameAge = false,
+                minBudget = 10000,
+                maxBudget = 500000,
+                minGroupSize = 1,
+                maxGroupSize = 5,
+                sortBy = "budget_desc",
                 userGender = member.gender,
                 userAgeRange = member.ageRange
             )
@@ -286,19 +286,19 @@ class RecruitServiceTest {
 
         // When
         val result = recruitService.searchAndFilter(
-            keyword = Optional.of("여행"),
-            placeCityName = Optional.of("서울"),
-            isClosed = Optional.of(false),
-            startDate = Optional.of(LocalDate.now()),
-            endDate = Optional.of(LocalDate.now().plusDays(3)),
-            travelStyle = Optional.of("RELAXATION"),
-            sameGender = Optional.of(true),
-            sameAge = Optional.of(false),
-            minBudget = Optional.of(10000),
-            maxBudget = Optional.of(500000),
-            minGroupSize = Optional.of(1),
-            maxGroupSize = Optional.of(5),
-            sortBy = Optional.of("budget_desc"),
+            keyword = "여행",
+            placeCityName = "서울",
+            isClosed = false,
+            startDate = LocalDate.now(),
+            endDate = LocalDate.now().plusDays(3),
+            travelStyle = "RELAXATION",
+            sameGender = true,
+            sameAge = false,
+            minBudget = 10000,
+            maxBudget = 500000,
+            minGroupSize = 1,
+            maxGroupSize = 5,
+            sortBy = "budget_desc",
             token = token
         )
 
