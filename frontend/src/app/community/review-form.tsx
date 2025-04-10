@@ -59,6 +59,7 @@ export default function ReviewForm({ reviewId }: ReviewFormProps) {
     { id: number; name: string }[]
   >([]);
   const [previewImages, setPreviewImages] = useState<string[]>([]);
+  const [isLoadingReview, setIsLoadingReview] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isLoggedInState, setIsLoggedInState] = useState(false);
@@ -94,16 +95,12 @@ export default function ReviewForm({ reviewId }: ReviewFormProps) {
 
 // 수정 모드일 경우 리뷰 데이터 가져오기
 useEffect(() => {
-  if (!isEditMode || !reviewId) return;
+  if (!isEditMode || !reviewId || isNaN(parseInt(reviewId))) return;
 
   const fetchReview = async () => {
     try {
+      setIsLoadingReview(true);
       const parsedId = parseInt(reviewId);
-      if (isNaN(parsedId)) {
-        setFormError("잘못된 리뷰 ID입니다.");
-        return;
-      }
-
       const review = await getReviewById(parsedId);
 
       setFormData({
@@ -113,19 +110,17 @@ useEffect(() => {
         placeId: review.placeId?.toString() ?? "",
         images: [],
       });
-
-      // 👉 이미지 URL 프리뷰가 있다면 이곳에서 처리
-      // if (review.images && review.images.length > 0) {
-      //   setPreviewImages(review.images);
-      // }
     } catch (err) {
       console.error("리뷰 정보를 불러오는 중 오류가 발생했습니다:", err);
-      setFormError("리뷰 정보를 불러오는 데 실패했습니다. 다시 시도해주세요.");
+      setFormError("리뷰 정보를 불러오는 데 실패했습니다.");
+    } finally {
+      setIsLoadingReview(false);
     }
   };
 
   fetchReview();
 }, [isEditMode, reviewId]);
+
 
   // 입력값 변경 처리
   const handleInputChange = (
@@ -251,38 +246,50 @@ useEffect(() => {
 
       let createdReview;
 
-      if (isEditMode && reviewId) {
-        // 리뷰 수정
-        console.log(`✏️ 리뷰 수정 시도: ID ${reviewId}`);
-        await updateReview(parseInt(reviewId), reviewData);
+      if (isEditMode && reviewId && !isNaN(parseInt(reviewId))) {
+        // ✏️ 리뷰 수정
+        const parsedId = parseInt(reviewId);
+        console.log(`✏️ 리뷰 수정 시도: ID ${parsedId}`);
+      
+        await updateReview(parsedId, reviewData);
         alert("리뷰가 성공적으로 수정되었습니다.");
-        createdReview = { reviewId: parseInt(reviewId) };
+      
+        // ✅ 수정 후 해당 리뷰 상세 페이지로 이동
+        router.push(`/community/${parsedId}`);
       } else {
-        // 리뷰 생성
+        // ✨ 새 리뷰 생성
         console.log("✨ 새 리뷰 생성 시도");
-        createdReview = await createReview(reviewData);
-        console.log("✅ 리뷰 생성 결과:", createdReview);
+      
+        const created = await createReview(reviewData);
+        console.log("✅ 리뷰 생성 결과:", created);
         alert("리뷰가 성공적으로 등록되었습니다.");
-      }
-
-      // 이미지 업로드 (이미지가 있는 경우에만)
-      if (
-        formData.images.length > 0 &&
-        createdReview &&
-        createdReview.reviewId
-      ) {
-        const imageFormData = new FormData();
-        formData.images.forEach((image) => {
-          imageFormData.append("images", image);
-        });
-
-        try {
-          await uploadReviewImages(createdReview.reviewId, imageFormData);
-        } catch (imageError) {
-          console.error("이미지 업로드 중 오류 발생:", imageError);
-          // 이미지 업로드 실패 시에도 리뷰는 생성/수정되었으므로 계속 진행
+      
+        // ✅ 생성된 리뷰의 상세 페이지로 이동
+        if (created?.reviewId) {
+          router.push(`/community/${created.reviewId}`);
+        } else {
+          // 예외 처리: 리뷰 ID가 없을 경우 목록으로 fallback
+          router.push("/community");
         }
       }
+      // 이미지 업로드 (이미지가 있는 경우에만)
+      // if (
+      //   formData.images.length > 0 &&
+      //   createdReview &&
+      //   createdReview.reviewId
+      // ) {
+      //   const imageFormData = new FormData();
+      //   formData.images.forEach((image) => {
+      //     imageFormData.append("images", image);
+      //   });
+
+      //   try {
+      //     await uploadReviewImages(createdReview.reviewId, imageFormData);
+      //   } catch (imageError) {
+      //     console.error("이미지 업로드 중 오류 발생:", imageError);
+      //     // 이미지 업로드 실패 시에도 리뷰는 생성/수정되었으므로 계속 진행
+      //   }
+      // }
 
       router.push("/community");
     } catch (err) {
@@ -314,6 +321,17 @@ useEffect(() => {
       previewImages.forEach((url) => URL.revokeObjectURL(url));
     };
   }, [previewImages]);
+
+
+  if (isEditMode && isLoadingReview) {
+    return (
+      <Card>
+        <CardContent className="p-6 text-center text-gray-500">
+          리뷰 정보를 불러오는 중입니다...
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <Card>
