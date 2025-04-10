@@ -113,7 +113,7 @@ class RecruitServiceTest {
         val requestDto = mockk<RecruitRequestDto>()
 
         // 🔹 로그인된 멤버가 없도록 설정 (null 반환)
-        every { authService.getLoggedInMember(token) } returns null
+        every { authService.getLoggedInMember(token) } throws ServiceException("401-1", "로그인이 필요합니다.")
 
         // When & Then
         val exception = assertThrows<ServiceException> {
@@ -386,7 +386,7 @@ class RecruitServiceTest {
 
         every { recruitRepository.findById(1L) } returns Optional.of(recruit)
         every { placeRepository.findById(place.id!!) } returns Optional.of(place)
-        every { authService.getLoggedInMember(invalidToken) } returns null // 실제로 null을 리턴하지는 않고 예외 던진다.
+        every { authService.getLoggedInMember(invalidToken) } throws ServiceException("401-1", "로그인이 필요합니다.") // 실제로 null을 리턴하지는 않고 예외 던진다.
 
         // When & Then
         val exception = assertThrows<ServiceException> {
@@ -471,7 +471,7 @@ class RecruitServiceTest {
 
         // mock 설정
         every { recruitRepository.findById(1L) } returns Optional.of(recruit)
-        every { authService.getLoggedInMember(invalidToken) } returns null // ❗ 로그인 실패
+        every { authService.getLoggedInMember(invalidToken) } throws ServiceException("401-1", "로그인이 필요합니다.") // ❗ 로그인 실패
 
         // When & Then
         val exception = assertThrows<ServiceException> {
