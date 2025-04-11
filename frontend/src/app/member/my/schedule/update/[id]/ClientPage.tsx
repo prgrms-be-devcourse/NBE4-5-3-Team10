@@ -6,7 +6,6 @@ import { useParams, useRouter } from "next/navigation";
 interface TripInformation {
   tripInformationId: number;
   placeId: number;
-  cityName: String;
   placeName: string;
   visitTime: string;
   duration: number;
@@ -15,6 +14,19 @@ interface TripInformation {
   notes: string;
   visited: boolean;
 }
+
+// 영어 교통수단 옵션 배열
+const transportationOptions = ["WALK", "BUS", "SUBWAY", "CAR", "TAXI", "ETC"];
+
+// 교통수단 한글 매핑 객체 (enum Transportation의 정보 참고)
+const transportationMapping: Record<string, string> = {
+  WALK: "도보",
+  BUS: "버스",
+  SUBWAY: "기차",
+  CAR: "자가용",
+  TAXI: "택시",
+  ETC: "기타",
+};
 
 export default function TripInfoUpdatePage() {
   const { id } = useParams(); // 수정할 세부 일정의 tripInformationId
@@ -55,8 +67,9 @@ export default function TripInfoUpdatePage() {
       });
   }, [id]);
 
+  // 변경 핸들러 타입 수정: HTMLSelectElement도 처리
   const handleChange = (
-    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
     if (!tripInfo) return;
@@ -72,7 +85,6 @@ export default function TripInfoUpdatePage() {
     const payload = {
       tripInformationId: tripInfo.tripInformationId,
       placeId: tripInfo.placeId,
-      cityName: tripInfo.cityName,
       placeName: tripInfo.placeName,
       duration: tripInfo.duration,
       transportation: tripInfo.transportation,
@@ -136,16 +148,23 @@ export default function TripInfoUpdatePage() {
           />
         </label>
       </div>
+      {/* 교통수단을 텍스트 입력에서 select 박스로 변경 및 한글화 */}
       <div className="mb-4">
         <label className="block mb-2">
           이동 수단:
-          <input
-            type="text"
+          <select
             name="transportation"
             value={tripInfo.transportation}
             onChange={handleChange}
             className="border p-2 w-full"
-          />
+          >
+            <option value="">선택하세요</option>
+            {transportationOptions.map((opt) => (
+              <option key={opt} value={opt}>
+                {transportationMapping[opt] || opt}
+              </option>
+            ))}
+          </select>
         </label>
       </div>
       <div className="mb-4">

@@ -27,7 +27,8 @@ interface AuthResponse {
   accessToken: string;
   refreshToken?: string;
   message?: string;
-  deletedAccount?: boolean; // 계정이 삭제 상태인지 여부 - 이름 수정
+  isDeletedAccount?: boolean;
+  authority?: string;
 }
 
 // RsData 응답 타입 정의
@@ -284,9 +285,9 @@ export default function ClientPage() {
         throw new Error("인증 정보가 없습니다.");
       }
 
-      // 소프트 딜리트된 계정인 경우 복구 모달 표시 - deletedAccount 체크로 수정
-      if (authData.deletedAccount) {
-        console.log("삭제된 계정으로 로그인 시도:", authData.deletedAccount);
+      // 소프트 딜리트된 계정인 경우 복구 모달 표시 - isDeletedAccount 체크로 수정
+      if (authData.isDeletedAccount) {
+        console.log("삭제된 계정으로 로그인 시도:", authData.isDeletedAccount);
 
         // 토큰 저장
         localStorage.setItem("accessToken", authData.accessToken);
@@ -302,6 +303,12 @@ export default function ClientPage() {
 
       // 정상 계정인 경우 일반 로그인 처리
       localStorage.setItem("accessToken", authData.accessToken);
+
+      // 사용자 권한 정보 저장
+      if (authData.authority) {
+        localStorage.setItem("userAuthority", authData.authority);
+      }
+
       // 사용자 정의 이벤트 발생
       window.dispatchEvent(new Event("login"));
 
@@ -312,8 +319,14 @@ export default function ClientPage() {
       // 쿠키 확인 (HttpOnly 쿠키는 보이지 않음)
       console.log("현재 쿠키:", document.cookie);
 
-      // 로그인 성공 - 홈페이지로 리디렉션
-      router.push("/");
+      // 권한이 admin인 사용자는 관리자 페이지로, 그 외는 홈페이지로 리디렉션
+      if (authData.authority === "ADMIN") {
+        console.log("관리자 권한 확인: 관리자 페이지로 이동");
+        router.push("/admin");
+      } else {
+        console.log("일반 사용자 권한: 홈페이지로 이동");
+        router.push("/");
+      }
     } catch (error: unknown) {
       console.error("로그인 오류:", error);
       setErrors({

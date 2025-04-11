@@ -12,6 +12,15 @@ interface Place {
   imageUrl: string;
 }
 
+// 영어 카테고리 -> 한글 매핑 객체
+const categoryMapping: Record<string, string> = {
+  PLACE: "장소",
+  STAY: "숙박",
+  RESTAURANT: "식당",
+  CAFE: "카페",
+  ETC: "기타",
+};
+
 export default function ClientPage() {
   const [places, setPlaces] = useState<Place[]>([]);
   const [loading, setLoading] = useState(true);
@@ -73,7 +82,10 @@ export default function ClientPage() {
 
   return (
     <div>
-      <button className="mb-4 text-blue-500" onClick={() => router.back()}>
+      <button
+        className="mb-4 text-blue-500"
+        onClick={() => router.push(`/admin`)}
+      >
         뒤로가기
       </button>
       <h2 className="text-2xl font-bold mb-4">전체 여행지</h2>
@@ -103,7 +115,7 @@ export default function ClientPage() {
             {Array.from(new Set(places.map((place) => place.category))).map(
               (category) => (
                 <option key={category} value={category}>
-                  {category}
+                  {categoryMapping[category] || category}
                 </option>
               )
             )}
@@ -145,6 +157,10 @@ export default function ClientPage() {
                 {place.placeName}
               </h3>
               <p className="text-gray-600">{place.description}</p>
+              {/* 카테고리 한글값 표시 */}
+              <p className="mt-2 text-sm text-gray-700">
+                카테고리: {categoryMapping[place.category] || place.category}
+              </p>
               <button
                 className="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded-md"
                 onClick={() => handleDelete(place.id)}

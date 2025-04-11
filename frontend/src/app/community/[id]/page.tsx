@@ -17,8 +17,9 @@ export const metadata: Metadata = {
 export default async function ReviewDetailPage({
   params,
 }: ReviewDetailPageProps) {
-  // 동적 라우트 파라미터에 접근하기 전에 async/await 패턴을 사용
-  const id = params.id;
+  // params 객체가 완전히 로드될 때까지 기다립니다
+  const resolvedParams = await Promise.resolve(params);
+  const id = resolvedParams.id;
 
   return (
     <div className="min-h-screen bg-gray-50">

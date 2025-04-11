@@ -376,6 +376,8 @@ export default function ClientPage() {
                   <option value="TOURISM">관광</option>
                   <option value="RELAXATION">휴양</option>
                   <option value="SHOPPING">쇼핑</option>
+                  <option value="ADVENTURE">액티비티</option>
+                  <option value="GOURMET">미식</option>
                 </select>
               </div>
 
