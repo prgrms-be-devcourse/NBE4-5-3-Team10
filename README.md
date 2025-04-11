@@ -69,6 +69,7 @@
 - AWS EC2
 - AWS RDS
 - AWS S3
+- Nginx
 ### 버전 관리 및 협업 도구
 - Git
 - GitHub
