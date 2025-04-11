@@ -61,7 +61,7 @@ class OAuth2AuthenticationSuccessHandler(
         authentication: Authentication
     ): String {
         // 세션에 저장된 원래 리디렉션 URI 가져오기, 없으면 기본값 사용
-        val defaultRedirectUri = "https://tripfriend.o-r.kr/login"
+        val defaultRedirectUri = "http://localhost:3000/member/login"
         val redirectUri = request.getParameter("redirect_uri")
         return redirectUri ?: defaultRedirectUri
     }
