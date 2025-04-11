@@ -346,7 +346,7 @@ export default function ClientPage() {
     const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
     // 현재 URL을 기준으로 리디렉션 URL 설정 (로그인 페이지로 돌아옴)
     const redirectUri = encodeURIComponent(
-      window.location.origin + window.location.pathname
+      "https://tripfriend.o-r.kr/member/login"
     );
 
     console.log(`${provider} 소셜 로그인 시도, 리디렉션 URL: ${redirectUri}`);
