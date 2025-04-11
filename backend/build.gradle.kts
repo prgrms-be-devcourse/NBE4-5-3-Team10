@@ -84,6 +84,9 @@ dependencies {
 	compileOnly("org.projectlombok:lombok")
 	annotationProcessor("org.projectlombok:lombok")
 	implementation(kotlin("stdlib-jdk8"))
+
+	// S3
+	implementation("software.amazon.awssdk:s3:2.31.18")
 }
 
 kotlin {
