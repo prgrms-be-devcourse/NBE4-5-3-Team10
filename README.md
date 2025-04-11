@@ -1,4 +1,4 @@
-# NBE4-5-2-Team10
+# NBE4-5-3-Team10
 프로그래머스 백엔드 데브코스 4기 5회차 10팀 TenTen의 3차 팀 프로젝트입니다.</br>
 3차 팀 프로젝트에서는 기존에 Java와 Spring Boot로 개발했던 2차 프로젝트를 Kotlin으로 마이그레이션하고, 성능 최적화와 기능 고도화를 진행했습니다.
 
@@ -51,9 +51,10 @@
 ## 기술 스택
 ### 언어
 - JAVA 17
+- Kotlin
 - TypeScript
 ### 프레임워크 및 라이브러리
-- Spring 3.4.2
+- Spring 3.2.4
 - Spring Security
 - React 19.0.0
 - Next.js 15.2.0
@@ -64,12 +65,14 @@
 ### IED 및 개발 도구
 - IntelliJ IDEA
 - Visual Studio Code
+- Docker
 - AWS EC2
 - AWS RDS
-- VERCEL
+- AWS S3
 ### 버전 관리 및 협업 도구
 - Git
 - GitHub
+- GitHubActions
 - Slack
 - Notion
 - FigJam
@@ -78,7 +81,8 @@
 ![여행동행리뉴얼](https://github.com/user-attachments/assets/ae2605d0-339b-4461-b22d-ccefa664c3c2)
 
 ## System Architeture
-<img width="912" alt="시스템아키텍쳐" src="https://github.com/user-attachments/assets/8dcd3d40-1efa-4443-a990-07a506e7db0e" />
+<img width="1237" alt="3차 시스템 아키텍처" src="https://github.com/user-attachments/assets/e983d27a-ceb0-40d0-858d-4815643d1235" />
+
 
 ## 브랜치 전략
 **GitHub Flow** 전략 사용
