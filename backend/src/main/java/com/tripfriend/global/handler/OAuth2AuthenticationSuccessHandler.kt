@@ -60,8 +60,8 @@ class OAuth2AuthenticationSuccessHandler(
         response: HttpServletResponse,
         authentication: Authentication
     ): String {
-        // 세션에 저장된 원래 리디렉션 URI 가져오기, 없으면 기본값 사용
-        val defaultRedirectUri = "http://localhost:3000/member/login"
+        // 하드코딩으로 프로덕션 URL 사용
+        val defaultRedirectUri = "https://tripfriend.o-r.kr/member/login"
         val redirectUri = request.getParameter("redirect_uri")
         return redirectUri ?: defaultRedirectUri
     }
@@ -73,6 +73,7 @@ class OAuth2AuthenticationSuccessHandler(
         cookie.maxAge = maxAge // 만료 시간 설정
         cookie.isHttpOnly = true // 자바스크립트에서 접근 불가
         cookie.secure = true // HTTPS 환경에서만 사용 가능
+        cookie.domain = "tripfriend.o-r.kr"
         response.addCookie(cookie)
     }
 }
