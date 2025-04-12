@@ -341,18 +341,22 @@ export default function ClientPage() {
     }
   };
 
-  // 소셜 로그인 함수 업데이트 - 리디렉션 URL 지정
   const handleSocialLogin = (provider: string) => {
     const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
   
-    // 현재 호스트 기반으로 동적 리디렉션 URL 생성
-    const currentHost = window.location.origin;
-    const redirectUri = encodeURIComponent(`${currentHost}/member/login`);
+    // 환경에 따라 클라이언트 도메인 설정
+    const clientUrl =
+      process.env.NEXT_PUBLIC_CLIENT_URL || window.location.origin;
+  
+    // redirect_uri 구성
+    const redirectUri = encodeURIComponent(`${clientUrl}/member/login`);
   
     console.log(`${provider} 소셜 로그인 시도, 리디렉션 URL: ${redirectUri}`);
-    console.log(`소셜 로그인 전체 URL: ${apiUrl}/oauth2/authorization/${provider}?redirect_uri=${redirectUri}`);
-
-    // 리디렉션 URL 파라미터를 추가하여 소셜 로그인 페이지로 이동
+    console.log(
+      `소셜 로그인 전체 URL: ${apiUrl}/oauth2/authorization/${provider}?redirect_uri=${redirectUri}`
+    );
+  
+    // 백엔드 소셜 로그인 요청
     window.location.href = `${apiUrl}/oauth2/authorization/${provider}?redirect_uri=${redirectUri}`;
   };
 

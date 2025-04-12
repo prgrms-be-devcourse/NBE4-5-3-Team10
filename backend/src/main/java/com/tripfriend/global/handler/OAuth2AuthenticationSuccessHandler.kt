@@ -63,6 +63,7 @@ class OAuth2AuthenticationSuccessHandler(
         // 하드코딩으로 프로덕션 URL 사용
         val defaultRedirectUri = "https://tripfriend.o-r.kr/member/login"
         val redirectUri = request.getParameter("redirect_uri")
+        println("클라이언트에서 전달받은 redirect_uri: $redirectUri")
         return redirectUri ?: defaultRedirectUri
     }
 
