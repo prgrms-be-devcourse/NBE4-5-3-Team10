@@ -60,21 +60,52 @@ class OAuth2AuthenticationSuccessHandler(
         response: HttpServletResponse,
         authentication: Authentication
     ): String {
-        // 하드코딩으로 프로덕션 URL 사용
-        val defaultRedirectUri = "https://tripfriend.o-r.kr/member/login"
+        // 클라이언트의 Origin 헤더나 Referer 헤더를 확인하여 요청 출처 확인
+        val origin = request.getHeader("Origin") ?: request.getHeader("Referer")
+    
+        // 클라이언트에서 전달받은 redirect_uri 파라미터 사용
         val redirectUri = request.getParameter("redirect_uri")
         println("클라이언트에서 전달받은 redirect_uri: $redirectUri")
-        return redirectUri ?: defaultRedirectUri
+    
+        // 리다이렉트 URI가 있으면 사용, 없으면 요청 출처의 도메인을 사용
+        val targetUrl = when {
+            // redirect_uri 파라미터가 있으면 사용
+            redirectUri != null -> redirectUri
+        
+            // Origin/Referer에서 도메인 추출 가능하면 사용
+            origin != null -> {
+                val domainPattern = "(https?://[^/]+)".toRegex()
+                val domainMatch = domainPattern.find(origin)
+                if (domainMatch != null) {
+                    "${domainMatch.value}/member/login"
+                } else {
+                    "https://tripfriend.o-r.kr/member/login" // 기본값
+                }
+            }
+        
+        // 기본값
+        else -> "https://tripfriend.o-r.kr/member/login"
     }
+    
+    println("사용할 redirect_uri: $targetUrl")
+    return targetUrl
+}
 
-    // 쿠키 생성 메서드 (만료 시간 설정)
     private fun addCookie(response: HttpServletResponse, name: String, value: String, maxAge: Int) {
         val cookie = Cookie(name, value)
         cookie.path = "/"
         cookie.maxAge = maxAge // 만료 시간 설정
         cookie.isHttpOnly = true // 자바스크립트에서 접근 불가
-        cookie.secure = true // HTTPS 환경에서만 사용 가능
-        cookie.domain = "tripfriend.o-r.kr"
+    
+        // 요청 URL을 확인하여 개발 환경(localhost)인지 판단
+        val requestURL = request.requestURL.toString()
+        val isLocalhost = requestURL.contains("localhost")
+    
+        if (!isLocalhost) {
+            cookie.secure = true // HTTPS 환경에서만 사용 가능
+            cookie.domain = "tripfriend.o-r.kr"
+        }
+    
         response.addCookie(cookie)
     }
 }
