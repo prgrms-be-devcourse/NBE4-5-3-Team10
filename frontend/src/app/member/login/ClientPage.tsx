@@ -79,6 +79,7 @@ export default function ClientPage() {
     const error = searchParams.get("error");
   
     if (accessToken) {
+      // 디버깅 추가
       console.log("소셜 로그인 성공, 액세스 토큰 수신:", accessToken);
       localStorage.setItem("accessToken", accessToken);
   
@@ -96,8 +97,7 @@ export default function ClientPage() {
       params.delete("accessToken");
       params.delete("refreshToken");
       params.delete("error"); // 혹시 있을 경우 대비
-      const newUrl =
-        url.pathname + (params.toString() ? `?${params.toString()}` : "");
+      const newUrl = url.pathname + (params.toString() ? `?${params.toString()}` : "");
       window.history.replaceState({}, document.title, newUrl);
   
       // 홈으로 이동
