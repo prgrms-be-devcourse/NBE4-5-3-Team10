@@ -89,11 +89,11 @@ class OAuth2AuthenticationSuccessHandler(
     
     println("사용할 redirect_uri: $targetUrl")
     return targetUrl
-}
+    }
 
-    private fun addCookie(response: HttpServletResponse, name: String, value: String, maxAge: Int) {
+    private fun addCookie(response: HttpServletResponse, request: HttpServletRequest, name: String, value: String, maxAge: Int) {
         val cookie = Cookie(name, value)
-        cookie.path = "/"
+        cookie.path = "/" // 쿠키 경로 설정
         cookie.maxAge = maxAge // 만료 시간 설정
         cookie.isHttpOnly = true // 자바스크립트에서 접근 불가
     
@@ -103,9 +103,9 @@ class OAuth2AuthenticationSuccessHandler(
     
         if (!isLocalhost) {
             cookie.secure = true // HTTPS 환경에서만 사용 가능
-            cookie.domain = "tripfriend.o-r.kr"
+            cookie.domain = "tripfriend.o-r.kr" // 도메인 설정
         }
     
-        response.addCookie(cookie)
+        response.addCookie(cookie) // 쿠키를 응답에 추가
     }
 }
