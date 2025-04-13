@@ -63,65 +63,35 @@ class OAuth2AuthenticationSuccessHandler(
         response: HttpServletResponse,
         authentication: Authentication
     ): String {
-        // 클라이언트에서 전달받은 redirect_uri 파라미터 사용 - 이 부분이 중요
+        // 클라이언트에서 전달받은 redirect_uri 파라미터를 최우선으로 사용
         val redirectUri = request.getParameter("redirect_uri")
         println("클라이언트에서 전달받은 redirect_uri: $redirectUri")
         
-        // redirect_uri 값이 있고 올바른 형식이면 그대로 사용
-        if (!redirectUri.isNullOrBlank() && 
-            (redirectUri.startsWith("http://") || redirectUri.startsWith("https://"))) {
-            println("클라이언트 지정 redirect_uri 사용: $redirectUri")
-            return redirectUri
-        }
-        
-        // 클라이언트의 Origin 헤더나 Referer 헤더를 확인하여 요청 출처 확인
-        val origin = request.getHeader("Origin") ?: request.getHeader("Referer")
-        
-        // 기본 타겟 URL 결정
-        val targetUrl = when {
-            // Origin/Referer에서 도메인 추출 가능하면 사용
-            origin != null -> {
-                val domainPattern = "(https?://[^/]+)".toRegex()
-                val domainMatch = domainPattern.find(origin)
-                if (domainMatch != null) {
-                    "${domainMatch.value}/member/login"
-                } else {
-                    getFallbackUrl(request)
-                }
+        if (!redirectUri.isNullOrBlank()) {
+            // 보안을 위해 redirect_uri가 허용된 도메인인지 확인 (옵션)
+            if (isValidRedirectUri(redirectUri)) {
+                return redirectUri
             }
-            // 요청 URL에서 도메인 추출
-            else -> getFallbackUrl(request)
+            println("유효하지 않은 redirect_uri: $redirectUri, 기본값 사용")
         }
         
-        println("최종 결정된 redirect_uri: $targetUrl")
-        return targetUrl
+        // 배포 환경을 기본으로 설정 (안전한 폴백 옵션)
+        return "https://tripfriend.o-r.kr/member/login"
     }
     
-    private fun getFallbackUrl(request: HttpServletRequest): String {
-        // 현재 요청의 호스트 정보로부터 프론트엔드 URL 추정
-        val serverName = request.serverName
-        val requestURL = request.requestURL.toString()
+    // 리다이렉트 URI의 유효성 검사 (필요에 따라 구현)
+    private fun isValidRedirectUri(uri: String): Boolean {
+        // 허용된 도메인 목록
+        val allowedDomains = listOf(
+            "tripfriend.o-r.kr",
+            "www.tripfriend.o-r.kr",
+            "localhost",
+            "127.0.0.1"
+        )
         
-        return when {
-            // 로컬 개발 환경
-            serverName.contains("localhost") || serverName.contains("127.0.0.1") -> {
-                // 백엔드가 8080 포트를 사용하면 프론트엔드는 보통 3000 포트 사용
-                "http://localhost:3000/member/login"
-            }
-            // 배포 환경
-            serverName.contains("tripfriend.o-r.kr") -> {
-                "https://tripfriend.o-r.kr/member/login"
-            }
-            // 기타 환경
-            else -> {
-                val domainPattern = "(https?://[^/]+)".toRegex()
-                val domainMatch = domainPattern.find(requestURL)
-                if (domainMatch != null) {
-                    "${domainMatch.value}/member/login"
-                } else {
-                    "https://tripfriend.o-r.kr/member/login" // 최종 기본값
-                }
-            }
+        // URI에 허용된 도메인이 포함되어 있는지 확인
+        return allowedDomains.any { domain -> 
+            uri.contains("://$domain") || uri.contains("://$domain:")
         }
     }
     
@@ -138,17 +108,12 @@ class OAuth2AuthenticationSuccessHandler(
         cookie.isHttpOnly = true // 자바스크립트에서 접근 불가
         
         // 요청 URL을 확인하여 개발 환경(localhost)인지 판단
-        val requestURL = request.requestURL.toString()
         val serverName = request.serverName
         
-        // localhost가 아니고 실제 도메인인 경우에만 secure와 domain 설정
+        // localhost가 아니면 secure 및 domain 설정
         if (!serverName.contains("localhost") && !serverName.contains("127.0.0.1")) {
             cookie.secure = true // HTTPS 환경에서만 사용 가능
-            
-            // 서버 이름에서 도메인 추출
-            if (serverName.contains("tripfriend.o-r.kr")) {
-                cookie.domain = "tripfriend.o-r.kr" // 도메인 설정
-            }
+            cookie.domain = "tripfriend.o-r.kr" // 도메인 설정
         }
         
         response.addCookie(cookie) // 쿠키를 응답에 추가
