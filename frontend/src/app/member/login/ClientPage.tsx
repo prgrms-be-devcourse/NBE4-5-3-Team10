@@ -74,45 +74,43 @@ export default function ClientPage() {
 
   // 소셜 로그인 처리를 위한 useEffect 추가
   useEffect(() => {
-    // 소셜 로그인 완료 후 토큰 확인
     const accessToken = searchParams.get("accessToken");
     const refreshToken = searchParams.get("refreshToken");
     const error = searchParams.get("error");
-
+  
     if (accessToken) {
       console.log("소셜 로그인 성공, 액세스 토큰 수신:", accessToken);
-
-      // 액세스 토큰 저장
       localStorage.setItem("accessToken", accessToken);
-
-      // 리프레시 토큰이 있으면 저장
+  
       if (refreshToken) {
         console.log("리프레시 토큰 수신:", refreshToken);
         localStorage.setItem("refreshToken", refreshToken);
       }
-
-      // 사용자 정의 이벤트 발생
+  
+      // 로그인 상태 알림
       window.dispatchEvent(new Event("login"));
-
-      // 토큰 파라미터 제거 (URL 정리)
+  
+      // URL 정리
       const url = new URL(window.location.href);
       const params = new URLSearchParams(url.search);
       params.delete("accessToken");
       params.delete("refreshToken");
+      params.delete("error"); // 혹시 있을 경우 대비
       const newUrl =
-        url.pathname + (params.toString() ? "?" + params.toString() : "");
+        url.pathname + (params.toString() ? `?${params.toString()}` : "");
       window.history.replaceState({}, document.title, newUrl);
-
-      // 홈페이지로 리디렉션
+  
+      // 홈으로 이동
       router.push("/");
-    } else if (error) {
-      // 소셜 로그인 에러 처리
-      setErrors({
-        ...errors,
-        general: "소셜 로그인에 실패했습니다: " + error,
-      });
     }
-  }, [searchParams, router, errors]);
+  
+    if (error) {
+      setErrors((prev) => ({
+        ...prev,
+        general: "소셜 로그인에 실패했습니다: " + error,
+      }));
+    }
+  }, [searchParams, router]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
