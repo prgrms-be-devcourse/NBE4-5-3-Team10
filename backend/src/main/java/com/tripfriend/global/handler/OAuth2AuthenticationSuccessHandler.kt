@@ -83,12 +83,12 @@ class OAuth2AuthenticationSuccessHandler(
                 }
             }
         
-        // 기본값
-        else -> "https://tripfriend.o-r.kr/member/login"
-    }
+            // 기본값
+            else -> "https://tripfriend.o-r.kr/member/login"
+        }
     
-    println("사용할 redirect_uri: $targetUrl")
-    return targetUrl
+        println("사용할 redirect_uri: $targetUrl")
+        return targetUrl
     }
 
     private fun addCookie(response: HttpServletResponse, request: HttpServletRequest, name: String, value: String, maxAge: Int) {
