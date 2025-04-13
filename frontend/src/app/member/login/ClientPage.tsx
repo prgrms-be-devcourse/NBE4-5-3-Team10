@@ -341,19 +341,17 @@ export default function ClientPage() {
 
   const handleSocialLogin = (provider: string) => {
     const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
-  
-    // 환경에 따라 클라이언트 도메인 설정
-    const clientUrl =
-      process.env.NEXT_PUBLIC_CLIENT_URL || window.location.origin;
-  
-    // redirect_uri 구성
+    
+    // 프로덕션 환경 확인 (NODE_ENV는 Next.js에서 제공)
+    const isProd = process.env.NODE_ENV === 'production';
+    
+    // 프로덕션이면 하드코딩된 URL 사용, 아니면 원래 로직
+    const clientUrl = isProd 
+      ? "https://tripfriend.o-r.kr" 
+      : (process.env.NEXT_PUBLIC_CLIENT_URL || window.location.origin);
+    
     const redirectUri = encodeURIComponent(`${clientUrl}/member/login`);
-  
-    console.log(`${provider} 소셜 로그인 시도, 리디렉션 URL: ${redirectUri}`);
-    console.log(
-      `소셜 로그인 전체 URL: ${apiUrl}/oauth2/authorization/${provider}?redirect_uri=${redirectUri}`
-    );
-  
+    
     // 백엔드 소셜 로그인 요청
     window.location.href = `${apiUrl}/oauth2/authorization/${provider}?redirect_uri=${redirectUri}`;
   };
